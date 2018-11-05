@@ -678,14 +678,40 @@
     continue(2)
 #   ^^^^^^^^ - keyword.control.flow
 
-
     exit
 
+    return
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+    returnme
+#   ^^^^^^^^^ - keyword.control.flow
+
+    return(1)
+#   ^^^^^^^^^ - keyword.control.flow
+
     return 1
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+#          ^ constant.numeric.integer.tcl
+
+    return -code $code $factor
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+#          ^^^^^ variable.parameter.tcl
+#                ^^^^^ variable.other.tcl
+#                      ^^^^^^^ variable.other.tcl
 
     return -code error \
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+#          ^^^^^ variable.parameter.tcl
+#                ^^^^^ constant.language.tcl
         "overflow computing factorial of $n"
-
+#       ^ string.quoted.double.tcl punctuation.definition.string.begin.tcl
 
 ##############################################################################
 # if-else tests
@@ -773,7 +799,7 @@
 #      ^ punctuation.section.braces.begin.tcl
 #      ^^^^^^^^^^^^^^^^^ meta.braces.tcl
 #       ^^^^ variable.other.tcl
-#            ^^ keyword.operator.logical.tcl
+#            ^^ keyword.operator.relational.tcl
 #               ^^^^^^^ meta.substitution.tcl
 #                      ^ punctuation.section.braces.end.tcl
 #                        ^^ meta.braces.tcl
@@ -825,3 +851,163 @@
            puts "no sh"
         }
     }
+
+##############################################################################
+# array commands
+##############################################################################
+
+    array set cpe_param [objectGetField -oid $cpeoid -fieldname parameters]
+#   ^^^^^ keyword.other.builtin.tcl
+#         ^^^ variable.function.tcl
+#             ^^^^^^^^^ variable.other.tcl
+#                       ^ punctuation.section.substitution.begin.tcl
+#                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
+#                                                                         ^ punctuation.section.substitution.end.tcl
+
+    array names list_name -glob "pa?[A-z]ttern"
+#   ^^^^^ keyword.other.builtin.tcl
+#        ^ - keyword - variable
+#         ^^^^^ variable.function.tcl
+#              ^ - variable
+#               ^^^^^^^^^ variable.other.tcl
+#                        ^ - variable
+#                         ^^^^^ variable.parameter.tcl
+#                              ^ - variable - string
+#                               ^ punctuation.definition.string.begin.tcl
+#                               ^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                                  ^ constant.other.placeholder.tcl
+#                                   ^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
+#                                             ^ punctuation.definition.string.end.tcl
+#                                              ^ - string
+
+##############################################################################
+# after commands
+##############################################################################
+
+    set id [after 10 [puts "done!"]]
+#           ^^^^^ keyword.other.builtin.tcl
+
+    after cancel $id
+#   ^^^^^ keyword.other.builtin.tcl
+#         ^^^^^^ constant.language.tcl
+#                ^^^ variable.other.tcl
+
+    after info $id
+#   ^^^^^ keyword.other.builtin.tcl
+#         ^^^^ constant.language.tcl
+#              ^^^ variable.other.tcl
+
+    after idle [list after 0 doOneStep]
+#   ^^^^^ keyword.other.builtin.tcl
+#         ^^^^ constant.language.tcl
+#              ^^^^^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
+
+##############################################################################
+# string commands
+##############################################################################
+
+    string compare $str1 $str2; string last $str3
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^^^^^^ variable.function.string.tcl
+#                  ^^^^^ variable.other.tcl
+#                        ^^^^^ variable.other.tcl
+#                             ^ punctuation.terminator.command.tcl
+#                               ^^^^^^ keyword.other.builtin.tcl
+#                                      ^^^^ variable.function.string.tcl
+#                                           ^^^^^ variable.other.tcl
+    string \
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^ punctuation.separator.continuation.newline.tcl
+    compare \
+#   ^^^^^^^ variable.function.string.tcl
+#           ^ punctuation.separator.continuation.newline.tcl
+    $str1 \
+#   ^^^^^ variable.other.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    $str2
+#   ^^^^^ variable.other.tcl
+
+    string is ascii "my ascii"
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^ variable.function.string.tcl
+#             ^^^^^ storage.type.tcl
+#                   ^^^^^^^^^^ string.quoted.double.tcl
+
+    string is inval "my ascii"
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^ variable.function.string.tcl
+#             ^^^^^ - storage.type.tcl
+#                   ^^^^^^^^^^ string.quoted.double.tcl
+
+    string inval $str
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^^^^ - variable.function.string.tcl
+#                ^^^^ variable.other.tcl
+
+    string match "patt[-[\]_A-z]r?n" $str
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^^^^ variable.function.string.tcl
+#                ^ punctuation.definition.string.begin.tcl
+#                ^^^^^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                     ^ punctuation.section.bracket.begin.tcl
+#                     ^^^^^^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
+#                      ^ - punctuation.separator
+#                        ^^ constant.character.escape.tcl
+#                            ^  punctuation.separator.sequence.tcl
+#                              ^ punctuation.section.bracket.begin.tcl
+#                                ^ constant.other.placeholder.tcl
+#                                  ^ punctuation.definition.string.end.tcl
+#                                    ^^^^ variable.other.tcl
+
+    string \
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^ punctuation.separator.continuation.newline.tcl
+    match \
+#  ^ - variable.function
+#   ^^^^^ variable.function.string.tcl
+#        ^ - variable.function
+#         ^ punctuation.separator.continuation.newline.tcl
+    -nocase \
+#   ^^^^^^^ variable.parameter.tcl
+#           ^ punctuation.separator.continuation.newline.tcl
+    "p\?a\*t\[t\]
+#  ^ - string
+#   ^ punctuation.definition.string.begin.tcl
+#   ^^^^^^^^^^^^^^ string.quoted.double.tcl
+#     ^^ constant.character.escape.other.tcl - constant.other.placeholder
+#        ^^ constant.character.escape.other.tcl - constant.other.placeholder
+#           ^^ constant.character.escape.other.tcl - punctuation
+#              ^^ constant.character.escape.other.tcl - punctuation
+    [_A-z]*r?n
+#^^^^^^^^^^^^^^ string.quoted.double.tcl
+#   ^ punctuation.section.bracket.begin.tcl
+#        ^ punctuation.section.bracket.begin.tcl
+#         ^ constant.other.placeholder.tcl
+#           ^ constant.other.placeholder.tcl
+    " $str
+# <- string.quoted.double.tcl
+#   ^ string.quoted.double.tcl punctuation.definition.string.end.tcl
+#    ^ - string
+#     ^^^^ variable.other.tcl
+
+    string match -nocase {p\?a\*t\[t\][_A-z]*r?n} $str
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^^^^ variable.function.string.tcl
+#                ^^^^^^^ variable.parameter.tcl
+#                        ^ punctuation.section.braces.begin.tcl
+#                        ^^^^^^^^^^^^^^^^^^^^^^^^ meta.braces.tcl string.quoted.other.tcl
+#                          ^^ constant.character.escape.other.tcl - constant.other.placeholder
+#                             ^^ constant.character.escape.other.tcl - constant.other.placeholder
+#                                ^^ constant.character.escape.other.tcl - punctuation
+#                                   ^^ constant.character.escape.other.tcl - punctuation
+#                                     ^ punctuation.section.bracket.begin.tcl
+#                                          ^ punctuation.section.bracket.begin.tcl
+#                                           ^ constant.other.placeholder.tcl
+#                                             ^ constant.other.placeholder.tcl
+#                                               ^ punctuation.section.braces.end.tcl
+
+##############################################################################
+# list commands
+##############################################################################
+
+    lappend listName value

@@ -12,26 +12,37 @@ variables:
   end_char:   '[\s;\)\]\}]|\\$'
   b:          '(?=[\s;\)\]\}]|\\$)'
   ident:       '[_A-Za-z][_0-9A-Za-z]*'
-  builtins: |-
-    (?x:
-      after|append|array|auto_execok|auto_import|auto_load|auto_mkindex|
-      auto_mkindex_old|auto_qualify|auto_reset|bgerror|binary|cd|clock|close|
-      concat|dde|encoding|eof|error|eval|exec|expr|fblocked|fconfigure|fcopy|
-      file|fileevent|filename|flush|format|gets|glob|global|history|http|incr|
-      info|interp|join|lappend|library|lindex|linsert|list|llength|load|lrange|
-      lreplace|lsearch|lset|lsort|memory|msgcat|namespace|open|package|parray|
-      pid|pkg::create|pkg_mkIndex|puts|pwd|re_syntax|read|regexp|regsub|registry|rename|
-      resource|scan|seek|set|socket|SafeBase|source|split|string|subst|Tcl|
-      tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|tcl_startOfPreviousWord|
-      tcl_wordBreakAfter|tcl_wordBreakBefore|tcltest|tclvars|tell|time|trace|
-      unknown|unset|update|uplevel|upvar|variable|vwait
-    ){{b}}
+
+  # https://www.tutorialspoint.com/tcl-tk/tcl_special_variables.htm
   variables: |-
     (?x:
       argc|argv|argv0|env|errorCode|errorInfo|tcl_interactive|tcl_library|
       tcl_pkgPath|tcl_patchLevel|tcl_platform|tcl_precision|tcl_prompt1|
       tcl_prompt2|tcl_rcFileName|tcl_traceCompile|tcl_traceExec|tcl_version
-    )
+    ){{b}}
+
+  keywords: |-
+    (?x:
+      append|auto_execok|auto_import|auto_load|auto_mkindex|
+      auto_mkindex_old|auto_qualify|auto_reset|bgerror|binary|cd|clock|close|
+      concat|dde|encoding|eof|error|eval|exec|expr|fblocked|fconfigure|fcopy|
+      file|fileevent|filename|flush|format|gets|glob|global|history|http|incr|
+      info|interp|join|library|memory|msgcat|namespace|open|package|parray|
+      pid|pkg::create|pkg_mkIndex|puts|pwd|re_syntax|read|regexp|regsub|registry|rename|
+      resource|scan|seek|set|socket|SafeBase|source|split|string|subst|Tcl|
+      tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|tcl_startOfPreviousWord|
+      tcl_wordBreakAfter|tcl_wordBreakBefore|tcltest|tclvars|tell|time|trace|
+      unknown|unset|update|uplevel|upvar|variable|vwait|{{list_funcs}}
+    ){{b}}
+
+  list_funcs: lappend|lindex|linsert|list|llength|load|lrange|lreplace|lsearch|lset|lsort
+
+  math_funcs: |-
+    (?x:
+      abs|acos|asin|atan|atan2|ceil|cos|cosh|double|exp|floor|fmod|hypot|
+      int|log|log10|pow|rand|round|sin|sinh|sqrt|srand|tan|tanh|wide
+    ){{b}}
+
 
 contexts:
   main:
@@ -41,16 +52,24 @@ contexts:
     - include: flow-control
     - include: namespace
     - include: proc
-    - match: '{{builtins}}'
+    - include: cmd-array
+    - include: cmd-after
+    - include: cmd-string
+
+    - match: '{{keywords}}'
       scope: keyword.other.builtin.tcl
-      push: cmd-args
+      push: cmd-generic-args
+    - match: '{{math_funcs}}'
+      scope: support.function.math.tcl
+      push: cmd-generic-args
     # generic commands
     - match: (?=\S)
-      push: [cmd-args, cmd-name]
+      push: [cmd-generic-args, cmd-generic-name]
 
-##[ COMMANDS ]################################################################
 
-  cmd-name:
+##[ GENERIC COMMANDS ]########################################################
+
+  cmd-generic-name:
     - meta_scope: meta.command.tcl variable.function.tcl
     - match: (?=\[)
       push:
@@ -60,12 +79,133 @@ contexts:
     - include: expressions
     - include: eow-pop
 
-  cmd-args:
+  cmd-generic-args:
     - meta_scope: meta.function-call.tcl
     - match: -{{ident}}{{b}}
       scope: variable.parameter.tcl
     - include: expressions
     - include: eoc-pop
+
+##[ AFTER COMMANDS ]##########################################################
+
+  cmd-after:
+    - match: after{{b}}
+      scope: keyword.other.builtin.tcl
+      push: [cmd-generic-args, cmd-after-args]
+
+  cmd-after-args:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/after.htm
+    - match: (cancel|idle|info){{b}}
+      scope: constant.language.tcl
+      pop: true
+    - include: else-pop
+
+##[ ARRAY COMMANDS ]##########################################################
+
+  cmd-array:
+    - match: array{{b}}
+      scope: keyword.other.builtin.tcl
+      push: [cmd-generic-args, cmd-array-args]
+
+  cmd-array-args:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/array.htm
+    - match: names{{b}}
+      scope: variable.function.tcl
+      set: [cmd-string-match-pattern, cmd-array-names-switches, variable-pop]
+    - match: |-
+        (?x:
+          anymore|donesearch|exists|get|nextelement|set|size|startsearch|
+          statistics|unset
+        ){{b}}
+      scope: variable.function.tcl
+      set: variable-pop
+    - include: else-pop
+
+  cmd-array-names-switches:
+    - match: -(exact|glob|regexp){{b}}
+      scope: variable.parameter.tcl
+    - include: else-pop
+
+##[ STRING COMMANDS ]#########################################################
+
+  cmd-string:
+    - match: string{{b}}
+      scope: keyword.other.builtin.tcl
+      push: [cmd-generic-args, cmd-string-args]
+
+  cmd-string-args:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/string.htm
+    - match: is{{b}}
+      scope: variable.function.string.tcl
+      set: cmd-string-is-args
+    - match: match{{b}}
+      scope: variable.function.string.tcl
+      set: [cmd-string-match-pattern, cmd-string-match-switches]
+    - match: |-
+        (?x:
+          cat|compare|equal|first|index|last|length|map|range|repeat|
+          replace|reverse|tolower|totitle|toupper|trim|trimleft|trimright|
+          bytelength|wordend|wordstart
+        ){{b}}
+      scope: variable.function.string.tcl
+      pop: true
+    - include: else-pop
+
+  cmd-string-is-args:
+    - match: |-
+        (?x:
+          alnum|alpha|ascii|boolean|control|digit|double|entier|false|graph|
+          integer|list|lower|print|punct|space|true|upper|wideinteger|wordchar|
+          xdigit
+        ){{b}}
+      scope: storage.type.tcl
+      pop: true
+    - include: else-pop
+
+  cmd-string-match-switches:
+    - match: -nocase{{b}}
+      scope: variable.parameter.tcl
+      pop: true
+    - include: else-pop
+
+  cmd-string-match-pattern:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/string.htm#M35
+    # enable basic pattern highlighting in quoted strings
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      set:
+        - meta_scope: meta.braces.tcl string.quoted.other.tcl
+        - include: braces-end-pop
+        - include: pattern-placeholder
+    - match: \"
+      scope: punctuation.definition.string.begin.tcl
+      set:
+        - meta_scope: string.quoted.double.tcl
+        - match: \"
+          scope: punctuation.definition.string.end.tcl
+          pop: true
+        - include: pattern-placeholder
+    - include: expressions
+    - include: else-pop
+
+  pattern-placeholder:
+    - include: escape
+    - include: variable
+    # Don't match the first `-` after `[` as punctuation.separator.
+    - match: (\[)-?
+      captures:
+        1: punctuation.section.bracket.begin.tcl
+      push:
+        - meta_scope: meta.bracket.tcl constant.other.placeholder.tcl
+        - match: \]
+          scope: punctuation.section.bracket.begin.tcl
+          pop: true
+        - match: \-
+          scope: punctuation.separator.sequence.tcl
+        - match: \\.
+          scope: constant.character.escape.tcl
+    - match: '[*?]'
+      scope: constant.other.placeholder.tcl
 
 ##[ FLOW CONTROL ]############################################################
 
@@ -82,7 +222,10 @@ contexts:
       push: eoc-pop-or-illegal
     - match: return{{b}}
       scope: keyword.control.flow.return.tcl
-      push: cmd-args
+      push:
+        - match: (ok|error|return|break|continue){{b}}
+          scope: constant.language.tcl
+        - include: cmd-generic-args
 
     # conditional
     - match: catch{{b}}
@@ -119,7 +262,7 @@ contexts:
       push:
         - braces-cmd-block-pop
         - flow-condition-pop
-        - flow-foreach-var-pop
+        - variable-pop
     - match: while{{b}}
       scope: keyword.control.flow.while.tcl
       push:
@@ -149,13 +292,6 @@ contexts:
       scope: keyword.control.flow.else.tcl
       push: braces-cmd-block-pop
     - include: eoc-pop
-
-  flow-foreach-var-pop:
-    - match: \s*
-      set:
-        - meta_content_scope: variable.other.tcl
-        - include: expressions
-        - include: eow-pop
 
 ##[ NAMESPACE ]###############################################################
 
@@ -235,10 +371,8 @@ contexts:
   braces-condition-body:
     - meta_scope: meta.braces.tcl
     - include: braces-end-pop
-    - match: ==|<=|>=|>|<|\|\||&&
-      scope: keyword.operator.logical.tcl
-    - match: n?eq{{b}}
-      scope: keyword.operator.logical.tcl
+    - include: operator-logical
+    - include: operator-relational
     - include: line-continuation
     - include: expressions
 
@@ -298,6 +432,24 @@ contexts:
         - include: substitution
         - include: variable
 
+  operator-bitwise:
+    - match: <<|>>|\||&|!
+      scope: keyword.operator.bitwise.tcl
+
+  operator-logical:
+    - match: \|\||&&|!
+      scope: keyword.operator.logical.tcl
+
+  operator-relational:
+    - match: ==|<=|>=|>|<
+      scope: keyword.operator.relational.tcl
+    - match: n?eq{{b}}
+      scope: keyword.operator.relational.tcl
+
+  operator-ternary:
+    - match: '\?|:'
+      scope: keyword.operator.ternary.tcl
+
   operator-accessor:
     - match: :{2,}
       scope: punctuation.accessor.colon.tcl
@@ -337,6 +489,13 @@ contexts:
           pop: true
 
 ##[ VARIABLES ]###############################################################
+
+  variable-pop:
+    - match: \s*
+      set:
+        - meta_content_scope: variable.other.tcl
+        - include: expressions
+        - include: eow-pop
 
   variable:
     # [8] Variable substitution
