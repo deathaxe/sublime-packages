@@ -14,6 +14,24 @@
 #                ^ punctuation.terminator.command.tcl
 #                 ^ - meta
 #                  ^^^^^^^^^^^^^^ meta.function-call.tcl
+    cmd\
+#   ^^^ variable.function.tcl
+#      ^ punctuation.separator.continuation.newline.tcl
+    arg1\
+#   ^^^^ - variable.function
+#       ^ punctuation.separator.continuation.newline.tcl
+    arg2
+#   ^^^^ - variable.function
+
+    cmd \
+#   ^^^ variable.function.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    arg1 \
+#   ^^^^ - variable.function
+#        ^ punctuation.separator.continuation.newline.tcl
+    arg2
+#   ^^^^ - variable.function
+
 
     [cmd arg][cmd arg] {puts "str"}
 
@@ -736,7 +754,54 @@
 #                                                 ^^^^^^^^^ meta.braces.tcl
 #                                                         ^ punctuation.section.braces.end.tcl
 
-# check line-continuation at all possible positions in statement
+# check line continuation as word break without preceding whitespace
+    if\
+#   ^^ keyword.control.flow.if.tcl
+#     ^ punctuation.separator.continuation.newline.tcl
+    true\
+#   ^^^^ constant.language.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    {cmd arg arg}\
+#   ^ punctuation.section.braces.begin.tcl
+#   ^^^^^^^^^^^^^ meta.braces.tcl
+#    ^^^ variable.function.tcl
+#               ^ punctuation.section.braces.end.tcl
+#                ^ punctuation.separator.continuation.newline.tcl
+    elseif\
+#   ^^^^^^ keyword.control.flow.elseif.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    false\
+#   ^^^^^ constant.language.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    {}\
+#   ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+#    ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#     ^ punctuation.separator.continuation.newline.tcl
+    elseif\
+#   ^^^^^^ keyword.control.flow.elseif.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    [puts\
+#   ^ punctuation.section.substitution.begin.tcl
+#   ^^^^^^^^ meta.substitution.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    "true"]\
+# <- meta.substitution.tcl
+#^^^^^^^^^^ meta.substitution.tcl
+#   ^^^^^^ string.quoted.double.tcl
+#         ^ punctuation.section.substitution.end.tcl
+#          ^ punctuation.separator.continuation.newline.tcl
+    {}\
+#   ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+#    ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#     ^ punctuation.separator.continuation.newline.tcl
+    else\
+#   ^^^^ keyword.control.flow.else.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    {}
+#   ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+#    ^ meta.braces.tcl punctuation.section.braces.end.tcl
+
+# check line continuation with preceding whitespace
     if \
 #   ^^ keyword.control.flow.if.tcl
 #      ^ punctuation.separator.continuation.newline.tcl
@@ -880,6 +945,48 @@
 #                                             ^ punctuation.definition.string.end.tcl
 #                                              ^ - string
 
+    array\
+#   ^^^^^ keyword.other.builtin.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    names\
+#   ^^^^^ variable.function.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    list_name\
+#   ^^^^^^^^^ variable.other.tcl
+#            ^ punctuation.separator.continuation.newline.tcl
+    -glob\
+#   ^^^^^ variable.parameter.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    "pa?[A-z]ttern"
+#  ^ - variable - string
+#   ^ punctuation.definition.string.begin.tcl
+#   ^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#      ^ constant.other.placeholder.tcl
+#       ^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
+#                 ^ punctuation.definition.string.end.tcl
+#                  ^ - string
+
+    array \
+#   ^^^^^ keyword.other.builtin.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    names \
+#   ^^^^^ variable.function.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    list_name \
+#   ^^^^^^^^^ variable.other.tcl
+#             ^ punctuation.separator.continuation.newline.tcl
+    -glob \
+#   ^^^^^ variable.parameter.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    "pa?[A-z]ttern"
+#  ^ - variable - string
+#   ^ punctuation.definition.string.begin.tcl
+#   ^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#      ^ constant.other.placeholder.tcl
+#       ^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
+#                 ^ punctuation.definition.string.end.tcl
+#                  ^ - string
+
 ##############################################################################
 # after commands
 ##############################################################################
@@ -892,6 +999,15 @@
 #         ^^^^^^ constant.language.tcl
 #                ^^^ variable.other.tcl
 
+    after\
+#   ^^^^^ keyword.other.builtin.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    cancel\
+#   ^^^^^^ constant.language.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    $id
+#   ^^^ variable.other.tcl
+
     after info $id
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^^^^ constant.language.tcl
@@ -901,6 +1017,15 @@
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^^^^ constant.language.tcl
 #              ^^^^^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
+
+    after\
+#   ^^^^^ keyword.other.builtin.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    $event\
+#   ^^^^^^ variable.other.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    $id
+#   ^^^ variable.other.tcl
 
 ##############################################################################
 # string commands
@@ -915,6 +1040,19 @@
 #                               ^^^^^^ keyword.other.builtin.tcl
 #                                      ^^^^ variable.function.string.tcl
 #                                           ^^^^^ variable.other.tcl
+
+    string\
+#   ^^^^^^ keyword.other.builtin.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    compare\
+#   ^^^^^^^ variable.function.string.tcl
+#          ^ punctuation.separator.continuation.newline.tcl
+    $str1\
+#   ^^^^^ variable.other.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    $str2
+#   ^^^^^ variable.other.tcl
+
     string \
 #   ^^^^^^ keyword.other.builtin.tcl
 #          ^ punctuation.separator.continuation.newline.tcl
@@ -958,6 +1096,28 @@
 #                                ^ constant.other.placeholder.tcl
 #                                  ^ punctuation.definition.string.end.tcl
 #                                    ^^^^ variable.other.tcl
+
+    string\
+#   ^^^^^^ keyword.other.builtin.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    match\
+#  ^ - variable.function
+#   ^^^^^ variable.function.string.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    -nocase\
+#   ^^^^^^^ variable.parameter.tcl
+#          ^ punctuation.separator.continuation.newline.tcl
+    "patt[-[\]_A-z]r?n" $str
+#   ^^^^^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#        ^ punctuation.section.bracket.begin.tcl
+#        ^^^^^^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
+#         ^ - punctuation.separator
+#           ^^ constant.character.escape.tcl
+#               ^  punctuation.separator.sequence.tcl
+#                 ^ punctuation.section.bracket.begin.tcl
+#                   ^ constant.other.placeholder.tcl
+#                     ^ punctuation.definition.string.end.tcl
+#                       ^^^^ variable.other.tcl
 
     string \
 #   ^^^^^^ keyword.other.builtin.tcl
