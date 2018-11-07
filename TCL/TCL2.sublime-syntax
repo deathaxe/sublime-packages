@@ -27,7 +27,7 @@ variables:
       auto_mkindex_old|auto_qualify|auto_reset|bgerror|binary|cd|clock|close|
       concat|dde|encoding|eof|error|eval|exec|expr|fblocked|fconfigure|fcopy|
       file|fileevent|filename|flush|format|gets|glob|global|history|http|incr|
-      info|interp|join|library|memory|msgcat|namespace|open|package|parray|
+      info|interp|join|library|memory|msgcat|open|package|parray|
       pid|pkg::create|pkg_mkIndex|puts|pwd|re_syntax|read|regexp|regsub|registry|rename|
       resource|scan|seek|set|socket|SafeBase|source|split|string|subst|Tcl|
       tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|tcl_startOfPreviousWord|
@@ -50,21 +50,21 @@ contexts:
     - include: comments
     # special commands
     - include: flow-control
-    - include: namespace
-    - include: proc
     - include: cmd-array
     - include: cmd-after
+    - include: cmd-regexp
     - include: cmd-string
-
+    - include: proc
+    - include: namespace
     - match: '{{keywords}}'
       scope: keyword.other.builtin.tcl
-      push: cmd-generic-args
+      push: cmd-generic-end
     - match: '{{math_funcs}}'
       scope: support.function.math.tcl
-      push: cmd-generic-args
+      push: cmd-generic-end
     # generic commands
     - match: (?=\S)
-      push: [cmd-generic-args, cmd-generic-name]
+      push: [cmd-generic-end, cmd-generic-name]
 
 ##[ GENERIC COMMANDS ]########################################################
 
@@ -82,7 +82,11 @@ contexts:
     - include: expressions
     - include: eow-pop
 
-  cmd-generic-args:
+  cmd-generic-arg:
+    - include: expressions
+    - include: eow-pop
+
+  cmd-generic-end:
     - meta_scope: meta.function-call.tcl
     - include: cmd-generic-switches
     - include: expressions
@@ -97,7 +101,7 @@ contexts:
   cmd-after:
     - match: after{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-generic-args, cmd-after-args]
+      push: [cmd-generic-end, cmd-after-args]
 
   cmd-after-args:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/after.htm
@@ -111,7 +115,7 @@ contexts:
   cmd-array:
     - match: array{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-generic-args, cmd-array-args]
+      push: [cmd-generic-end, cmd-array-args]
 
   cmd-array-args:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/array.htm
@@ -132,12 +136,67 @@ contexts:
       scope: variable.parameter.tcl
     - include: else-pop
 
+##[ REGEXP COMMANDS ]#########################################################
+
+  cmd-regexp:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/regexp.htm
+    - match: regexp{{b}}
+      scope: keyword.other.builtin.tcl
+      push:
+        - cmd-generic-end
+        - cmd-regexp-pattern
+        - cmd-regexp-switches
+    - match: regsub{{b}}
+      scope: keyword.other.builtin.tcl
+      push:
+        - cmd-generic-end
+        - cmd-regexp-pattern
+        - cmd-generic-arg
+        - cmd-regexp-pattern
+        - cmd-regexp-switches
+
+  cmd-regexp-pattern:
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      push:
+        - meta_scope: meta.braces.tcl
+        - meta_content_scope: string.regexp.tcl
+        - match: \}
+          scope: punctuation.section.braces.end.tcl
+          pop: true
+        - include: scope:source.regexp#base-literal
+    - match: \"
+      scope: punctuation.definition.string.begin.tcl
+      push:
+        - meta_scope: string.quoted.double.tcl
+        - meta_content_scope: string.regexp.tcl
+        - match: \"
+          scope: punctuation.definition.string.end.tcl
+          pop: true
+        - include: scope:source.regexp#base-literal
+    - include: else-pop
+
+  cmd-regexp-switches:
+    # Marks the end of switches. The argument following this one will be treated
+    # as exp even if it starts with a -.
+    - match: --
+      scope: punctuation.terminator.switches.tcl
+      pop: true
+    # The word after start is not the regexp pattern
+    - match: -start{{b}}
+      scope: variable.parameter.tcl
+      push: cmd-generic-arg
+    # Normal switches
+    - match: -(about|expanded|indices|line|linestop|lineanchor|nocase|all|inline){{b}}
+      scope: variable.parameter.tcl
+    - include: else-pop
+
 ##[ STRING COMMANDS ]#########################################################
 
   cmd-string:
     - match: string{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-generic-args, cmd-string-args]
+      push: [cmd-generic-end, cmd-string-args]
 
   cmd-string-args:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/string.htm
@@ -231,7 +290,7 @@ contexts:
       push:
         - match: (ok|error|return|break|continue){{b}}
           scope: constant.language.tcl
-        - include: cmd-generic-args
+        - include: cmd-generic-end
 
     # conditional
     - match: catch{{b}}

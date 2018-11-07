@@ -1028,6 +1028,86 @@
 #   ^^^ variable.other.tcl
 
 ##############################################################################
+# regexp commands
+##############################################################################
+
+    regexp {instance="?([^" \t]+)"?} $counter matchedstring instance; # comment
+#   ^^^^^^ keyword.other.builtin.tcl
+#         ^ - keyword - meta.braces - string
+#          ^ punctuation.section.braces.begin.tcl
+#          ^^^^^^^^^^^^^^^^^^^^^^^^^ meta.braces.tcl
+#           ^^^^^^^^^^^^^^^^^^^^^^^ string.regexp
+#                                  ^ punctuation.section.braces.end.tcl
+#                                   ^ - meta.braces - string
+#                                    ^^^^^^^^ variable.other.tcl
+#                                             ^^^^^^^^^^^^^^^^^^^^^^ meta.function-call.tcl
+#                                                                   ^ punctuation.terminator.command.tcl
+#                                                                     ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    set check1 [regexp {^'(.){0,32}'$} $param]
+    #                   ^^^^^^^^^^^^^ string.regexp
+
+    set check2 [regexp {[*\?\|"<>:/\]]+} $param]
+    #                   ^^^^^^^^^^^^^^^ string.regexp
+
+    set stepquote [regsub -all {"} $line {""} ]
+    #                             ^ - string
+
+    regexp  -- -na
+
+    regsub -all {[A-z]\d+na\/\b} $line {\\} line
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^^^ variable.parameter.tcl
+#               ^ punctuation.section.braces.begin.tcl
+#               ^^^^^^^^^^^^^^^^ meta.braces.tcl
+#                ^^^^^ meta.set.regexp
+#                          ^^ constant.character.escape.regexp
+#                              ^ punctuation.section.braces.end.tcl
+#                                ^^^^^ variable.other.tcl
+#                                      ^ punctuation.section.braces.begin.tcl
+#                                      ^^^^ meta.braces.tcl
+#                                       ^^ constant.character.escape.regexp
+#                                         ^ punctuation.section.braces.end.tcl
+
+    regsub\
+#   ^^^^^^ keyword.other.builtin.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    -all\
+#   ^^^^ variable.parameter.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    {[A-z]\d+na\/\b}\
+#   ^ punctuation.section.braces.begin.tcl
+#   ^^^^^^^^^^^^^^^^ meta.braces.tcl
+#    ^^^^^ meta.set.regexp
+#              ^^ constant.character.escape.regexp
+#                  ^ punctuation.section.braces.end.tcl
+#                   ^ punctuation.separator.continuation.newline.tcl
+    $line\
+#   ^^^^^ variable.other.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    {\\}\
+#   ^ punctuation.section.braces.begin.tcl
+#   ^^^^ meta.braces.tcl
+#    ^^ constant.character.escape.regexp
+#      ^ punctuation.section.braces.end.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    line
+#   ^^^^ - keyword.other
+
+    regsub -all "[A-z]\d+na\/\b" $line "\\" line
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^^^ variable.parameter.tcl
+#               ^ string.quoted.double.tcl - string.regexp punctuation.definition.string.begin.tcl
+#                ^^^^^^^^^^^^^^ string.quoted.double.tcl string.regexp.tcl
+#                ^^^^^ meta.set.regexp
+#                          ^^ constant.character.escape.regexp
+#                              ^ string.quoted.double.tcl - string.regexp punctuation.definition.string.end.tcl
+#                                ^^^^^ variable.other.tcl
+#                                      ^ string.quoted.double.tcl - string.regexp punctuation.definition.string.begin.tcl
+#                                       ^^ string.quoted.double.tcl string.regexp constant.character.escape.regexp
+#                                         ^ string.quoted.double.tcl - string.regexp punctuation.definition.string.end.tcl
+
+##############################################################################
 # string commands
 ##############################################################################
 
