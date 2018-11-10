@@ -10,10 +10,10 @@
 
     cmd arg1 arg2; cmd arg1 arg2
 #  ^ - meta.function-call
-#   ^^^^^^^^^^^^^^ meta.function-call.tcl
+#   ^^^^^^^^^^^^^ meta.function-call.tcl
 #                ^ punctuation.terminator.command.tcl
 #                 ^ - meta
-#                  ^^^^^^^^^^^^^^ meta.function-call.tcl
+#                  ^^^^^^^^^^^^^ meta.function-call.tcl
     cmd\
 #   ^^^ variable.function.tcl
 #      ^ punctuation.separator.continuation.newline.tcl
@@ -31,6 +31,13 @@
 #        ^ punctuation.separator.continuation.newline.tcl
     arg2
 #   ^^^^ - variable.function
+
+    cmd \; v]text [v]text
+#       ^^ constant.character.escape.other.tcl
+#           ^ - punctuation
+#                 ^ punctuation.section.substitution.begin.tcl
+#                 ^^^ meta.substitution.tcl
+#                   ^ punctuation.section.substitution.end.tcl
 
 
     [cmd arg][cmd arg] {puts "str"}
@@ -77,7 +84,7 @@
 #    - string - punctuation
 
 # Command substitution, variable substitution, and backslash substitution are performed
-    "$foo ${bar + 2} [baz]"
+    "$foo ${bar + 2} [baz]""invalid"
 #  ^ - string - punctuation
 #   ^ punctuation.definition.string.begin.tcl
 #   ^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.double.tcl
@@ -93,7 +100,7 @@
 #                        ^ punctuation.section.substitution.end.tcl
 #                         ^ punctuation.definition.string.end.tcl
 #                          ^ - string - punctuation
-
+#                          ^^^^^^^^^ invalid.illegal.end-of-word-expected.tcl
 
 # backslash substitution
     "foo $bar # baz ${bar + 2} [proc eval {}] \h \" "
@@ -140,11 +147,11 @@
 # between the outer braces, not including the braces themselves.
 ##############################################################################
 
-    {}
+    {}{
 #  ^ - meta.braces - punctuation
 #   ^ meta.braces.tcl punctuation.section.braces.begin.tcl
 #    ^ meta.braces.tcl punctuation.section.braces.end.tcl
-#     ^ - meta.braces - punctuation
+#     ^ invalid.illegal.end-of-word-expected.tcl - meta.braces - punctuation
 
     {
 #  ^ - meta.braces - punctuation
@@ -566,7 +573,7 @@
 #       ^^^^^^^^^^^^^ comment.line.double-dash.tcl
 
     cmd ; # no comment
-#       ^ meta.function-call.tcl punctuation.terminator.command.tcl
+#       ^ punctuation.terminator.command.tcl
 #         ^ punctuation.definition.comment.begin.tcl
 #         ^^^^^^^^^^^^^ comment.line.double-dash.tcl
 
@@ -666,7 +673,7 @@
     break invalid ; # comment
 #   ^^^^^ keyword.control.flow.break.tcl
 #        ^ - keyword - invalid
-#         ^^^^^^^ invalid.illegal.command-end-expected.tcl
+#         ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 #                ^ - invalid
 #                 ^ punctuation.terminator.command.tcl
 #                   ^ comment.line.double-dash.tcl
@@ -683,7 +690,7 @@
     continue "test";# comment
 #   ^^^^^^^^ keyword.control.flow.continue.tcl
 #           ^ - keyword - invalid
-#            ^^^^^^ invalid.illegal.command-end-expected.tcl
+#            ^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 #                  ^ punctuation.terminator.command.tcl
 #                   ^ comment.line.double-dash.tcl
 
@@ -884,6 +891,78 @@
         puts "bar"
     }
 
+    if {[catch {ns::func -class interface \
+#   ^^^ meta.statement.conditional.tcl
+#      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl
+#   ^^ keyword.control.flow.if.tcl
+#      ^ punctuation.section.braces.begin.tcl
+#       ^ punctuation.section.substitution.begin.tcl
+#        ^^^^^ keyword.control.flow.catch.tcl
+#              ^ punctuation.section.braces.begin.tcl
+#               ^^^^^^^^ meta.command.tcl variable.function.tcl
+#                 ^^ punctuation.accessor.colon.tcl
+#                        ^^^^^^ variable.parameter.tcl
+#                                         ^ punctuation.separator.continuation.newline.tcl
+        -flags "statistics,interfaceautoprobe" \
+#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#       ^^^^^^ variable.parameter.tcl
+#              ^ punctuation.definition.string.begin.tcl
+#              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                         ^ - punctuation
+#                                            ^ punctuation.definition.string.end.tcl
+#                                              ^ punctuation.separator.continuation.newline.tcl
+        -name $aggrname -role $extra_role \
+#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#       ^^^^^ variable.parameter.tcl
+#             ^^^^^^^^^ variable.other.tcl
+#                       ^^^^^ variable.parameter.tcl
+#                             ^^^^^^^^^^^ variable.other.tcl
+#                                         ^ punctuation.separator.continuation.newline.tcl
+                        -parameters [array get params] \
+#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#                       ^^^^^^^^^^^ variable.parameter.tcl
+#                                   ^ punctuation.section.substitution.begin.tcl
+#                                   ^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl meta.substitution.tcl
+#                                    ^^^^^ keyword.other.builtin.tcl
+#                                                    ^ punctuation.section.substitution.end.tcl
+#                                                      ^ punctuation.separator.continuation.newline.tcl
+        -opaque [list "becs.editor" "ifrole.tcl"] \
+#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#       ^^^^^^^ variable.parameter.tcl
+#               ^ punctuation.section.substitution.begin.tcl
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl meta.substitution.tcl
+#                ^^^^ keyword.other.builtin.tcl
+#                     ^ punctuation.definition.string.begin.tcl
+#                     ^^^^^^^^^^^^^ string.quoted.double.tcl
+#                          ^ - punctuation
+#                                 ^ punctuation.definition.string.end.tcl
+#                                  ^ - string
+#                                   ^ punctuation.definition.string.begin.tcl
+#                                   ^^^^^^^^^^^^ string.quoted.double.tcl
+#                                        ^ - punctuation
+#                                              ^ punctuation.definition.string.end.tcl
+#                                               ^ punctuation.section.substitution.end.tcl
+#                                                 ^ punctuation.separator.continuation.newline.tcl
+        -parentoid $aggr_attach_oid} err]} {
+#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#       ^^^^^^^^^^ variable.parameter.tcl
+#                  ^^^^^^^^^^^^^^^^ variable.other.tcl
+#                                  ^ punctuation.section.braces.end.tcl
+#                                   ^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl
+#                                       ^ punctuation.section.substitution.end.tcl
+#                                        ^ meta.statement.conditional.tcl meta.braces.tcl punctuation.section.braces.end.tcl - meta.substitution
+#                                         ^ meta.statement.conditional.tcl - meta.braces - meta.substitution - punctuation
+#                                          ^ meta.statement.conditional.tcl meta.braces.tcl punctuation.section.braces.begin.tcl
+        return "Creating aggregator interface $aggrname under element/management element-module OID $aggr_attach_oid: $err"
+#<- meta.statement.conditional.tcl meta.braces.tcl
+    }
+#   ^ meta.statement.conditional.tcl meta.braces.tcl punctuation.section.braces.end.tcl
+
 ##############################################################################
 # for loop tests
 ##############################################################################
@@ -1031,6 +1110,15 @@
 # regexp commands
 ##############################################################################
 
+# -------------------------------------------------#
+# https://github.com/sublimehq/Packages/issues/779
+# ------------------------------------------------ #
+regexp -inline -all -- {%[a-zA-Z_]*%} "whatever"
+#      ^^^^^^^^^^^^^^^^ - string
+
+regexp -all -inline {%[a-zA-Z_]*%} "whatever"
+#      ^^^^^^^^^^^^^ - string
+
     regexp {instance="?([^" \t]+)"?} $counter matchedstring instance; # comment
 #   ^^^^^^ keyword.other.builtin.tcl
 #         ^ - keyword - meta.braces - string
@@ -1053,33 +1141,50 @@
     set stepquote [regsub -all {"} $line {""} ]
     #                             ^ - string
 
-    regexp  -- -na
+    # regexp  -- -na
+
+    regsub
+#   ^^^^^^ keyword.other.builtin.tcl
+
+    regsub ; regexp;#
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^ punctuation.terminator.command.tcl
+#            ^^^^^^ keyword.other.builtin.tcl
+#                  ^ punctuation.terminator.command.tcl
+#                   ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    regsub -start 5 -all -- -all\b[set var] $var
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^^^^^ variable.parameter.regexp.tcl
+#                 ^ constant.numeric.integer.tcl
+#                   ^^^^ variable.parameter.regexp.tcl
+#                        ^^ punctuation.terminator.switches.tcl
+#                           ^^^^^^^^^^^^^^^ string.unquoted.tcl string.regexp.tcl
+#                                 ^ punctuation.section.substitution.begin.tcl
+#                                 ^^^^^^^^^ meta.substitution.tcl
+#                                         ^ punctuation.section.substitution.end.tcl
+#                                           ^^^^ variable.other.tcl
 
     regsub -all {[A-z]\d+na\/\b} $line {\\} line
 #   ^^^^^^ keyword.other.builtin.tcl
-#          ^^^^ variable.parameter.tcl
+#          ^^^^ variable.parameter.regexp.tcl
 #               ^ punctuation.section.braces.begin.tcl
 #               ^^^^^^^^^^^^^^^^ meta.braces.tcl
-#                ^^^^^ meta.set.regexp
-#                          ^^ constant.character.escape.regexp
 #                              ^ punctuation.section.braces.end.tcl
 #                                ^^^^^ variable.other.tcl
 #                                      ^ punctuation.section.braces.begin.tcl
 #                                      ^^^^ meta.braces.tcl
-#                                       ^^ constant.character.escape.regexp
 #                                         ^ punctuation.section.braces.end.tcl
 
     regsub\
 #   ^^^^^^ keyword.other.builtin.tcl
 #         ^ punctuation.separator.continuation.newline.tcl
     -all\
-#   ^^^^ variable.parameter.tcl
+#   ^^^^ variable.parameter.regexp.tcl
 #       ^ punctuation.separator.continuation.newline.tcl
     {[A-z]\d+na\/\b}\
 #   ^ punctuation.section.braces.begin.tcl
 #   ^^^^^^^^^^^^^^^^ meta.braces.tcl
-#    ^^^^^ meta.set.regexp
-#              ^^ constant.character.escape.regexp
 #                  ^ punctuation.section.braces.end.tcl
 #                   ^ punctuation.separator.continuation.newline.tcl
     $line\
@@ -1088,7 +1193,6 @@
     {\\}\
 #   ^ punctuation.section.braces.begin.tcl
 #   ^^^^ meta.braces.tcl
-#    ^^ constant.character.escape.regexp
 #      ^ punctuation.section.braces.end.tcl
 #       ^ punctuation.separator.continuation.newline.tcl
     line
@@ -1096,16 +1200,14 @@
 
     regsub -all "[A-z]\d+na\/\b" $line "\\" line
 #   ^^^^^^ keyword.other.builtin.tcl
-#          ^^^^ variable.parameter.tcl
-#               ^ string.quoted.double.tcl - string.regexp punctuation.definition.string.begin.tcl
-#                ^^^^^^^^^^^^^^ string.quoted.double.tcl string.regexp.tcl
-#                ^^^^^ meta.set.regexp
-#                          ^^ constant.character.escape.regexp
-#                              ^ string.quoted.double.tcl - string.regexp punctuation.definition.string.end.tcl
+#          ^^^^ variable.parameter.regexp.tcl
+#               ^ punctuation.definition.string.begin.tcl
+#               ^^^^^^^^^^^^^^^^ string.quoted.double.tcl string.regexp.tcl
+#                              ^ punctuation.definition.string.end.tcl
 #                                ^^^^^ variable.other.tcl
-#                                      ^ string.quoted.double.tcl - string.regexp punctuation.definition.string.begin.tcl
-#                                       ^^ string.quoted.double.tcl string.regexp constant.character.escape.regexp
-#                                         ^ string.quoted.double.tcl - string.regexp punctuation.definition.string.end.tcl
+#                                      ^ punctuation.definition.string.begin.tcl
+#                                      ^^^^ string.quoted.double.tcl string.regexp
+#                                         ^ punctuation.definition.string.end.tcl
 
 ##############################################################################
 # string commands

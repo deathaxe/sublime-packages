@@ -46,8 +46,10 @@ variables:
 
 contexts:
   main:
-    # [1] Commands
     - include: comments
+    - match: ;
+      scope: punctuation.terminator.command.tcl
+
     # special commands
     - include: flow-control
     - include: cmd-array
@@ -56,55 +58,19 @@ contexts:
     - include: cmd-string
     - include: proc
     - include: namespace
-    - match: '{{keywords}}'
-      scope: keyword.other.builtin.tcl
-      push: cmd-generic-end
-    - match: '{{math_funcs}}'
-      scope: support.function.math.tcl
-      push: cmd-generic-end
+
     # generic commands
-    - match: (?=\S)
-      push: [cmd-generic-end, cmd-generic-name]
-
-##[ GENERIC COMMANDS ]########################################################
-
-  cmd-generic-name:
-    - meta_scope: meta.command.tcl variable.function.tcl
-    - match: \[
-      scope: punctuation.section.substitution.begin.tcl
-      push:
-        - clear_scopes: 1
-        - meta_scope: meta.substitution.tcl
-        - match: \]
-          scope: punctuation.section.substitution.end.tcl
-          pop: true
-        - include: main
-    - include: expressions
-    - include: eow-pop
-
-  cmd-generic-arg:
-    - include: expressions
-    - include: eow-pop
-
-  cmd-generic-end:
-    - meta_scope: meta.function-call.tcl
-    - include: cmd-generic-switches
-    - include: expressions
-    - include: eoc-pop
-
-  cmd-generic-switches:
-    - match: -{{ident}}{{b}}
-      scope: variable.parameter.tcl
+    - include: cmd-generic
 
 ##[ AFTER COMMANDS ]##########################################################
 
   cmd-after:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/after.htm
     - match: after{{b}}
       scope: keyword.other.builtin.tcl
       push: [cmd-generic-end, cmd-after-args]
 
   cmd-after-args:
-    # https://www.tcl.tk/man/tcl8.6/TclCmd/after.htm
     - match: (cancel|idle|info){{b}}
       scope: constant.language.tcl
       pop: true
@@ -113,22 +79,26 @@ contexts:
 ##[ ARRAY COMMANDS ]##########################################################
 
   cmd-array:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/array.htm
     - match: array{{b}}
       scope: keyword.other.builtin.tcl
       push: [cmd-generic-end, cmd-array-args]
 
   cmd-array-args:
-    # https://www.tcl.tk/man/tcl8.6/TclCmd/array.htm
     - match: names{{b}}
       scope: variable.function.tcl
-      set: [cmd-string-match-pattern, cmd-array-names-switches, variable-pop, eow-pop]
+      set:
+        - cmd-string-match-pattern
+        - cmd-array-names-switches
+        - cmd-generic-arg
+        - eow-pop
     - match: |-
         (?x:
           anymore|donesearch|exists|get|nextelement|set|size|startsearch|
           statistics|unset
         ){{b}}
       scope: variable.function.tcl
-      set: [variable-pop, eow-pop]
+      set: [cmd-generic-arg, eow-pop]
     - include: else-pop
 
   cmd-array-names-switches:
@@ -146,66 +116,82 @@ contexts:
         - cmd-generic-end
         - cmd-regexp-pattern
         - cmd-regexp-switches
+        - eow-pop
     - match: regsub{{b}}
       scope: keyword.other.builtin.tcl
       push:
         - cmd-generic-end
+        - cmd-regexp-switches
+        - eow-pop
+
+  cmd-regexp-switches:
+    - match: (?=[""{])
+      set:
         - cmd-regexp-pattern
         - cmd-generic-arg
         - cmd-regexp-pattern
-        - cmd-regexp-switches
-
-  cmd-regexp-pattern:
-    - match: \{
-      scope: punctuation.section.braces.begin.tcl
-      push:
-        - meta_scope: meta.braces.tcl
-        - meta_content_scope: string.regexp.tcl
-        - match: \}
-          scope: punctuation.section.braces.end.tcl
-          pop: true
-        - include: scope:source.regexp#base-literal
-    - match: \"
-      scope: punctuation.definition.string.begin.tcl
-      push:
-        - meta_scope: string.quoted.double.tcl
-        - meta_content_scope: string.regexp.tcl
-        - match: \"
-          scope: punctuation.definition.string.end.tcl
-          pop: true
-        - include: scope:source.regexp#base-literal
-    - include: else-pop
-
-  cmd-regexp-switches:
     # Marks the end of switches. The argument following this one will be treated
     # as exp even if it starts with a -.
-    - match: --
+    - match: \-\-
       scope: punctuation.terminator.switches.tcl
-      pop: true
-    # The word after start is not the regexp pattern
-    - match: -start{{b}}
-      scope: variable.parameter.tcl
-      push: cmd-generic-arg
+      set:
+        - cmd-regexp-pattern
+        - cmd-generic-arg
+        - cmd-regexp-pattern
     # Normal switches
-    - match: -(about|expanded|indices|line|linestop|lineanchor|nocase|all|inline){{b}}
-      scope: variable.parameter.tcl
+    - match: -(about|expanded|indices|line|linestop|lineanchor|nocase|all|inline|start){{b}}
+      scope: variable.parameter.regexp.tcl
+    - include: expressions
     - include: else-pop
+
+  cmd-regexp-pattern:
+    - include: eol-pop
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      set:
+        - meta_scope: meta.braces.tcl string.quoted.other.tcl string.regexp.tcl
+        - include: braces-end-pop
+        # - include: scope:source.regexp#base-literal
+
+        # make sure to ignore nested braces
+        - match: escape
+        - match: \{
+          push:
+            - match: \}
+              pop: true
+            - match: escape
+    - match: \"
+      scope: punctuation.definition.string.begin.tcl
+      set:
+        - meta_scope: string.quoted.double.tcl string.regexp.tcl
+        - include: string-end-pop
+        # - include: scope:source.regexp#base-literal
+        - match: escape
+    - match: (?=\S)
+      set:
+        - meta_scope: string.unquoted.tcl string.regexp.tcl
+        - include: expressions
+        - include: eow-pop
+
 
 ##[ STRING COMMANDS ]#########################################################
 
   cmd-string:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/string.htm
     - match: string{{b}}
       scope: keyword.other.builtin.tcl
       push: [cmd-generic-end, cmd-string-args]
 
   cmd-string-args:
-    # https://www.tcl.tk/man/tcl8.6/TclCmd/string.htm
     - match: is{{b}}
       scope: variable.function.string.tcl
-      set: cmd-string-is-args
+      set: [cmd-string-is-args, eow-pop]
     - match: match{{b}}
       scope: variable.function.string.tcl
-      set: [cmd-string-match-pattern, cmd-string-match-switches]
+      set:
+        - cmd-string-match-pattern
+        - cmd-string-match-switches
+        - eow-pop
     - match: |-
         (?x:
           cat|compare|equal|first|index|last|length|map|range|repeat|
@@ -228,10 +214,11 @@ contexts:
     - include: else-pop
 
   cmd-string-match-switches:
-    - match: -nocase{{b}}
-      scope: variable.parameter.tcl
+    - match: (?=[\"\{])
       pop: true
-    - include: else-pop
+    - match: -\S+?{{b}}
+      scope: variable.parameter.tcl
+    - include: eow-pop-or-illegal
 
   cmd-string-match-pattern:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/string.htm#M35
@@ -240,18 +227,19 @@ contexts:
       scope: punctuation.section.braces.begin.tcl
       set:
         - meta_scope: meta.braces.tcl string.quoted.other.tcl
-        - include: braces-end-pop
         - include: pattern-placeholder
+        - include: braces-end-pop
     - match: \"
       scope: punctuation.definition.string.begin.tcl
       set:
         - meta_scope: string.quoted.double.tcl
-        - match: \"
-          scope: punctuation.definition.string.end.tcl
-          pop: true
         - include: pattern-placeholder
-    - include: expressions
-    - include: else-pop
+        - include: string-end-pop
+    - match: (?=\S)
+      set:
+        - meta_scope: string.unquoted.tcl string.regexp.tcl
+        - include: pattern-placeholder
+        - include: eow-pop
 
   pattern-placeholder:
     - include: escape
@@ -331,7 +319,7 @@ contexts:
       push:
         - braces-cmd-block-pop
         - flow-condition-pop
-        - variable-pop
+        - cmd-generic-arg
         - eow-pop
     - match: while{{b}}
       scope: keyword.control.flow.while.tcl
@@ -341,7 +329,6 @@ contexts:
         - eow-pop
 
   flow-condition-pop:
-    - meta_content_scope: meta.condition.tcl
     - match: (false|true){{b}}
       scope: constant.language.tcl
     - include: braces-condition-pop
@@ -372,7 +359,7 @@ contexts:
   namespace:
     - match: namespace{{b}}
       scope: keyword.control.flow.namespace.tcl
-      push: [namespace-meta, braces-cmd-block-pop, namespace-name, namespace-eval, eow-pop]
+      push: [namespace-meta, braces-cmd-block-pop, namespace-name, namespace-eval]
 
   namespace-eval:
     - match: '{{ident}}'
@@ -415,10 +402,97 @@ contexts:
     - include: expressions
     - include: eoc-pop
 
-##[ BRACES ]##################################################################
+##[ RULE 1 - COMMANDS ]#######################################################
+
+  cmd-generic:
+    - match: '{{keywords}}'
+      scope: keyword.other.builtin.tcl
+      push: cmd-generic-end
+    - match: '{{math_funcs}}'
+      scope: support.function.math.tcl
+      push: cmd-generic-end
+    - match: (?=\S)
+      push: [cmd-generic-end, cmd-generic-name]
+
+  cmd-generic-name:
+    - meta_scope: meta.command.tcl variable.function.tcl
+    - match: \[
+      scope: punctuation.section.substitution.begin.tcl
+      push:
+        - clear_scopes: 1
+        - meta_scope: meta.substitution.tcl
+        - match: \]
+          scope: punctuation.section.substitution.end.tcl
+          pop: true
+        - include: main
+    - include: expressions
+    - include: eow-pop
+
+  cmd-generic-arg:
+    - match: (?=\S)
+      set:
+        - meta_content_scope: meta.argument.tcl variable.other.tcl
+        - include: expressions
+        - include: eow-pop
+
+  cmd-generig-var:
+    # generic variable definition
+    - match: '{{ident}}{{b}}'
+      scope: meta.definition.variable.tcl variable.other.tcl
+      pop: true
+    - match: else-pop
+
+  cmd-generic-end:
+    - meta_scope: meta.function-call.tcl
+    - include: cmd-generic-switches
+    - include: expressions
+    - include: eoc-pop
+
+  cmd-generic-switches:
+    - match: -{{ident}}{{b}}
+      scope: variable.parameter.tcl
+
+##[ RULE 2 - WORDS ]##########################################################
+
+  expressions:
+    - include: escape
+    - include: numbers
+    - include: string-quoted-double
+    - include: braces
+    - include: substitution
+    - include: variable
+    - include: operator-accessor
+    - include: operator-ternary
+    # - match: '[^{{end_char}}]+'
+    #   scope: string.unquoted.tcl
+
+##[ RULE 4 - DOUBLE QUOTED ]##################################################
+
+  string-quoted-double:
+    - match: \"
+      scope: punctuation.definition.string.begin.tcl
+      push:
+        - meta_scope: string.quoted.double.tcl
+        - include: string-end-pop
+        - include: escape
+        - include: substitution
+        - include: variable
+
+  string-end-pop:
+    # Note: The end of a quoted string is always the end of the word.
+    - match: \"
+      scope: punctuation.definition.string.end.tcl
+      set: eow-pop-or-illegal
+
+##[ RULE 5 - ARGUMENT EXPANSION ]#############################################
+
+  operator-expand-args:
+    - match: \{\*\}(?=\S)
+      scope: keyword.operator.word.tcl
+
+##[ RULE 6 - BRACES ]#########################################################
 
   braces:
-    # [6] Braces
     - include: operator-expand-args
     - match: \{(?=\s*$)
       scope: punctuation.section.braces.begin.tcl
@@ -466,75 +540,11 @@ contexts:
   braces-end-pop:
     - match: \}
       scope: punctuation.section.braces.end.tcl
-      pop: true
+      set: eow-pop-or-illegal
 
-##[ EXPRESSIONS ]#############################################################
-
-  expressions:
-    - include: escape
-    - include: numbers
-    - include: string-quoted-double
-    - include: variable
-    - include: substitution
-    - include: braces
-    - include: operator-accessor
-    # - match: '[^{{end_char}}]+'
-    #   scope: string.unquoted.tcl
-
-  numbers:
-    - match: \b0x\h*\b
-      scope: constant.numeric.integer.tcl
-    - match: \b0b[01]*\b
-      scope: constant.numeric.integer.tcl
-    - match: \b0o[0-7]*\b
-      scope: constant.numeric.integer.tcl
-    - match: \b[0-9]+\.[0-9]+\b
-      scope: constant.numeric.float.tcl
-    - match: \b[0-9]+\b
-      scope: constant.numeric.integer.tcl
-
-  string-quoted-double:
-    # [4] Double Quotes
-    - match: \"
-      scope: punctuation.definition.string.begin.tcl
-      push:
-        - meta_scope: string.quoted.double.tcl
-        - match: \"
-          scope: punctuation.definition.string.end.tcl
-          pop: true
-        - include: escape
-        - include: substitution
-        - include: variable
-
-  operator-bitwise:
-    - match: <<|>>|\||&|!
-      scope: keyword.operator.bitwise.tcl
-
-  operator-logical:
-    - match: \|\||&&|!
-      scope: keyword.operator.logical.tcl
-
-  operator-relational:
-    - match: ==|<=|>=|>|<
-      scope: keyword.operator.relational.tcl
-    - match: n?eq{{b}}
-      scope: keyword.operator.relational.tcl
-
-  operator-ternary:
-    - match: '\?|:'
-      scope: keyword.operator.ternary.tcl
-
-  operator-accessor:
-    - match: :{2,}
-      scope: punctuation.accessor.colon.tcl
-
-  operator-expand-args:
-    # [5] Argument expansion
-    - match: \{\*\}(?=\S)
-      scope: keyword.operator.word.tcl
+##[ RULE 7 - COMMAND SUBSTITUTION ]###########################################
 
   substitution:
-    # [7] Command substitution
     - match: \[
       scope: punctuation.section.substitution.begin.tcl
       push:
@@ -544,35 +554,9 @@ contexts:
           pop: true
         - include: main
 
-  escape:
-    # [9] Backslash substitution
-    - match: \\\d{1,3}
-      scope: constant.character.escape.octal.tcl
-    - match: \\(x\h+|u\h{1,4}|U\h{1,8})
-      scope: constant.character.escape.hexadecimal.tcl
-    - match: \\.
-      scope: constant.character.escape.other.tcl
-
-  comments:
-    # [10] Comments
-    - match: '#'
-      scope: punctuation.definition.comment.begin.tcl
-      push:
-        - meta_scope: comment.line.double-dash.tcl
-        - match: $\n?
-          pop: true
-
-##[ VARIABLES ]###############################################################
-
-  variable-pop:
-    - match: \s*
-      set:
-        - meta_content_scope: variable.other.tcl
-        - include: expressions
-        - include: eow-pop
+##[ RULE 8 - VARIABLES ]######################################################
 
   variable:
-    # [8] Variable substitution
     - match: \${
       scope: punctuation.definition.variable.begin.tcl
       push: [variable-braced-end, variable-braced-name]
@@ -618,7 +602,63 @@ contexts:
         - include: substitution
         - include: variable
 
-##[ PROTOTYPES ]##############################################################
+##[ RULE 9 - ESCAPES ]########################################################
+
+  escape:
+    - match: \\\d{1,3}
+      scope: constant.character.escape.octal.tcl
+    - match: \\(x\h+|u\h{1,4}|U\h{1,8})
+      scope: constant.character.escape.hexadecimal.tcl
+    - match: \\.
+      scope: constant.character.escape.other.tcl
+
+##[ RULE 10 - COMMENTS ]######################################################
+
+  comments:
+    - match: '#'
+      scope: punctuation.definition.comment.begin.tcl
+      push:
+        - meta_scope: comment.line.double-dash.tcl
+        - match: $\n?
+          pop: true
+
+##[ CUSTOM ATOMICS ]##########################################################
+
+  numbers:
+    - match: \b0x\h*\b
+      scope: constant.numeric.integer.tcl
+    - match: \b0b[01]*\b
+      scope: constant.numeric.integer.tcl
+    - match: \b0o[0-7]*\b
+      scope: constant.numeric.integer.tcl
+    - match: \b[0-9]+\.[0-9]+\b
+      scope: constant.numeric.float.tcl
+    - match: \b[0-9]+\b
+      scope: constant.numeric.integer.tcl
+
+  operator-accessor:
+    - match: :{2,}
+      scope: punctuation.accessor.colon.tcl
+
+  operator-bitwise:
+    - match: <<|>>|\||&|!
+      scope: keyword.operator.bitwise.tcl
+
+  operator-logical:
+    - match: \|\||&&|!
+      scope: keyword.operator.logical.tcl
+
+  operator-relational:
+    - match: ==|<=|>=|>|<
+      scope: keyword.operator.relational.tcl
+    - match: n?eq{{b}}
+      scope: keyword.operator.relational.tcl
+
+  operator-ternary:
+    - match: \?|:'
+      scope: keyword.operator.ternary.tcl
+
+##[ CONTEXT POP OFFS ]########################################################
 
   any-pop:
     - match: ''
@@ -627,7 +667,8 @@ contexts:
   else-pop:
     # Pop off with the next none-whitespace or at the end of line.
     - include: eol-pop
-    - include: eos-pop
+    - match: (?=\S)
+      pop: true
 
   line-continuation:
     - match: \\$
@@ -641,21 +682,21 @@ contexts:
         # Note: Comments aren't vaild at the line after a continuation
         # but it helps avoid breaking syntax by syntax-test rules.
         - include: comments
-        - include: eos-pop
+        - match: (?=\S)
+          pop: true
     - match: $\n?
       pop: true
 
-  eos-pop:
-    - match: (?=\S)
-      pop: true
+  eol-pop-or-illegal:
+    - include: eol-pop
+    - match: '[^\s;\)\]\}\\]+'
+      scope: invalid.illegal.end-of-line-expected.tcl
 
   eow-pop:
     # [3] Words
     # Pop off at the end of a word. Words end with the next
     # whitespace, end of line or command termination character.
-    - match: (?=\s)
-      set: else-pop
-    - match: (?=[;\]\}])
+    - match: $\n?
       pop: true
     # A line continuation is also handled as word break.
     - match: \\$
@@ -664,20 +705,27 @@ contexts:
         # Note: Comments aren't vaild at the line after a continuation
         # but it helps avoid breaking syntax by syntax-test rules.
         - include: comments
-        - include: eos-pop
+        - match: (?=\S)
+          pop: true
+    - match: (?=\s)
+      set: else-pop
+    - match: (?=[;\]\}])
+      pop: true
+
+  eow-pop-or-illegal:
+    - include: eow-pop
+    - match: '[^\s;\)\]\}\\]+'
+      scope: invalid.illegal.end-of-word-expected.tcl
 
   eoc-pop:
     # [1] Commands
     # Pop off at the end of a command. Commands end with a newline, semicolon,
     # or if a closing bracket or brace follows.
     - include: eol-pop
-    - match: (?=[\]\}])
-      pop: true
-    - match: ;
-      scope: punctuation.terminator.command.tcl
+    - match: (?=[;\]\}])
       pop: true
 
   eoc-pop-or-illegal:
     - include: eoc-pop
     - match: '[^\s;\)\]\}\\]+'
-      scope: invalid.illegal.command-end-expected.tcl
+      scope: invalid.illegal.end-of-cmd-expected.tcl
