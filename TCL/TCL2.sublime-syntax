@@ -149,7 +149,7 @@ contexts:
     - match: \{
       scope: punctuation.section.braces.begin.tcl
       set:
-        - meta_scope: meta.braces.tcl string.quoted.other.tcl string.regexp.tcl
+        - meta_scope: meta.braces.tcl string.quoted.brace.tcl string.regexp.tcl
         - include: braces-end-pop
         # - include: scope:source.regexp#base-literal
 
@@ -226,7 +226,7 @@ contexts:
     - match: \{
       scope: punctuation.section.braces.begin.tcl
       set:
-        - meta_scope: meta.braces.tcl string.quoted.other.tcl
+        - meta_scope: meta.braces.tcl string.quoted.brace.tcl
         - include: pattern-placeholder
         - include: braces-end-pop
     - match: \"
@@ -283,25 +283,25 @@ contexts:
     # conditional
     - match: catch{{b}}
       scope: keyword.control.flow.catch.tcl
-      push: braces-cmd-block-pop
+      push: braces-block-pop
     - match: if{{b}}
       scope: keyword.control.flow.if.tcl
       push:
         - flow-elseif-pop
-        - braces-cmd-block-pop
+        - braces-block-pop
         - flow-condition-pop
         - eow-pop
     - match: else(if)?{{b}}
       scope: invalid.illegal.unexpected.tcl
       push:
         - flow-elseif-pop
-        - braces-cmd-block-pop
+        - braces-block-pop
         - flow-condition-pop
         - eow-pop
     - match: switch{{b}}
       scope: keyword.control.flow.switch.tcl
       push:
-        - braces-cmd-block-pop
+        - braces-block-pop
         - flow-condition-pop
         - eow-pop
 
@@ -309,22 +309,22 @@ contexts:
     - match: for{{b}}
       scope: keyword.control.flow.for.tcl
       push:
-        - braces-cmd-block-pop
-        - braces-cmd-block-pop
+        - braces-block-pop
+        - braces-block-pop
         - flow-condition-pop
-        - braces-cmd-block-pop
+        - braces-block-pop
         - eow-pop
     - match: foreach{{b}}
       scope: keyword.control.flow.foreach.tcl
       push:
-        - braces-cmd-block-pop
+        - braces-block-pop
         - flow-condition-pop
         - cmd-generic-arg
         - eow-pop
     - match: while{{b}}
       scope: keyword.control.flow.while.tcl
       push:
-        - braces-cmd-block-pop
+        - braces-block-pop
         - flow-condition-pop
         - eow-pop
 
@@ -344,13 +344,13 @@ contexts:
     - match: elseif{{b}}
       scope: keyword.control.flow.elseif.tcl
       push:
-        - braces-cmd-block-pop
+        - braces-block-pop
         - flow-condition-pop
         - eow-pop
     - match: else{{b}}
       scope: keyword.control.flow.else.tcl
       push:
-        - braces-cmd-block-pop
+        - braces-block-pop
         - eow-pop
     - include: eoc-pop
 
@@ -359,7 +359,7 @@ contexts:
   namespace:
     - match: namespace{{b}}
       scope: keyword.control.flow.namespace.tcl
-      push: [namespace-meta, braces-cmd-block-pop, namespace-name, namespace-eval]
+      push: [namespace-meta, braces-block-pop, namespace-name, namespace-eval]
 
   namespace-eval:
     - match: '{{ident}}'
@@ -384,7 +384,7 @@ contexts:
   proc:
     - match: proc{{b}}
       scope: keyword.control.flow.tcl
-      push: [proc-meta, braces-cmd-block-pop, proc-params, proc-name]
+      push: [proc-meta, braces-block-pop, proc-params, proc-name]
 
   proc-name:
     - match: '{{ident}}'
@@ -457,9 +457,9 @@ contexts:
   expressions:
     - include: escape
     - include: numbers
+    - include: substitution
     - include: string-quoted-double
     - include: braces
-    - include: substitution
     - include: variable
     - include: operator-accessor
     - include: operator-ternary
@@ -492,50 +492,82 @@ contexts:
 
 ##[ RULE 6 - BRACES ]#########################################################
 
-  braces:
+  braces-block-pop:
+    # a block of commands
     - include: operator-expand-args
-    - match: \{(?=\s*$)
-      scope: punctuation.section.braces.begin.tcl
-      push: braces-cmd-block-body
     - match: \{
       scope: punctuation.section.braces.begin.tcl
-      push: braces-string-body
-
-  braces-string-body:
-    - meta_scope: meta.braces.tcl string.quoted.other.tcl
-    - include: braces-end-pop
-    - match: \\\\
-    - match: \\[n{[()]}]
-      scope: constant.character.escape.other.tcl
-    - include: braces
-    - include: numbers
+      set:
+        - meta_scope: meta.braces.tcl
+        - include: braces-end-pop
+        - include: main
+    - include: else-pop
 
   braces-condition-pop:
     - include: operator-expand-args
     - match: \{
       scope: punctuation.section.braces.begin.tcl
-      set: braces-condition-body
+      set:
+        - meta_scope: meta.braces.tcl
+        - include: braces-end-pop
+        - include: operator-logical
+        - include: operator-relational
+        - include: line-continuation
+        - include: expressions
 
-  braces-condition-body:
-    - meta_scope: meta.braces.tcl
-    - include: braces-end-pop
-    - include: operator-logical
-    - include: operator-relational
-    - include: line-continuation
-    - include: expressions
-
-  braces-cmd-block-pop:
+  braces:
     - include: operator-expand-args
+    - include: braces-string
+    - include: braces-expr
+
+  braces-expr:
     - match: \{
       scope: punctuation.section.braces.begin.tcl
-      set: braces-cmd-block-body
-    - include: else-pop
+      push:
+        - meta_scope: meta.braces.tcl
+        - include: braces-end-pop
+        - include: braces-expr-body
 
-  braces-cmd-block-body:
-    - meta_scope: meta.braces.tcl
-    - include: braces-end-pop
+  braces-expr-body:
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      push:
+        - meta_scope: meta.braces.tcl
+        - match: \}
+          scope: punctuation.section.braces.end.tcl
+          pop: true
+        - include: braces-expr-body
     - include: line-continuation
-    - include: main
+    - include: expressions
+    # Note: Each new line within a brace quoted word starts with a command,
+    #       if the previous line was not terminated with a line continuation
+    - match: \n
+      push:
+        - match: (?=\})
+          pop: true
+        - include: main
+
+  braces-string:
+    # A single-line braced block without any other braces is handled as string.
+    - match: \{(?=[^\{]*\})
+      scope: punctuation.section.braces.begin.tcl
+      push:
+        - meta_scope: meta.braces.tcl string.quoted.brace.tcl
+        - include: braces-end-pop
+        - include: braces-string-body
+
+  braces-string-body:
+    # Note: ...for each additional open brace there must be
+    #       an additional close brace
+    - match: \{
+      push:
+        - match: \}
+          pop: true
+        - include: braces-string-body
+    - match: \\\\
+    - match: \\[n{[()]}]
+      scope: constant.character.escape.other.tcl
+    - include: numbers
 
   braces-end-pop:
     - match: \}
@@ -560,7 +592,7 @@ contexts:
     - match: \${
       scope: punctuation.definition.variable.begin.tcl
       push: [variable-braced-end, variable-braced-name]
-    - match: \$
+    - match: \$(?=[_0-9A-Za-z])
       scope: punctuation.definition.variable.tcl
       push: [variable-simple-end, variable-simple-name]
 
