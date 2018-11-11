@@ -1186,14 +1186,41 @@ set regexp {(.{0,200})}
 # regexp commands
 ##############################################################################
 
-# -------------------------------------------------#
 # https://github.com/sublimehq/Packages/issues/779
-# ------------------------------------------------ #
-regexp -inline -all -- {%[a-zA-Z_]*%} "whatever"
-#      ^^^^^^^^^^^^^^^^ - string
-
-regexp -all -inline {%[a-zA-Z_]*%} "whatever"
-#      ^^^^^^^^^^^^^ - string
+    regexp -inline -all -- {%[a-zA-Z_]*%} "whatever"
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^^^^^^ variable.parameter.regexp.tcl
+#                 ^ - punctuation - variable
+#                  ^^^^ variable.parameter.regexp.tcl
+#                      ^ - punctuation - variable
+#                       ^^ punctuation.terminator.switches.tcl
+#                         ^ - meta.braces - punctuation - string
+#                          ^ punctuation.section.braces.begin.tcl
+#                          ^^^^^^^^^^^^^^ meta.braces.tcl string.quoted.brace.tcl string.regexp.tcl
+#                                       ^ punctuation.section.braces.end.tcl
+#                                        ^ - meta.braces - string
+#                                         ^^^^^^^^^^ string.quoted.double.tcl
+    regexp\
+#   ^^^^^^ keyword.other.builtin.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    -inline\
+#   ^^^^^^^ variable.parameter.regexp.tcl
+#          ^ punctuation.separator.continuation.newline.tcl
+    -all\
+#   ^^^^ variable.parameter.regexp.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    --\
+#   ^^ punctuation.terminator.switches.tcl
+#     ^ punctuation.separator.continuation.newline.tcl
+    {%[a-zA-Z_]*%}\
+#  ^ - meta.braces - punctuation - string
+#   ^ punctuation.section.braces.begin.tcl
+#   ^^^^^^^^^^^^^^ meta.braces.tcl string.quoted.brace.tcl string.regexp.tcl
+#                ^ punctuation.section.braces.end.tcl
+#                 ^ punctuation.separator.continuation.newline.tcl
+    "whatever"
+#  ^ - meta.braces - string
+#   ^^^^^^^^^^ string.quoted.double.tcl
 
     regexp {instance="?([^" \t]+)"?} $counter matchedstring instance; # comment
 #   ^^^^^^ keyword.other.builtin.tcl
@@ -1209,10 +1236,10 @@ regexp -all -inline {%[a-zA-Z_]*%} "whatever"
 #                                                                     ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
     set check1 [regexp {^'(.){0,32}'$} $param]
-    #                   ^^^^^^^^^^^^^ string.regexp
+    #                  ^^^^^^^^^^^^^^^ string.regexp
 
     set check2 [regexp {[*\?\|"<>:/\]]+} $param]
-    #                   ^^^^^^^^^^^^^^^ string.regexp
+    #                  ^^^^^^^^^^^^^^^^^ string.regexp
 
     set stepquote [regsub -all {"} $line {""} ]
     #                             ^ - string
@@ -1429,3 +1456,70 @@ regexp -all -inline {%[a-zA-Z_]*%} "whatever"
 ##############################################################################
 
     lappend listName value
+
+##############################################################################
+# set commands
+##############################################################################
+
+    set var "val"
+#  ^ - meta - keyword
+#   ^^^ keyword.other.builtin.tcl
+#      ^ - keyword - variable
+#       ^^^ variable.other.tcl
+#          ^ - variable - string
+#           ^^^^^ string.quoted.double.tcl
+#                ^ - string
+
+    set\
+#  ^ - meta - keyword
+#   ^^^ keyword.other.builtin.tcl
+#      ^ punctuation.separator.continuation.newline.tcl
+    var\
+#   ^^^ variable.other.tcl
+#      ^ punctuation.separator.continuation.newline.tcl
+    "val"
+#   ^^^^^ string.quoted.double.tcl
+#
+
+    set var {val}
+#  ^ - meta - keyword
+#   ^^^ keyword.other.builtin.tcl
+#      ^ - keyword - variable
+#       ^^^ variable.other.tcl
+#           ^^^^^ string.quoted.brace.tcl
+#
+
+    set {var1 var2} [list "val1" {val2}]
+#  ^ - meta - keyword
+#   ^^^ keyword.other.builtin.tcl
+#      ^ - keyword - variable
+#       ^ punctuation.section.braces.begin.tcl
+#       ^^^^^^^^^^^ meta.braces.tcl
+#        ^^^^ variable.other.tcl
+#            ^ - variable
+#             ^^^^ variable.other.tcl
+#                 ^ punctuation.section.braces.end.tcl
+#                  ^ - variable
+#                   ^ punctuation.section.substitution.begin.tcl
+#                   ^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
+#                    ^^^^ keyword.other.builtin.tcl
+#                                      ^ punctuation.section.substitution.end.tcl
+
+    set anAry(msg) "Hello, World!"
+#  ^ - meta - keyword
+#   ^^^ keyword.other.builtin.tcl
+#      ^ - keyword - variable
+#       ^^^^^^^^^^ variable.other.tcl
+#            ^ punctuation.section.parens.begin.tcl
+#            ^^^^^ meta.parens.tcl
+#                ^ punctuation.section.parens.end.tcl
+
+    set vbl in[expr {rand() >= 0.5}]
+
+
+    expr 1 + 5
+
+    expr !{1 > 5}
+
+    expr {1 + 5}
+

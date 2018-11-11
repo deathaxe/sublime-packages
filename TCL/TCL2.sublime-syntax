@@ -28,7 +28,7 @@ variables:
       concat|dde|encoding|eof|error|eval|exec|expr|fblocked|fconfigure|fcopy|
       file|fileevent|filename|flush|format|gets|glob|global|history|http|incr|
       info|interp|join|library|memory|msgcat|open|package|parray|
-      pid|pkg::create|pkg_mkIndex|puts|pwd|re_syntax|read|regexp|regsub|registry|rename|
+      pid|pkg::create|pkg_mkIndex|puts|pwd|re_syntax|read|registry|rename|
       resource|scan|seek|set|socket|SafeBase|source|split|string|subst|Tcl|
       tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|tcl_startOfPreviousWord|
       tcl_wordBreakAfter|tcl_wordBreakBefore|tcltest|tclvars|tell|time|trace|
@@ -52,8 +52,10 @@ contexts:
 
     # special commands
     - include: flow-control
+    - include: cmd-set
     - include: cmd-array
     - include: cmd-after
+    - include: cmd-expr
     - include: cmd-regexp
     - include: cmd-string
     - include: proc
@@ -105,6 +107,17 @@ contexts:
     - match: -(exact|glob|regexp){{b}}
       scope: variable.parameter.tcl
     - include: else-pop
+
+##[ EXPR COMMAND ]############################################################
+
+  cmd-expr:
+    - match: expr{{b}}
+      scope: keyword.other.builtin.tcl
+      push:
+        - include: braces-expr-pop
+        - include: line-continuation
+        - include: expressions
+        - include: eoc-pop
 
 ##[ REGEXP COMMANDS ]#########################################################
 
@@ -170,7 +183,7 @@ contexts:
     - match: (?=\S)
       set:
         - meta_scope: string.unquoted.tcl string.regexp.tcl
-        - include: expressions
+        - include: words
         - include: eow-pop
 
 
@@ -260,6 +273,16 @@ contexts:
     - match: '[*?]'
       scope: constant.other.placeholder.tcl
 
+##[ SET COMMAND ]#############################################################
+
+  cmd-set:
+    - match: set{{b}}
+      scope: keyword.other.builtin.tcl
+      push:
+        - cmd-generic-end
+        - cmd-generig-var
+        - eow-pop
+
 ##[ FLOW CONTROL ]############################################################
 
   flow-control:
@@ -319,7 +342,7 @@ contexts:
       push:
         - braces-block-pop
         - flow-condition-pop
-        - cmd-generic-arg
+        - cmd-generig-var
         - eow-pop
     - match: while{{b}}
       scope: keyword.control.flow.while.tcl
@@ -331,12 +354,8 @@ contexts:
   flow-condition-pop:
     - match: (false|true){{b}}
       scope: constant.language.tcl
-    - include: braces-condition-pop
-    - include: escape
-    - include: numbers
-    - include: string-quoted-double
-    - include: variable
-    - include: substitution
+    - include: braces-expr-pop
+    - include: expressions
     - include: eow-pop
 
   flow-elseif-pop:
@@ -436,11 +455,23 @@ contexts:
         - include: eow-pop
 
   cmd-generig-var:
-    # generic variable definition
-    - match: '{{ident}}{{b}}'
-      scope: meta.definition.variable.tcl variable.other.tcl
-      pop: true
-    - match: else-pop
+    # list like variable
+    - include: operator-expand-args
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      set:
+        - meta_scope: meta.braces.tcl
+        - include: braces-end-pop
+        - match: '{{ident}}'
+          push: [variable-simple-end, variable-simple-name]
+        - include: words
+    # simple variable
+    - match: '{{ident}}'
+      set: [variable-simple-end, variable-simple-name]
+    - match: (?=\S)
+      set:
+        - include: words
+        - include: eow-pop
 
   cmd-generic-end:
     - meta_scope: meta.function-call.tcl
@@ -455,16 +486,21 @@ contexts:
 ##[ RULE 2 - WORDS ]##########################################################
 
   expressions:
+    - include: words
+    - include: operator-accessor
+    - include: operator-arithmetic
+    - include: operator-relational
+    - include: operator-logical
+    - include: operator-bitwise
+    - include: operator-ternary
+
+  words:
     - include: escape
     - include: numbers
     - include: substitution
     - include: string-quoted-double
     - include: braces
     - include: variable
-    - include: operator-accessor
-    - include: operator-ternary
-    # - match: '[^{{end_char}}]+'
-    #   scope: string.unquoted.tcl
 
 ##[ RULE 4 - DOUBLE QUOTED ]##################################################
 
@@ -510,8 +546,6 @@ contexts:
       set:
         - meta_scope: meta.braces.tcl
         - include: braces-end-pop
-        - include: operator-logical
-        - include: operator-relational
         - include: line-continuation
         - include: expressions
 
@@ -528,7 +562,17 @@ contexts:
         - include: braces-end-pop
         - include: braces-expr-body
 
+  braces-expr-pop:
+    - include: operator-expand-args
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      set:
+        - meta_scope: meta.braces.tcl
+        - include: braces-end-pop
+        - include: braces-expr-body
+
   braces-expr-body:
+    - include: operator-expand-args
     - match: \{
       scope: punctuation.section.braces.begin.tcl
       push:
@@ -672,6 +716,10 @@ contexts:
     - match: :{2,}
       scope: punctuation.accessor.colon.tcl
 
+  operator-arithmetic:
+    - match: '[-+*/]'
+      scope: keyword.operator.arithmetic.tcl
+
   operator-bitwise:
     - match: <<|>>|\||&|!
       scope: keyword.operator.bitwise.tcl
@@ -681,7 +729,7 @@ contexts:
       scope: keyword.operator.logical.tcl
 
   operator-relational:
-    - match: ==|<=|>=|>|<
+    - match: ==|!=|<=|>=|>|<
       scope: keyword.operator.relational.tcl
     - match: n?eq{{b}}
       scope: keyword.operator.relational.tcl
