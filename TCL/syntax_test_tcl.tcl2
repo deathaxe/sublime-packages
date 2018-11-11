@@ -183,29 +183,6 @@
     {{{}{}}{}{}}
 #   ^^^^^^^^^^^^ punctuation.section.braces - illegal
 
-    { {\} \{} \n \x10 ; ] $novar ${foo(bar,baz)} }
-#  ^ - meta.braces - punctuation
-#   ^ punctuation.section.braces.begin.tcl
-#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.braces.tcl
-#     ^ punctuation.section.braces.begin.tcl
-#     ^^^^^^^ meta.braces.tcl meta.braces.tcl
-#      ^^ constant.character.escape.other.tcl - punctuation.section.braces
-#         ^^ constant.character.escape.other.tcl - punctuation.section.braces
-#           ^ punctuation.section.braces.end.tcl
-#             ^^ constant.character.escape.other.tcl
-#                ^^^^ - constant.character.escape
-#                     ^ - punctuation
-#                       ^ - punctuation
-#                         ^^^^^^ - variable.other
-#                                ^^^^^^^^^^^^^^^ - variable.other
-#                                 ^ punctuation.section.braces.begin.tcl
-#                                 ^^^^^^^^^^^^^^ meta.braces.tcl meta.braces.tcl
-#                                     ^ - punctuation
-#                                         ^ - punctuation
-#                                             ^ - punctuation
-#                                              ^ punctuation.section.braces.end.tcl
-#                                                ^ punctuation.section.braces.end.tcl
-#                                                 ^ - meta.braces - punctuation
 
 # ----------------------------------------------------------------------------
 # https://github.com/SublimeTextIssues/DefaultPackages/issues/131
@@ -692,6 +669,7 @@ set regexp {(.{0,200})}
 # namespace tests
 ##############################################################################
 
+
     namespace \
 #   ^^^^^^^^^ keyword.control.flow.namespace.tcl
 #             ^ punctuation.separator.continuation.newline.tcl
@@ -702,34 +680,33 @@ set regexp {(.{0,200})}
 #   ^ entity.name.namespace.tcl
 #     ^ punctuation.separator.continuation.newline.tcl
     {
-#^^^ meta.namespace.tcl - meta.braces
-#   ^^ meta.namespace.tcl meta.braces
-#   ^ punctuation.section.braces.begin.tcl
+#^^^ meta.namespace.tcl - meta.block
+#   ^^ meta.namespace.tcl meta.block.tcl
+#   ^ punctuation.section.block.begin.tcl
     }
-#^^^^ meta.namespace.tcl meta.braces.tcl
-#    ^ meta.namespace.tcl - meta.braces.tcl
-#   ^ punctuation.section.braces.end.tcl
-
+#^^^^ meta.namespace.tcl meta.block.tcl
+#    ^ meta.namespace.tcl - meta.block.tcl
+#   ^ punctuation.section.block.end.tcl
 
     namespace eval A {
 #  ^ - meta
-#   ^^^^^^^^^^^^^^^^^^^ meta.namespace
-#                    ^^ meta.braces
+#   ^^^^^^^^^^^^^^^^^^^ meta.namespace.tcl
+#                    ^^ meta.block.tcl
 #   ^^^^^^^^^ keyword.control.flow.namespace
 #             ^^^^ keyword.control.flow.eval
 #                  ^ entity.name.namespace
-#                    ^ punctuation.section.braces.begin
+#                    ^ punctuation.section.block.begin
         namespace eval B \
 #^^^^^^^ meta.namespace
 #       ^^^^^^^^^^^^^^^^^^^ meta.namespace meta.namespace
-#                    ^^ meta.braces
+#                    ^^ meta.block.tcl
 #       ^^^^^^^^^ keyword.control.flow.namespace
 #                 ^^^^ keyword.control.flow.eval
 #                      ^ entity.name.namespace
 #                        ^ punctuation.separator.continuation.newline
         {
 #<- meta.namespace meta.namespace
-#       ^ punctuation.section.braces.begin
+#       ^ punctuation.section.block.begin
             proc A {
 
             }
@@ -741,6 +718,204 @@ set regexp {(.{0,200})}
         }
     }
 
+##############################################################################
+# proc tests
+##############################################################################
+
+    proc
+#   ^^^^ meta.function.tcl keyword.declaration.proc.tcl
+
+    proc name
+#  ^ - meta.function
+#   ^^^^^^^^^^ meta.function.tcl
+#   ^^^^ keyword.declaration.proc.tcl
+#        ^^^^ entity.name.function.tcl
+#            ^ - variable
+    proc $name
+#  ^ - meta.function
+#   ^^^^^^^^^^ meta.function.tcl
+#   ^^^^ keyword.declaration.proc.tcl
+#        ^^^^^ variable.other.tcl
+#             ^ - variable
+
+    proc name args
+#  ^ - meta.function
+#   ^^^^^^^^^^^^^^^ meta.function.tcl
+#             ^^^^ meta.function.parameters.tcl
+#   ^^^^ keyword.declaration.proc.tcl
+#        ^^^^ entity.name.function.tcl
+#            ^ - variable
+#             ^^^^ variable.parameter.tcl
+#                 ^ - variable
+
+    proc $name args
+#  ^ - meta.function
+#   ^^^^^^^^^^^^^^^ meta.function.tcl
+#              ^^^^ meta.function.parameters.tcl
+#   ^^^^ keyword.declaration.proc.tcl
+#        ^^^^^ variable.other.tcl
+#             ^ - variable
+#              ^^^^ variable.parameter.tcl
+#                  ^ - variable
+
+    proc [expr name] args
+#  ^ - meta.function
+#   ^^^^^^^^^^^^^^^^^^^^^ meta.function.tcl
+#                    ^^^^ meta.function.parameters.tcl
+#   ^^^^ keyword.declaration.proc.tcl
+#        ^^^^^^^^^^^ meta.substitution.tcl
+#                   ^ - variable
+#                    ^^^^ variable.parameter.tcl
+#                        ^ - variable
+
+    proc name args body
+#  ^ - meta.function
+#   ^^^^^^^^^^^^^^^^^^^^ meta.function.tcl
+#             ^^^^ meta.function.parameters.tcl
+#   ^^^^ keyword.declaration.proc.tcl
+#        ^^^^ entity.name.function.tcl
+#             ^^^^ variable.parameter.tcl
+#                 ^ - variable
+#                  ^^^^^ meta.function-call.tcl meta.command.tcl
+#                  ^^^^ variable.function.tcl
+#                      ^ - variable.function
+
+    proc\
+#  ^ - meta.function
+#   ^^^^^^ meta.function.tcl
+#   ^^^^ keyword.declaration.proc.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    name\
+#^^^^^^^^^ meta.function.tcl
+#   ^^^^ entity.name.function.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    args\
+#^^^^^^^^^ meta.function.tcl
+#   ^^^^ meta.function.parameters.tcl variable.parameter.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    body
+#^^^^^^^^ meta.function.tcl
+#   ^^^^^ meta.function-call.tcl meta.command.tcl variable.function.tcl
+
+# If name includes any namespace qualifiers, the procedure is created in the specified namespace
+    proc ns::name args body
+#  ^ - meta.function
+#   ^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.tcl
+#        ^^^^^^^^ entity.name.function.tcl
+#          ^^ punctuation.accessor.colon.tcl
+#                 ^^^^ meta.function.parameters.tcl
+#                      ^^^^^ meta.function-call.tcl meta.command.tcl variable.function.tcl
+
+# Args specifies the formal arguments to the procedure. It consists of a list,
+# possibly empty, each of whose elements specifies one argument. Each argument
+# specifier is also a list with either one or two fields. If there is only a
+# single field in the specifier then it is the name of the argument; if there
+# are two fields, then the first is the argument name and the second is its
+# default value.
+    proc name {} {}
+#  ^ - meta.function
+#   ^^^^^^^^^^^^^^^^ meta.function.tcl
+#   ^^^^ keyword.declaration.proc.tcl
+#        ^^^^ entity.name.function.tcl
+#             ^ punctuation.section.braces.begin.tcl
+#             ^^ meta.function.parameters.tcl meta.braces.tcl
+#              ^ punctuation.section.braces.end.tcl
+#                ^ punctuation.section.block.begin.tcl
+#                ^^ meta.block.tcl
+#                 ^ punctuation.section.block.end.tcl
+
+    proc echo {{text "foo" invalid}} {puts $text}
+#  ^ - meta.function
+#   ^^^^^^^^^^ meta.function.tcl - meta.function.parameters - meta.braces
+#             ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
+#              ^^^^^^^^^^^^^^^^^^^^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl
+#                          ^^^^^^^ invalid.illegal.end-of-word-expected.tcl
+#                                  ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
+#                                   ^ meta.function.tcl - meta.function.parameters - meta.braces - meta.block
+#                                    ^^^^^^^^^^^^ meta.block.tcl
+#                                     ^^^^^^^^^^ meta.function-call.tcl
+#   ^^^^ keyword.declaration.proc.tcl
+#        ^^^^ entity.name.function.tcl
+#             ^^ punctuation.section.braces.begin.tcl
+#               ^^^^ variable.parameter.tcl
+#                    ^^^^^ string.quoted.double.tcl
+#                                 ^^ punctuation.section.braces.end.tcl
+#                                    ^ punctuation.section.block.begin.tcl
+#                                     ^^^^ keyword.other.builtin.tcl
+#                                          ^^^^^ variable.other.tcl
+#                                               ^ punctuation.section.block.end.tcl
+
+    proc\
+#  ^ - meta.function
+#   ^^^^^^ meta.function.tcl - meta.function.parameters - meta.braces
+#   ^^^^ keyword.declaration.proc.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    echo\
+#  ^^^^^^^ meta.function.tcl - meta.function.parameters - meta.braces
+#   ^^^^ entity.name.function.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    {\
+#  ^ meta.function.tcl - meta.function.parameters - meta.braces
+#   ^ punctuation.section.braces.begin.tcl
+#   ^^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
+#    ^ punctuation.separator.continuation.newline.tcl
+        {\
+#      ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
+#       ^ punctuation.section.braces.begin.tcl
+#       ^^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+            text\
+#           ^^^^ variable.parameter.tcl
+#               ^ punctuation.separator.continuation.newline.tcl
+            "foo"\
+#           ^^^^^ string.quoted.double.tcl
+#                ^ punctuation.separator.continuation.newline.tcl
+            invalid\
+#           ^^^^^^^ invalid.illegal.end-of-word-expected.tcl
+#                  ^ punctuation.separator.continuation.newline.tcl
+        }\
+#      ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl - punctuation
+#       ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl punctuation.section.braces.end.tcl
+#        ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl punctuation.separator.continuation.newline.tcl
+    }\
+#  ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl - punctuation
+#   ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl punctuation.section.braces.end.tcl
+#    ^ meta.function.tcl punctuation.separator.continuation.newline.tcl
+    {
+#   ^ meta.function.tcl meta.block.tcl punctuation.section.block.begin.tcl
+        puts\
+#       ^^^^ meta.function.tcl meta.block.tcl meta.function-call.tcl keyword.other.builtin.tcl
+#           ^ meta.function.tcl meta.block.tcl meta.function-call.tcl punctuation.separator.continuation.newline.tcl
+        $text
+#       ^^^^^ meta.function.tcl meta.block.tcl meta.function-call.tcl variable.other.tcl
+    }
+#   ^ meta.function.tcl meta.block.tcl punctuation.section.block.end.tcl
+
+    proc mult {par {multiplier 2}} {
+#  ^ - meta.function
+#   ^^^^^^^^^^ meta.function.tcl - meta.function.parameters - meta.braces
+#             ^^^^^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
+#                  ^^^^^^^^^^^^^^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl
+#                                ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
+#                                 ^ meta.function.tcl - meta.function.parameters - meta.braces
+#                                  ^ meta.function.tcl meta.block.tcl punctuation.section.block.begin.tcl
+#             ^ punctuation.section.braces.begin.tcl
+#              ^^^ variable.parameter.tcl
+#                  ^ punctuation.section.braces.begin.tcl
+#                   ^^^^^^^^^^ variable.parameter.tcl
+#                              ^ constant.numeric.integer.tcl
+#                               ^^ punctuation.section.braces.end.tcl
+#
+        upvar 1 $par var
+#<- meta.function.tcl meta.block.tcl
+#       ^ meta.function.tcl meta.block.tcl meta.function-call.tcl keyword.other.builtin.tcl
+        set var [expr {$var * $multiplier}]
+    } invalid
+#<- meta.function.tcl meta.block.tcl
+#^^^^ meta.function.tcl meta.block.tcl
+#   ^ punctuation.section.block.end.tcl
+#    ^^^^^^^^^ meta.function.tcl - meta.block.tcl
+#     ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 
 ##############################################################################
 # flow control keyword tests
