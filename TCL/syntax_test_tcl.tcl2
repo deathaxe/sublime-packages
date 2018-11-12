@@ -664,6 +664,76 @@ set regexp {(.{0,200})}
     set w { ; # no commet }
 #             ^^^^^^^^^^^^^^ - comment
 
+##############################################################################
+# expr tests
+##############################################################################
+
+    expr
+#  ^ - meta.expression
+#   ^^^^^ meta.expression.tcl
+#   ^^^^ keyword.other.builtin.tcl
+
+    expr 1 + 2 * $var
+#  ^ - meta.expression
+#   ^^^^^^^^^^^^^^^^^^ meta.expression.tcl
+#   ^^^^ keyword.other.builtin.tcl
+#        ^ constant.numeric.integer.tcl
+#          ^ keyword.operator.arithmetic.tcl
+#            ^ constant.numeric.integer.tcl
+#              ^ keyword.operator.arithmetic.tcl
+#                ^^^^ variable.other.tcl
+
+    expr {}
+#  ^ - meta.expression
+#   ^^^^^^^^ meta.expression.tcl
+#   ^^^^ keyword.other.builtin.tcl
+#        ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+#         ^ meta.braces.tcl punctuation.section.braces.end.tcl
+
+    expr {
+#  ^ - meta.expression
+#   ^^^^^^^ meta.expression.tcl
+#   ^^^^ keyword.other.builtin.tcl
+#        ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+    }
+#^^^^^ meta.expression.tcl
+#^^^^ meta.braces.tcl
+#   ^ punctuation.section.braces.end.tcl
+
+    expr {
+#  ^ - meta.expression
+#   ^^^^^^^ meta.expression.tcl
+#   ^^^^ keyword.other.builtin.tcl
+#        ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+    list
+#   ^^^^ - keyword - variable
+    -
+#^^^^^ meta.expression.tcl meta.braces.tcl
+#   ^ keyword.operator.arithmetic.tcl
+    $var
+#^^^^^^^^ meta.expression.tcl meta.braces.tcl
+#   ^^^^ variable.other.tcl
+    +
+#^^^^^ meta.expression.tcl meta.braces.tcl
+#   ^ keyword.operator.arithmetic.tcl
+    [string "test"]
+#^^^ meta.expression.tcl meta.braces.tcl - meta.substitution
+#   ^ punctuation.section.substitution.begin.tcl
+#   ^^^^^^^^^^^^^^^ meta.expression.tcl meta.braces.tcl meta.substitution.tcl
+#    ^^^^^^ keyword.other.builtin.tcl
+#           ^^^^^^ string.quoted.double.tcl
+#                 ^ punctuation.section.substitution.end.tcl
+#                  ^ meta.expression.tcl meta.braces.tcl - meta.substitution
+    *
+#^^^^^ meta.expression.tcl meta.braces.tcl
+#   ^ keyword.operator.arithmetic.tcl
+    10
+#^^^^^^ meta.expression.tcl meta.braces.tcl
+#   ^^ constant.numeric.integer.tcl
+    }
+#^^^^^ meta.expression.tcl
+#^^^^ meta.braces.tcl
+#   ^ punctuation.section.braces.end.tcl
 
 ##############################################################################
 # namespace tests
@@ -1112,6 +1182,15 @@ set regexp {(.{0,200})}
 #          ^^^^ constant.language.tcl
 #               ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                ^ meta.block.tcl punctuation.section.block.end.tcl
+    elseif true {}
+#   ^^^^^^ invalid.illegal.unexpected.tcl
+#          ^^^^ constant.language.tcl
+#               ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                ^ meta.block.tcl punctuation.section.block.end.tcl
+    else {}
+#   ^^^^ invalid.illegal.unexpected.tcl
+#        ^ meta.block.tcl punctuation.section.block.begin.tcl
+#         ^ meta.block.tcl punctuation.section.block.end.tcl
     else {}
 #   ^^^^ invalid.illegal.unexpected.tcl
 #        ^ meta.block.tcl punctuation.section.block.begin.tcl
@@ -1205,6 +1284,7 @@ set regexp {(.{0,200})}
 #                  ^^^^^^^^^^^^^^^^ variable.other.tcl
 #                                  ^ punctuation.section.block.end.tcl
 #                                   ^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl
+#                                    ^^^ variable.other.tcl
 #                                       ^ punctuation.section.substitution.end.tcl
 #                                        ^ meta.statement.conditional.tcl meta.braces.tcl punctuation.section.braces.end.tcl - meta.substitution
 #                                         ^ meta.statement.conditional.tcl - meta.braces - meta.substitution - punctuation
