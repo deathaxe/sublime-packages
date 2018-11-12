@@ -26,13 +26,13 @@ variables:
       append|auto_execok|auto_import|auto_load|auto_mkindex|
       auto_mkindex_old|auto_qualify|auto_reset|bgerror|binary|cd|clock|close|
       concat|dde|encoding|eof|error|eval|exec|expr|fblocked|fconfigure|fcopy|
-      file|fileevent|filename|flush|format|gets|glob|global|history|http|incr|
+      file|fileevent|filename|flush|format|gets|glob|history|http|incr|
       info|interp|join|library|memory|msgcat|open|package|parray|
       pid|pkg::create|pkg_mkIndex|puts|pwd|re_syntax|read|registry|rename|
       resource|scan|seek|set|socket|SafeBase|source|split|string|subst|Tcl|
       tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|tcl_startOfPreviousWord|
       tcl_wordBreakAfter|tcl_wordBreakBefore|tcltest|tclvars|tell|time|trace|
-      unknown|unset|update|uplevel|upvar|variable|vwait|{{list_funcs}}
+      unknown|unset|update|uplevel|vwait|{{list_funcs}}
     ){{b}}
 
   list_funcs: lappend|lindex|linsert|list|llength|load|lrange|lreplace|lsearch|lset|lsort
@@ -42,7 +42,6 @@ variables:
       abs|acos|asin|atan|atan2|ceil|cos|cosh|double|exp|floor|fmod|hypot|
       int|log|log10|pow|rand|round|sin|sinh|sqrt|srand|tan|tanh|wide
     ){{b}}
-
 
 contexts:
   main:
@@ -401,6 +400,9 @@ contexts:
     - match: proc{{b}}
       scope: keyword.declaration.proc.tcl
       push: [proc-meta, block-pop, proc-params, proc-name, eow-pop]
+    - match: (global|namespace upvar|upvar|variable){{b}}
+      scope: storage.type.tcl
+      push: [proc-vars-end, cmd-generig-var]
 
   proc-name:
     # simple program name
@@ -465,6 +467,11 @@ contexts:
   proc-meta:
     - meta_scope: meta.function.tcl
     - include: eoc-pop-or-illegal
+
+  proc-vars-end:
+    - meta_scope: meta.definition.variable.tcl
+    - include: expressions
+    - include: eoc-pop
 
 ##[ RULE 1 - COMMANDS ]#######################################################
 

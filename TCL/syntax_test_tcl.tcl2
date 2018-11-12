@@ -953,6 +953,11 @@ set regexp {(.{0,200})}
 #    ^ meta.function.tcl punctuation.separator.continuation.newline.tcl
     {
 #   ^ meta.function.tcl meta.block.tcl punctuation.section.block.begin.tcl
+        upvar var $up
+#       ^^^^^^^^^^^^^^ meta.function.tcl meta.block.tcl meta.definition.variable.tcl
+#       ^^^^^ storage.type.tcl
+#             ^^^ variable.other.tcl
+#                 ^^^ variable.other.tcl
         puts\
 #       ^^^^ meta.function.tcl meta.block.tcl meta.function-call.tcl keyword.other.builtin.tcl
 #           ^ meta.function.tcl meta.block.tcl meta.function-call.tcl punctuation.separator.continuation.newline.tcl
@@ -978,7 +983,7 @@ set regexp {(.{0,200})}
 #
         upvar 1 $par var
 #<- meta.function.tcl meta.block.tcl
-#       ^ meta.function.tcl meta.block.tcl meta.function-call.tcl keyword.other.builtin.tcl
+#       ^^^^^ meta.function.tcl meta.block.tcl meta.definition.variable.tcl storage.type.tcl
         set var [expr {$var * $multiplier}]
     } invalid
 #<- meta.function.tcl meta.block.tcl
