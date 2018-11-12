@@ -996,21 +996,21 @@ set regexp {(.{0,200})}
     if true {} elseif false {} else {} ; if false {cmd arg}
 #   ^^ keyword.control.flow.if.tcl
 #      ^^^^ constant.language.tcl
-#           ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#            ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#           ^ meta.block.tcl punctuation.section.block.begin.tcl
+#            ^ meta.block.tcl punctuation.section.block.end.tcl
 #              ^^^^^^ keyword.control.flow.elseif.tcl
 #                     ^^^^^ constant.language.tcl
-#                           ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#                            ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#                           ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                            ^ meta.block.tcl punctuation.section.block.end.tcl
 #                              ^^^^ keyword.control.flow.else.tcl
-#                                   ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#                                    ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#                                   ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                                    ^ meta.block.tcl punctuation.section.block.end.tcl
 #                                      ^ punctuation.terminator.command.tcl
 #                                        ^^ keyword.control.flow.if.tcl
 #                                           ^^^^^ constant.language.tcl
-#                                                 ^ punctuation.section.braces.begin.tcl
-#                                                 ^^^^^^^^^ meta.braces.tcl
-#                                                         ^ punctuation.section.braces.end.tcl
+#                                                 ^ punctuation.section.block.begin.tcl
+#                                                 ^^^^^^^^^ meta.block.tcl
+#                                                         ^ punctuation.section.block.end.tcl
 
 # check line continuation as word break without preceding whitespace
     if\
@@ -1020,10 +1020,10 @@ set regexp {(.{0,200})}
 #   ^^^^ constant.language.tcl
 #       ^ punctuation.separator.continuation.newline.tcl
     {cmd arg arg}\
-#   ^ punctuation.section.braces.begin.tcl
-#   ^^^^^^^^^^^^^ meta.braces.tcl
+#   ^ punctuation.section.block.begin.tcl
+#   ^^^^^^^^^^^^^ meta.block.tcl
 #    ^^^ variable.function.tcl
-#               ^ punctuation.section.braces.end.tcl
+#               ^ punctuation.section.block.end.tcl
 #                ^ punctuation.separator.continuation.newline.tcl
     elseif\
 #   ^^^^^^ keyword.control.flow.elseif.tcl
@@ -1032,8 +1032,8 @@ set regexp {(.{0,200})}
 #   ^^^^^ constant.language.tcl
 #        ^ punctuation.separator.continuation.newline.tcl
     {}\
-#   ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#    ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#   ^ meta.block.tcl punctuation.section.block.begin.tcl
+#    ^ meta.block.tcl punctuation.section.block.end.tcl
 #     ^ punctuation.separator.continuation.newline.tcl
     elseif\
 #   ^^^^^^ keyword.control.flow.elseif.tcl
@@ -1049,15 +1049,15 @@ set regexp {(.{0,200})}
 #         ^ punctuation.section.substitution.end.tcl
 #          ^ punctuation.separator.continuation.newline.tcl
     {}\
-#   ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#    ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#   ^ meta.block.tcl punctuation.section.block.begin.tcl
+#    ^ meta.block.tcl punctuation.section.block.end.tcl
 #     ^ punctuation.separator.continuation.newline.tcl
     else\
 #   ^^^^ keyword.control.flow.else.tcl
 #       ^ punctuation.separator.continuation.newline.tcl
     {}
-#   ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#    ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#   ^ meta.block.tcl punctuation.section.block.begin.tcl
+#    ^ meta.block.tcl punctuation.section.block.end.tcl
 
 # check line continuation with preceding whitespace
     if \
@@ -1067,10 +1067,10 @@ set regexp {(.{0,200})}
 #   ^^^^ constant.language.tcl
 #        ^ punctuation.separator.continuation.newline.tcl
     {cmd arg arg} \
-#   ^ punctuation.section.braces.begin.tcl
-#   ^^^^^^^^^^^^^ meta.braces.tcl
+#   ^ punctuation.section.block.begin.tcl
+#   ^^^^^^^^^^^^^ meta.block.tcl
 #    ^^^ variable.function.tcl
-#               ^ punctuation.section.braces.end.tcl
+#               ^ punctuation.section.block.end.tcl
 #                 ^ punctuation.separator.continuation.newline.tcl
     elseif \
 #   ^^^^^^ keyword.control.flow.elseif.tcl
@@ -1079,8 +1079,8 @@ set regexp {(.{0,200})}
 #   ^^^^^ constant.language.tcl
 #         ^ punctuation.separator.continuation.newline.tcl
     {} \
-#   ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#    ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#   ^ meta.block.tcl punctuation.section.block.begin.tcl
+#    ^ meta.block.tcl punctuation.section.block.end.tcl
 #      ^ punctuation.separator.continuation.newline.tcl
     elseif \
 #   ^^^^^^ keyword.control.flow.elseif.tcl
@@ -1096,26 +1096,26 @@ set regexp {(.{0,200})}
 #         ^ punctuation.section.substitution.end.tcl
 #           ^ punctuation.separator.continuation.newline.tcl
     {} \
-#   ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#    ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#   ^ meta.block.tcl punctuation.section.block.begin.tcl
+#    ^ meta.block.tcl punctuation.section.block.end.tcl
 #      ^ punctuation.separator.continuation.newline.tcl
     else \
 #   ^^^^ keyword.control.flow.else.tcl
 #        ^ punctuation.separator.continuation.newline.tcl
     {}
-#   ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#    ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#   ^ meta.block.tcl punctuation.section.block.begin.tcl
+#    ^ meta.block.tcl punctuation.section.block.end.tcl
 
 # Ensure else doesn't work outside of if command
     elseif true {}
 #   ^^^^^^ invalid.illegal.unexpected.tcl
 #          ^^^^ constant.language.tcl
-#               ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#                ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#               ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                ^ meta.block.tcl punctuation.section.block.end.tcl
     else {}
 #   ^^^^ invalid.illegal.unexpected.tcl
-#        ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#         ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#        ^ meta.block.tcl punctuation.section.block.begin.tcl
+#         ^ meta.block.tcl punctuation.section.block.end.tcl
 
     if {$arg eq [set x]} {
 #   ^^ keyword.control.flow.if.tcl
@@ -1125,8 +1125,8 @@ set regexp {(.{0,200})}
 #            ^^ keyword.operator.relational.tcl
 #               ^^^^^^^ meta.substitution.tcl
 #                      ^ punctuation.section.braces.end.tcl
-#                        ^^ meta.braces.tcl
-#                        ^ punctuation.section.braces.begin.tcl
+#                        ^^ meta.block.tcl
+#                        ^ punctuation.section.block.begin.tcl
         set var 0
 
         if {$var == 0} {
@@ -1149,14 +1149,14 @@ set regexp {(.{0,200})}
 #      ^ punctuation.section.braces.begin.tcl
 #       ^ punctuation.section.substitution.begin.tcl
 #        ^^^^^ keyword.control.flow.catch.tcl
-#              ^ punctuation.section.braces.begin.tcl
+#              ^ punctuation.section.block.begin.tcl
 #               ^^^^^^^^ meta.command.tcl variable.function.tcl
 #                 ^^ punctuation.accessor.colon.tcl
 #                        ^^^^^^ variable.parameter.tcl
 #                                         ^ punctuation.separator.continuation.newline.tcl
         -flags "statistics,interfaceautoprobe" \
-#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
 #       ^^^^^^ variable.parameter.tcl
 #              ^ punctuation.definition.string.begin.tcl
 #              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.double.tcl
@@ -1164,28 +1164,28 @@ set regexp {(.{0,200})}
 #                                            ^ punctuation.definition.string.end.tcl
 #                                              ^ punctuation.separator.continuation.newline.tcl
         -name $aggrname -role $extra_role \
-#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
 #       ^^^^^ variable.parameter.tcl
 #             ^^^^^^^^^ variable.other.tcl
 #                       ^^^^^ variable.parameter.tcl
 #                             ^^^^^^^^^^^ variable.other.tcl
 #                                         ^ punctuation.separator.continuation.newline.tcl
                         -parameters [array get params] \
-#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
 #                       ^^^^^^^^^^^ variable.parameter.tcl
 #                                   ^ punctuation.section.substitution.begin.tcl
-#                                   ^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl meta.substitution.tcl
+#                                   ^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl meta.substitution.tcl
 #                                    ^^^^^ keyword.other.builtin.tcl
 #                                                    ^ punctuation.section.substitution.end.tcl
 #                                                      ^ punctuation.separator.continuation.newline.tcl
         -opaque [list "becs.editor" "ifrole.tcl"] \
-#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
-#^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
+#^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
 #       ^^^^^^^ variable.parameter.tcl
 #               ^ punctuation.section.substitution.begin.tcl
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl meta.substitution.tcl
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl meta.substitution.tcl
 #                ^^^^ keyword.other.builtin.tcl
 #                     ^ punctuation.definition.string.begin.tcl
 #                     ^^^^^^^^^^^^^ string.quoted.double.tcl
@@ -1199,20 +1199,20 @@ set regexp {(.{0,200})}
 #                                               ^ punctuation.section.substitution.end.tcl
 #                                                 ^ punctuation.separator.continuation.newline.tcl
         -parentoid $aggr_attach_oid} err]} {
-#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.braces.tcl
+#<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
 #       ^^^^^^^^^^ variable.parameter.tcl
 #                  ^^^^^^^^^^^^^^^^ variable.other.tcl
-#                                  ^ punctuation.section.braces.end.tcl
+#                                  ^ punctuation.section.block.end.tcl
 #                                   ^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl
 #                                       ^ punctuation.section.substitution.end.tcl
 #                                        ^ meta.statement.conditional.tcl meta.braces.tcl punctuation.section.braces.end.tcl - meta.substitution
 #                                         ^ meta.statement.conditional.tcl - meta.braces - meta.substitution - punctuation
-#                                          ^ meta.statement.conditional.tcl meta.braces.tcl punctuation.section.braces.begin.tcl
+#                                          ^ meta.statement.conditional.tcl meta.block.tcl punctuation.section.block.begin.tcl
         return "Creating aggregator interface $aggrname under element/management element-module OID $aggr_attach_oid: $err"
-#<- meta.statement.conditional.tcl meta.braces.tcl
+#<- meta.statement.conditional.tcl meta.block.tcl
     }
-#   ^ meta.statement.conditional.tcl meta.braces.tcl punctuation.section.braces.end.tcl
+#   ^ meta.statement.conditional.tcl meta.block.tcl punctuation.section.block.end.tcl
 
 ##############################################################################
 # for loop tests
