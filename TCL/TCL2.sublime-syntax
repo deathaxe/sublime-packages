@@ -367,21 +367,25 @@ contexts:
 
   namespace:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/namespace.htm
-    # TODO: distinguish between different statement types
     - match: namespace{{b}}
-      scope: keyword.control.flow.namespace.tcl
-      push:
-        - namespace-meta
-        - block-pop
-        - namespace-name
-        - namespace-eval
-        - eow-pop
+      scope: keyword.other.builtin.tcl
+      push: [namespace-meta, namespace-type, eow-pop]
 
-  namespace-eval:
-    - match: '{{ident}}{{b}}'
-      scope: keyword.control.flow.eval.tcl
-      set: eow-pop
-    - include: word-pop
+  namespace-type:
+    - match: eval{{b}}
+      scope: variable.function.tcl
+      set: [block-pop, namespace-name, eow-pop]
+    - match: upvar{{b}}
+      scope: storage.type.tcl
+      pop: true
+    - match: |-
+        (?x:
+          children|code|current|delete|ensemble|exists|export|forget|import|
+          inscope|origin|parent|path|qualifiers|tail|unknown|which
+        ){{b}}
+      scope: variable.function.tcl
+      pop: true
+    - include: any-pop
 
   namespace-name:
     - match: '{{ident}}{{b}}'
@@ -391,7 +395,7 @@ contexts:
 
   namespace-meta:
     - meta_scope: meta.namespace.tcl
-    - include: eoc-pop-or-illegal
+    - include: cmd-generic-end
 
 ##[ PROC ]####################################################################
 
@@ -400,7 +404,7 @@ contexts:
     - match: proc{{b}}
       scope: keyword.declaration.proc.tcl
       push: [proc-meta, block-pop, proc-params, proc-name, eow-pop]
-    - match: (global|namespace upvar|upvar|variable){{b}}
+    - match: (global|upvar|variable){{b}}
       scope: storage.type.tcl
       push: [proc-vars-end, cmd-generig-var]
 

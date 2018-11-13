@@ -740,12 +740,30 @@ set regexp {(.{0,200})}
 # namespace tests
 ##############################################################################
 
+    namespace
+#   ^^^^^^^^^ keyword.other.builtin.tcl
+
+    namespace children A
+#   ^^^^^^^^^ keyword.other.builtin.tcl
+#             ^^^^^^^^ variable.function.tcl
+
+    namespace which -command "name"
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.namespace.tcl
+#   ^^^^^^^^^ keyword.other.builtin.tcl
+#             ^^^^^ variable.function.tcl
+#                   ^^^^^^^^  variable.parameter.tcl
+#                            ^^^^^^ string.quoted.double.tcl
+
+    namespace $other
+#   ^^^^^^^^^^^^^^^^^ meta.namespace.tcl
+#   ^^^^^^^^^ keyword.other.builtin.tcl
+#             ^^^^^^ variable.other.tcl
 
     namespace \
-#   ^^^^^^^^^ keyword.control.flow.namespace.tcl
+#   ^^^^^^^^^ keyword.other.builtin.tcl
 #             ^ punctuation.separator.continuation.newline.tcl
     eval \
-#   ^^^^ keyword.control.flow.eval.tcl
+#   ^^^^ variable.function.tcl
 #        ^ punctuation.separator.continuation.newline.tcl
     A \
 #   ^ entity.name.namespace.tcl
@@ -763,21 +781,29 @@ set regexp {(.{0,200})}
 #  ^ - meta
 #   ^^^^^^^^^^^^^^^^^^^ meta.namespace.tcl
 #                    ^^ meta.block.tcl
-#   ^^^^^^^^^ keyword.control.flow.namespace
-#             ^^^^ keyword.control.flow.eval
-#                  ^ entity.name.namespace
-#                    ^ punctuation.section.block.begin
+#   ^^^^^^^^^ keyword.other.builtin.tcl
+#             ^^^^ variable.function.tcl
+#                  ^ entity.name.namespace.tcl
+#                    ^ punctuation.section.block.begin.tcl
         namespace eval B \
 #^^^^^^^ meta.namespace
 #       ^^^^^^^^^^^^^^^^^^^ meta.namespace meta.namespace
 #                    ^^ meta.block.tcl
-#       ^^^^^^^^^ keyword.control.flow.namespace
-#                 ^^^^ keyword.control.flow.eval
-#                      ^ entity.name.namespace
+#       ^^^^^^^^^ keyword.other.builtin.tcl
+#                 ^^^^ variable.function.tcl
+#                      ^ entity.name.namespace.tcl
 #                        ^ punctuation.separator.continuation.newline
         {
-#<- meta.namespace meta.namespace
-#       ^ punctuation.section.block.begin
+#<- meta.namespace.tcl meta.namespace.tcl
+#       ^ punctuation.section.block.begin.tcl
+            namespace upvar $var
+#           ^^^^^^^^^ keyword.other.builtin.tcl
+#                     ^^^^^ storage.type.tcl
+#                           ^^^^ variable.other.tcl
+            namespace forget ns::var
+#           ^^^^^^^^^ keyword.other.builtin.tcl
+#                     ^^^^^^ variable.function.tcl
+
             proc A {
 
             }
