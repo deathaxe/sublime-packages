@@ -14,6 +14,10 @@
 #                ^ punctuation.terminator.command.tcl
 #                 ^ - meta
 #                  ^^^^^^^^^^^^^ meta.function-call.tcl
+#  ^ - variable.function.tcl
+#   ^^^ variable.function.tcl
+#      ^ - variable.function.tcl
+
     cmd\
 #   ^^^ variable.function.tcl
 #      ^ punctuation.separator.continuation.newline.tcl
@@ -265,9 +269,6 @@ set regexp {(.{0,200})}
 #  ^ - meta.substitution - punctuation
 #   ^ punctuation.section.substitution.begin.tcl
 #   ^^ meta.substitution.tcl
-      proc A {a b c} {
-
-      }
     ]
 # <- meta.substitution.tcl
 #^^^^ meta.substitution.tcl
@@ -846,7 +847,7 @@ set regexp {(.{0,200})}
 #        ^^^^ entity.name.function.tcl
 #             ^^^^ variable.parameter.tcl
 #                 ^ - variable
-#                  ^^^^^ meta.function-call.tcl meta.command.tcl
+#                  ^^^^^ meta.function-call.tcl
 #                  ^^^^ variable.function.tcl
 #                      ^ - variable.function
 
@@ -865,7 +866,9 @@ set regexp {(.{0,200})}
 #       ^ punctuation.separator.continuation.newline.tcl
     body
 #^^^^^^^^ meta.function.tcl
-#   ^^^^^ meta.function-call.tcl meta.command.tcl variable.function.tcl
+#   ^^^^^ meta.function-call.tcl
+#   ^^^^ meta.command.tcl variable.function.tcl
+#       ^ - meta.command - variable
 
 # If name includes any namespace qualifiers, the procedure is created in the specified namespace
     proc ns::name args body
@@ -874,7 +877,9 @@ set regexp {(.{0,200})}
 #        ^^^^^^^^ entity.name.function.tcl
 #          ^^ punctuation.accessor.colon.tcl
 #                 ^^^^ meta.function.parameters.tcl
-#                      ^^^^^ meta.function-call.tcl meta.command.tcl variable.function.tcl
+#                      ^^^^^ meta.function-call.tcl
+#                      ^^^^ meta.command.tcl variable.function.tcl
+#                          ^ - meta.command - variable
 
 # Args specifies the formal arguments to the procedure. It consists of a list,
 # possibly empty, each of whose elements specifies one argument. Each argument

@@ -827,7 +827,7 @@ contexts:
     # [3] Words
     # Pop off at the end of a word. Words end with the next
     # whitespace, end of line or command termination character.
-    - match: $\n?
+    - match: $
       pop: true
     # A line continuation is also handled as word break.
     - match: \\$
