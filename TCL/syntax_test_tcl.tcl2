@@ -1806,3 +1806,38 @@ set regexp {(.{0,200})}
 #                ^ punctuation.section.parens.end.tcl
 
     set vbl in[expr {rand() >= 0.5}]
+
+##############################################################################
+# switch commands
+##############################################################################
+
+    switch -glob -- $var {
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^^ variable.parameter.tcl
+#                ^^ punctuation.terminator.switches.tcl
+#                   ^^^^ variable.other.tcl
+#                        ^^ meta.list.tcl
+#                        ^ punctuation.section.list.begin.tcl
+        label1 {
+#<- meta.list.tcl
+#       ^^^^^^ string.unquoted.tcl
+#              ^^ meta.block.tcl
+#              ^ punctuation.section.block.begin.tcl
+            puts $var
+#<- meta.list.tcl meta.block.tcl
+#           ^^^^ meta.list.tcl meta.block.tcl meta.function-call.tcl keyword.other.builtin.tcl
+        }
+#<- meta.list.tcl meta.block.tcl
+#       ^ meta.list.tcl meta.block.tcl punctuation.section.block.end.tcl
+        label2 {
+            puts "label 2"
+        }
+        "label 3" {puts "label 3"}
+#<- meta.list.tcl
+#       ^^^^^^^^^ string.quoted.double.tcl
+#                 ^ punctuation.section.block.begin.tcl
+#                 ^^^^^^^^^^^^^^^^ meta.list.tcl meta.block.tcl
+#                                ^ punctuation.section.block.end.tcl
+#                                 ^ meta.list.tcl - meta.block
+#
+    }

@@ -326,7 +326,7 @@ contexts:
       push: block-pop
     - match: switch{{b}}
       scope: keyword.control.flow.switch.tcl
-      push: [block-pop, condition-pop]
+      push: [switch-labels-pop, word-pop, switch-args-pop, eow-pop]
 
     # loops
     - match: for{{b}}
@@ -362,6 +362,29 @@ contexts:
       scope: keyword.control.flow.else.tcl
       push: [block-pop, eow-pop]
     - include: eoc-pop
+
+  switch-args-pop:
+    - match: \-\-{{b}}
+      scope: punctuation.terminator.switches.tcl
+      pop: true
+    - include: cmd-generic-switches
+    - include: words
+
+  switch-labels-pop:
+    - include: operator-expand-args
+    - match: \{
+      scope: punctuation.section.list.begin.tcl
+      set:
+        - meta_scope: meta.list.tcl
+        - match: \}
+          scope: punctuation.section.list.end.tcl
+          pop: true
+        - include: block
+        - include: comments
+        - include: words
+        - match: '{{ident}}{{b}}'
+          scope: string.unquoted.tcl
+    - include: else-pop
 
 ##[ NAMESPACE ]###############################################################
 
@@ -589,6 +612,16 @@ contexts:
       scope: keyword.operator.word.tcl
 
 ##[ RULE 6 - BRACES ]#########################################################
+
+  block:
+    - match: \{
+      scope: punctuation.section.block.begin.tcl
+      push:
+        - meta_scope: meta.block.tcl
+        - match: \}
+          scope: punctuation.section.block.end.tcl
+          pop: true
+        - include: main
 
   block-pop:
     # A single word, which represents a script block no matter whether it
