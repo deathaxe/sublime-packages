@@ -538,11 +538,7 @@ contexts:
 
   expressions:
     - include: words
-    - include: operator-arithmetic
-    - include: operator-relational
-    - include: operator-logical
-    - include: operator-bitwise
-    - include: operator-ternary
+    - include: operators
 
   expressions-pop:
     - include: expressions
@@ -768,31 +764,19 @@ contexts:
     - match: \b[0-9]+\b
       scope: constant.numeric.integer.tcl
 
+  operators:
+    - match: \b(eq|ne|in|ni){{b}}
+      scope: keyword.operator.relational.tcl
+    - match: ==|!=|<=|>=|>|<
+      scope: keyword.operator.relational.tcl
+    - match: '[-+*/]'
+      scope: keyword.operator.arithmetic.tcl
+    - match: \?|:'
+      scope: keyword.operator.ternary.tcl
+
   operator-accessor:
     - match: :{2,}
       scope: punctuation.accessor.colon.tcl
-
-  operator-arithmetic:
-    - match: '[-+*/]'
-      scope: keyword.operator.arithmetic.tcl
-
-  operator-bitwise:
-    - match: <<|>>|\||&|!
-      scope: keyword.operator.bitwise.tcl
-
-  operator-logical:
-    - match: \|\||&&|!
-      scope: keyword.operator.logical.tcl
-
-  operator-relational:
-    - match: ==|!=|<=|>=|>|<
-      scope: keyword.operator.relational.tcl
-    - match: n?eq{{b}}
-      scope: keyword.operator.relational.tcl
-
-  operator-ternary:
-    - match: \?|:'
-      scope: keyword.operator.ternary.tcl
 
 ##[ CONTEXT POP OFFS ]########################################################
 

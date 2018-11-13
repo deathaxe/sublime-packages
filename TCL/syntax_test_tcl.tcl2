@@ -1806,11 +1806,3 @@ set regexp {(.{0,200})}
 #                ^ punctuation.section.parens.end.tcl
 
     set vbl in[expr {rand() >= 0.5}]
-
-
-    expr 1 + 5
-
-    expr !{1 > 5}
-
-    expr {1 + 5}
-
