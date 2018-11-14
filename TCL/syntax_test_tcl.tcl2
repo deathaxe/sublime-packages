@@ -674,7 +674,30 @@ set regexp {(.{0,200})}
 #   ^^^^^ meta.expression.tcl
 #   ^^^^ keyword.other.builtin.tcl
 
-    expr 1 + 2 * $var
+    expr eq ne in ni == != <= >= < >
+#        ^^ keyword.operator.relational.tcl
+#           ^^ keyword.operator.relational.tcl
+#              ^^ keyword.operator.relational.tcl
+#                 ^^ keyword.operator.relational.tcl
+#                    ^^ keyword.operator.relational.tcl
+#                       ^^ keyword.operator.relational.tcl
+#                          ^^ keyword.operator.relational.tcl
+#                             ^^ keyword.operator.relational.tcl
+#                                ^ keyword.operator.relational.tcl
+#                                  ^ keyword.operator.relational.tcl
+
+    expr && || !
+#        ^^ keyword.operator.logical.tcl
+#           ^^ keyword.operator.logical.tcl
+#              ^ keyword.operator.logical.tcl
+
+    expr ^ | & ~
+#        ^ keyword.operator.bitwise.tcl
+#          ^ keyword.operator.bitwise.tcl
+#            ^ keyword.operator.bitwise.tcl
+#              ^ keyword.operator.bitwise.tcl
+
+    expr 1 + 2 * $var ** 4 % 2 / 1
 #  ^ - meta.expression
 #   ^^^^^^^^^^^^^^^^^^ meta.expression.tcl
 #   ^^^^ keyword.other.builtin.tcl
@@ -683,6 +706,19 @@ set regexp {(.{0,200})}
 #            ^ constant.numeric.integer.tcl
 #              ^ keyword.operator.arithmetic.tcl
 #                ^^^^ variable.other.tcl
+#                     ^^ keyword.operator.arithmetic.tcl
+#                        ^ constant.numeric.integer.tcl
+#                          ^ keyword.operator.arithmetic.tcl
+#                            ^ constant.numeric.integer.tcl
+#                              ^ keyword.operator.arithmetic.tcl
+#                                ^ constant.numeric.integer.tcl
+
+    expr $var ? "true" : "false"
+#        ^^^^ variable.other.tcl
+#             ^ keyword.operator.ternary.tcl
+#               ^^^^^^ string.quoted.double.tcl
+#                      ^ keyword.operator.ternary.tcl
+#                        ^^^^^^^ string.quoted.double.tcl
 
     expr {}
 #  ^ - meta.expression
@@ -696,10 +732,18 @@ set regexp {(.{0,200})}
 #   ^^^^^^^ meta.expression.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+    } {
+#^^^^^^^ meta.expression.tcl
+#^^^^ meta.braces.tcl
+#   ^ punctuation.section.braces.end.tcl
+#    ^ - meta.braces
+#     ^^ meta.braces.tcl
+#     ^ punctuation.section.braces.begin.tcl
     }
 #^^^^^ meta.expression.tcl
 #^^^^ meta.braces.tcl
 #   ^ punctuation.section.braces.end.tcl
+#    ^ - meta.braces
 
     expr {
 #  ^ - meta.expression

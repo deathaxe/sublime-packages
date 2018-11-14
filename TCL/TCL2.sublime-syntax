@@ -110,6 +110,7 @@ contexts:
 ##[ EXPR COMMAND ]############################################################
 
   cmd-expr:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/expr.htm
     - match: expr{{b}}
       scope: keyword.other.builtin.tcl
       push: cmd-expr-body
@@ -346,7 +347,6 @@ contexts:
       set:
         - meta_scope: meta.braces.tcl
         - include: braces-end-pop
-        - include: continuation
         - include: expressions
     - match: (false|true){{b}}
       scope: constant.language.tcl
@@ -420,6 +420,10 @@ contexts:
     - meta_scope: meta.namespace.tcl
     - include: cmd-generic-end
 
+  namespace-accessor:
+    - match: :{2,}
+      scope: punctuation.accessor.colon.tcl
+
 ##[ PROC ]####################################################################
 
   proc:
@@ -436,7 +440,7 @@ contexts:
     - match: '{{ident}}'
       set:
         - meta_scope: entity.name.function.tcl
-        - include: operator-accessor
+        - include: namespace-accessor
         - match: (?![_0-9A-Za-z])
           set: eow-pop-or-illegal
     # scripted program name
@@ -574,7 +578,7 @@ contexts:
     - include: string-quoted-double
     - include: braces
     - include: variable
-    - include: operator-accessor
+    - include: namespace-accessor
 
   words-pop:
     - include: words
@@ -726,7 +730,7 @@ contexts:
       push: [variable-simple-end, variable-simple-name]
 
   variable-simple-name:
-    - include: operator-accessor
+    - include: namespace-accessor
     - include: variable-index
     - match: (?![_0-9A-Za-z])
       pop: true
@@ -736,7 +740,7 @@ contexts:
     - include: any-pop
 
   variable-braced-name:
-    - include: operator-accessor
+    - include: namespace-accessor
     - include: variable-index
     - match: (?=[\]\}])
       pop: true
@@ -802,14 +806,34 @@ contexts:
       scope: keyword.operator.relational.tcl
     - match: ==|!=|<=|>=|>|<
       scope: keyword.operator.relational.tcl
-    - match: '[-+*/]'
+    - match: \*\*|[-+*/%]
       scope: keyword.operator.arithmetic.tcl
-    - match: \?|:'
+    - match: '&&|\|\||!'
+      scope: keyword.operator.logical.tcl
+    - match: '[\^\|&~]'
+      scope: keyword.operator.bitwise.tcl
+    - match: '[?:]'
       scope: keyword.operator.ternary.tcl
 
-  operator-accessor:
-    - match: :{2,}
-      scope: punctuation.accessor.colon.tcl
+  continuation:
+    - match: \\$
+      scope: punctuation.separator.continuation.newline.tcl
+      push:
+        # Note: Comments aren't vaild at the line after a continuation
+        # but it helps avoid breaking syntax by syntax-test rules.
+        - include: comments
+        - match: (?=\S)
+          pop: true
+
+  continuation-pop:
+    - match: \\$
+      scope: punctuation.separator.continuation.newline.tcl
+      set:
+        # Note: Comments aren't vaild at the line after a continuation
+        # but it helps avoid breaking syntax by syntax-test rules.
+        - include: comments
+        - match: (?=\S)
+          pop: true
 
 ##[ CONTEXT POP OFFS ]########################################################
 
@@ -822,16 +846,6 @@ contexts:
     - include: eol-pop
     - match: (?=\S)
       pop: true
-
-  continuation:
-    - match: \\$
-      scope: punctuation.separator.continuation.newline.tcl
-      push:
-        # Note: Comments aren't vaild at the line after a continuation
-        # but it helps avoid breaking syntax by syntax-test rules.
-        - include: comments
-        - match: (?=\S)
-          pop: true
 
   eol-pop:
     # Pop off at the end of a line, if it doesn't end with a line continuation.
@@ -846,21 +860,16 @@ contexts:
 
   eow-pop:
     # [3] Words
-    # Pop off at the end of a word. Words end with the next
-    # whitespace, end of line or command termination character.
+    # Pop off at the end of a word. Words end with the next...
+    # line continuation
+    - include: continuation-pop
+    # end of line
     - match: $
       pop: true
-    # A line continuation is also handled as word break.
-    - match: \\$
-      scope: punctuation.separator.continuation.newline.tcl
-      set:
-        # Note: Comments aren't vaild at the line after a continuation
-        # but it helps avoid breaking syntax by syntax-test rules.
-        - include: comments
-        - match: (?=\S)
-          pop: true
+    # whitespace
     - match: (?=\s)
       set: else-pop
+    # command termination character
     - match: (?=[;\]\}])
       pop: true
 
