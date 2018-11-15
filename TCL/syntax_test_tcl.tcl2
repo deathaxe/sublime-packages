@@ -1524,6 +1524,24 @@ set regexp {(.{0,200})}
 #   ^^^ variable.other.tcl
 
 ##############################################################################
+# incr commands
+##############################################################################
+
+    incr
+#   ^^^^ keyword.other.builtin.tcl
+
+    incr var
+#   ^^^^ keyword.other.builtin.tcl
+#        ^^^ variable.other.tcl
+
+    incr var 2 illegal
+#   ^^^^ keyword.other.builtin.tcl
+#        ^^^ variable.other.tcl
+#           ^ - variable - constant
+#            ^ constant.numeric.integer.tcl - variable
+#              ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+##############################################################################
 # regexp commands
 ##############################################################################
 

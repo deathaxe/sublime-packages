@@ -26,7 +26,7 @@ variables:
       append|auto_execok|auto_import|auto_load|auto_mkindex|
       auto_mkindex_old|auto_qualify|auto_reset|bgerror|binary|cd|clock|close|
       concat|dde|encoding|eof|error|eval|exec|expr|fblocked|fconfigure|fcopy|
-      file|fileevent|filename|flush|format|gets|glob|history|http|incr|
+      file|fileevent|filename|flush|format|gets|glob|history|http|
       info|interp|join|library|memory|msgcat|open|package|parray|
       pid|pkg::create|pkg_mkIndex|puts|pwd|re_syntax|read|registry|rename|
       resource|scan|seek|set|socket|SafeBase|source|split|string|subst|Tcl|
@@ -54,6 +54,7 @@ contexts:
     - include: cmd-array
     - include: cmd-after
     - include: cmd-expr
+    - include: cmd-incr
     - include: cmd-regexp
     - include: cmd-string
     - include: cmd-set
@@ -128,6 +129,21 @@ contexts:
         - include: expressions
     - include: expressions
     - include: eoc-pop
+
+##[ REGEXP COMMANDS ]#########################################################
+
+  cmd-incr:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/incr.htm
+    - match: incr{{b}}
+      scope: keyword.other.builtin.tcl
+      push:
+        - cmd-incr-end
+        - cmd-generic-arg
+        - cmd-generic-var
+
+  cmd-incr-end:
+    - meta_scope: meta.function-call.tcl
+    - include: eoc-pop-or-illegal
 
 ##[ REGEXP COMMANDS ]#########################################################
 
