@@ -136,35 +136,34 @@ contexts:
     - match: regexp{{b}}
       scope: keyword.other.builtin.tcl
       push:
-        - cmd-generic-end
-        - cmd-regexp-pattern
-        - cmd-regexp-switches
-        - eow-pop
+        - cmd-regexp-matches     # string, match, submatches
+        - cmd-regexp-pattern     # pattern
+        - cmd-regexp-switches    # switches
     - match: regsub{{b}}
       scope: keyword.other.builtin.tcl
       push:
-        - cmd-generic-end
-        - cmd-regexp-switches
-        - eow-pop
+        - eoc-pop-or-illegal     # must be end of command
+        - cmd-generic-var        # varname
+        - cmd-regexp-pattern     # substitution
+        - cmd-generic-arg        # string
+        - cmd-regexp-pattern     # pattern
+        - cmd-regexp-switches    # switches
 
   cmd-regexp-switches:
+    # quoted string indicates start of pattern
     - match: (?=[""{])
-      set:
-        - cmd-regexp-pattern
-        - cmd-generic-arg
-        - cmd-regexp-pattern
+      pop: true
     # Marks the end of switches. The argument following this one will be treated
     # as exp even if it starts with a -.
     - match: \-\-
       scope: punctuation.terminator.switches.tcl
-      set:
-        - cmd-regexp-pattern
-        - cmd-generic-arg
-        - cmd-regexp-pattern
+      pop: true
     # Normal switches
-    - match: -(about|expanded|indices|line|linestop|lineanchor|nocase|all|inline|start){{b}}
+    - match: -(about|expanded|indices|line|linestop|lineanchor|nocase|all|inline){{b}}
       scope: variable.parameter.regexp.tcl
-    - include: expressions
+    - match: -(start){{b}}
+      scope: variable.parameter.regexp.tcl
+      push: word-pop
     - include: else-pop
 
   cmd-regexp-pattern:
@@ -195,6 +194,11 @@ contexts:
         - meta_scope: string.unquoted.tcl string.regexp.tcl
         - include: words-pop
 
+  cmd-regexp-matches:
+    - include: words
+    - match: '[^\s;\]\}\\]+'
+      scope: variable.other.tcl
+    - include: eoc-pop
 
 ##[ STRING COMMANDS ]#########################################################
 
@@ -289,7 +293,7 @@ contexts:
       scope: keyword.other.builtin.tcl
       push:
         - cmd-generic-end
-        - cmd-generig-var
+        - cmd-generic-var
         - eow-pop
 
 ##[ FLOW CONTROL ]############################################################
@@ -315,7 +319,7 @@ contexts:
     # conditional
     - match: catch{{b}}
       scope: keyword.control.flow.catch.tcl
-      push: [cmd-generig-var, block-pop]
+      push: [cmd-generic-var, block-pop]
     - match: if{{b}}
       scope: keyword.control.flow.if.tcl
       push: [elseif-pop, block-pop, condition-pop]
@@ -335,7 +339,7 @@ contexts:
       push: [block-pop, block-pop, condition-pop, block-pop]
     - match: foreach{{b}}
       scope: keyword.control.flow.foreach.tcl
-      push: [block-pop, condition-pop, cmd-generig-var]
+      push: [block-pop, condition-pop, cmd-generic-var]
     - match: while{{b}}
       scope: keyword.control.flow.while.tcl
       push: [block-pop, condition-pop]
@@ -433,7 +437,7 @@ contexts:
       push: [proc-meta, block-pop, proc-params, proc-name, eow-pop]
     - match: (global|upvar|variable){{b}}
       scope: storage.type.tcl
-      push: [proc-vars-end, cmd-generig-var]
+      push: [proc-vars-end, cmd-generic-var]
 
   proc-name:
     # simple program name
@@ -535,7 +539,7 @@ contexts:
         - meta_content_scope: meta.argument.tcl variable.other.tcl
         - include: words-pop
 
-  cmd-generig-var:
+  cmd-generic-var:
     - include: operator-expand-args
     # list like variable
     - match: \{
