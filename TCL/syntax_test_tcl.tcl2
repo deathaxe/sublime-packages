@@ -1387,6 +1387,30 @@ set regexp {(.{0,200})}
 
     # for loop execution
     for {set a 10} {$a < 20} {incr a} {
+#   ^^^ keyword.control.flow.for.tcl
+#       ^ punctuation.section.block.begin.tcl
+#       ^^^^^^^^^^ meta.block.tcl
+#        ^^^ keyword.other.builtin.tcl
+#            ^ variable.other.tcl
+#              ^^ constant.numeric.integer.tcl
+#                ^ punctuation.section.block.end.tcl
+#                 ^ - meta.block - meta.braces
+#                  ^ punctuation.section.braces.begin.tcl
+#                  ^^^^^^^^^ meta.braces.tcl
+#                   ^^ variable.other.tcl
+#                      ^ keyword.operator.relational.tcl
+#                        ^^ constant.numeric.integer.tcl
+#                          ^ punctuation.section.braces.end.tcl
+#                           ^ - meta.block - meta.braces
+#                            ^ punctuation.section.block.begin.tcl
+#                            ^^^^^^^^ meta.block.tcl
+#                             ^^^^ keyword.other.builtin.tcl
+#                                  ^ variable.other.tcl
+#                                   ^ punctuation.section.block.end.tcl
+#                                    ^ - meta.block - meta.braces
+#                                     ^ punctuation.section.block.begin.tcl
+#                                     ^^ meta.block.tcl
+#
        puts "value of a: $a"
     }
 
