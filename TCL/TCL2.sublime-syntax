@@ -576,7 +576,7 @@ contexts:
   cmd-generic-end:
     - meta_scope: meta.function-call.tcl
     - include: cmd-generic-switches
-    - include: expressions
+    - include: words
     - include: eoc-pop
 
   cmd-generic-switches:
