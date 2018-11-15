@@ -25,11 +25,11 @@ variables:
     (?x:
       append|auto_execok|auto_import|auto_load|auto_mkindex|
       auto_mkindex_old|auto_qualify|auto_reset|bgerror|binary|cd|clock|close|
-      concat|dde|encoding|eof|error|eval|exec|expr|fblocked|fconfigure|fcopy|
+      concat|dde|encoding|eof|error|eval|exec|fblocked|fconfigure|fcopy|
       file|fileevent|filename|flush|format|gets|glob|history|http|
       info|interp|join|library|memory|msgcat|open|package|parray|
       pid|pkg::create|pkg_mkIndex|puts|pwd|re_syntax|read|registry|rename|
-      resource|scan|seek|set|socket|SafeBase|source|split|string|subst|Tcl|
+      resource|scan|seek|socket|SafeBase|source|split|subst|Tcl|
       tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|tcl_startOfPreviousWord|
       tcl_wordBreakAfter|tcl_wordBreakBefore|tcltest|tclvars|tell|time|trace|
       unknown|unset|update|uplevel|vwait|{{list_funcs}}
@@ -48,6 +48,14 @@ contexts:
     - include: comments
     - match: ;
       scope: punctuation.terminator.command.tcl
+
+    # known commands
+    - match: '{{keywords}}'
+      scope: keyword.other.builtin.tcl
+      push: cmd-generic-end
+    - match: '{{math_funcs}}'
+      scope: support.function.math.tcl
+      push: cmd-generic-end
 
     # special commands
     - include: flow-control
@@ -527,12 +535,6 @@ contexts:
 ##[ RULE 1 - COMMANDS ]#######################################################
 
   cmd-generic:
-    - match: '{{keywords}}'
-      scope: keyword.other.builtin.tcl
-      push: cmd-generic-end
-    - match: '{{math_funcs}}'
-      scope: support.function.math.tcl
-      push: cmd-generic-end
     - match: (?=\S)
       push: [cmd-generic-end, cmd-generic-name]
 
