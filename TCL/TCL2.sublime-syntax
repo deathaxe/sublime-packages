@@ -671,10 +671,7 @@ contexts:
           pop: true
         - include: main
     # single word script
-    - match: $|(?=\S)
-      set:
-        - include: eow-pop
-        - include: main
+    - include: word-pop
 
   braces:
     - include: operator-expand-args

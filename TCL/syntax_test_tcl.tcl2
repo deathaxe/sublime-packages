@@ -915,17 +915,16 @@ set regexp {(.{0,200})}
 #                    ^^^^ variable.parameter.tcl
 #                        ^ - variable
 
-    proc name args body
+    proc name args $body
 #  ^ - meta.function
-#   ^^^^^^^^^^^^^^^^^^^^ meta.function.tcl
+#   ^^^^^^^^^^^^^^^^^^^^^ meta.function.tcl
 #             ^^^^ meta.function.parameters.tcl
 #   ^^^^ keyword.declaration.proc.tcl
 #        ^^^^ entity.name.function.tcl
 #             ^^^^ variable.parameter.tcl
 #                 ^ - variable
-#                  ^^^^^ meta.function-call.tcl
-#                  ^^^^ variable.function.tcl
-#                      ^ - variable.function
+#                  ^^^^^ variable.other.tcl
+#                       ^ - variable
 
     proc\
 #  ^ - meta.function
@@ -940,22 +939,20 @@ set regexp {(.{0,200})}
 #^^^^^^^^^ meta.function.tcl
 #   ^^^^ meta.function.parameters.tcl variable.parameter.tcl
 #       ^ punctuation.separator.continuation.newline.tcl
-    body
+    $body
 #^^^^^^^^ meta.function.tcl
-#   ^^^^^ meta.function-call.tcl
-#   ^^^^ meta.command.tcl variable.function.tcl
-#       ^ - meta.command - variable
+#   ^^^^^ variable.other.tcl
+#        ^ - variable
 
 # If name includes any namespace qualifiers, the procedure is created in the specified namespace
-    proc ns::name args body
+    proc ns::name args $body
 #  ^ - meta.function
-#   ^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.tcl
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.tcl
 #        ^^^^^^^^ entity.name.function.tcl
 #          ^^ punctuation.accessor.colon.tcl
 #                 ^^^^ meta.function.parameters.tcl
-#                      ^^^^^ meta.function-call.tcl
-#                      ^^^^ meta.command.tcl variable.function.tcl
-#                          ^ - meta.command - variable
+#                      ^^^^^ variable.other.tcl
+#                           ^ - variable
 
 # Args specifies the formal arguments to the procedure. It consists of a list,
 # possibly empty, each of whose elements specifies one argument. Each argument
