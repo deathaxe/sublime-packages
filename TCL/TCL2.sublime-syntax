@@ -895,22 +895,19 @@ contexts:
   continuation:
     - match: \\$
       scope: punctuation.separator.continuation.newline.tcl
-      push:
-        # Note: Comments aren't vaild at the line after a continuation
-        # but it helps avoid breaking syntax by syntax-test rules.
-        - include: comments
-        - match: (?=\S)
-          pop: true
+      push: continuation-body
 
   continuation-pop:
     - match: \\$
       scope: punctuation.separator.continuation.newline.tcl
-      set:
-        # Note: Comments aren't vaild at the line after a continuation
-        # but it helps avoid breaking syntax by syntax-test rules.
-        - include: comments
-        - match: (?=\S)
-          pop: true
+      set: continuation-body
+
+  continuation-body:
+    # Note: Comments aren't vaild at the line after a continuation
+    # but it helps avoid breaking syntax by syntax-test rules.
+    - include: comments
+    - match: (?=\S)
+      pop: true
 
 ##[ CONTEXT POP OFFS ]########################################################
 
