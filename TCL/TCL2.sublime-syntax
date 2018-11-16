@@ -12,35 +12,42 @@ variables:
   end_char:   '[\s;\)\]\}]|\\$'
   b:          '(?=[\s;\)\]\}]|\\$)'
   ident:       '[_A-Za-z][_0-9A-Za-z]*'
+  illegal:    '[^\s;\)\]\}\\]+'
 
   # https://www.tutorialspoint.com/tcl-tk/tcl_special_variables.htm
   variables: |-
     (?x:
+      # https://www.tcl.tk/man/tcl8.6/TclCmd/tclvars.htm
       argc|argv|argv0|env|errorCode|errorInfo|tcl_interactive|tcl_library|
       tcl_pkgPath|tcl_patchLevel|tcl_platform|tcl_precision|tcl_prompt1|
-      tcl_prompt2|tcl_rcFileName|tcl_traceCompile|tcl_traceExec|tcl_version
+      tcl_prompt2|tcl_rcFileName|tcl_traceCompile|tcl_traceExec|tcl_version|
+      # https://www.tcl.tk/man/tcl8.6/TclCmd/library.htm#M20
+      auto_execs|auto_index|auto_noexec|auto_noload|auto_path|env\(TCL_LIBRARY\)|env\(TCLLIBPATH\)
     ){{b}}
 
   keywords: |-
     (?x:
-      append|auto_execok|auto_import|auto_load|auto_mkindex|
-      auto_mkindex_old|auto_qualify|auto_reset|bgerror|binary|cd|clock|close|
-      concat|dde|encoding|eof|error|eval|exec|fblocked|fconfigure|fcopy|
-      file|fileevent|filename|flush|format|gets|glob|history|http|
-      info|interp|join|library|memory|msgcat|open|package|parray|
-      pid|pkg::create|pkg_mkIndex|puts|pwd|re_syntax|read|registry|rename|
-      resource|scan|seek|socket|SafeBase|source|split|subst|Tcl|
-      tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|tcl_startOfPreviousWord|
-      tcl_wordBreakAfter|tcl_wordBreakBefore|tcltest|tclvars|tell|time|trace|
-      unknown|unset|update|uplevel|vwait|{{list_funcs}}
+      append|apply|bgerror|binary|cd|clock|close|concat|coroutine|dde|encoding|
+      eof|error|eval|exec|fblocked|fconfigure|fcopy|file|fileevent|filename|
+      flush|format|gets|glob|history|http|info|interp|join|library|memory|
+      msgcat|next|nextto|open|package|pid|pkg::create|pkg_mkIndex|puts|pwd|read|
+      registry|rename|resource|scan|seek|socket|source|split|subst|tailcall|
+      tcltest|tclvars|tell|time|trace|unknown|unload|unset|update|uplevel|vwait|
+      yield|yieldto|zlib|
+      # list manipulation commands
+      lappend|lassign|lindex|linsert|list|llength|lmap|load|lrange|lrepeat|
+      lreplace|lreverse|lsearch|lset|lsort|
+      # https://www.tcl.tk/man/tcl8.6/TclCmd/library.htm#M5
+      auto_execok|auto_import|auto_load|auto_mkindex|auto_qualify|auto_reset|
+      parray|tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|
+      tcl_startOfPreviousWord|tcl_wordBreakAfter|tcl_wordBreakBefore
     ){{b}}
-
-  list_funcs: lappend|lindex|linsert|list|llength|load|lrange|lreplace|lsearch|lset|lsort
 
   math_funcs: |-
     (?x:
-      abs|acos|asin|atan|atan2|ceil|cos|cosh|double|exp|floor|fmod|hypot|
-      int|log|log10|pow|rand|round|sin|sinh|sqrt|srand|tan|tanh|wide
+      abs|acos|asin|atan|atan2|bool|ceil|cos|cosh|double|entier|exp|floor|fmod|
+      hypot|int|isqrt|log|log10|max|min|pow|rand|round|sin|sinh|sqrt|srand|tan|
+      tanh|wide
     ){{b}}
 
 contexts:
@@ -220,7 +227,7 @@ contexts:
 
   cmd-regexp-matches:
     - include: words
-    - match: '[^\s;\]\}\\]+'
+    - match: '{{illegal}}'
       scope: variable.other.tcl
     - include: eoc-pop
 
@@ -877,7 +884,7 @@ contexts:
 
   eol-pop-or-illegal:
     - include: eol-pop
-    - match: '[^\s;\)\]\}\\]+'
+    - match: '{{illegal}}'
       scope: invalid.illegal.end-of-line-expected.tcl
 
   eow-pop:
@@ -897,7 +904,7 @@ contexts:
 
   eow-pop-or-illegal:
     - include: eow-pop
-    - match: '[^\s;\)\]\}\\]+'
+    - match: '{{illegal}}'
       scope: invalid.illegal.end-of-word-expected.tcl
 
   eoc-pop:
@@ -910,5 +917,5 @@ contexts:
 
   eoc-pop-or-illegal:
     - include: eoc-pop
-    - match: '[^\s;\)\]\}\\]+'
+    - match: '{{illegal}}'
       scope: invalid.illegal.end-of-cmd-expected.tcl
