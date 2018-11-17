@@ -214,7 +214,7 @@ contexts:
       set:
         - meta_scope: string.quoted.double.tcl string.regexp.tcl
         - include: cmd-regexp-pattern-body
-        - include: string-end-pop
+        - include: string-quoted-double-end
     - match: (?=\S)
       set:
         - meta_scope: string.unquoted.tcl string.regexp.tcl
@@ -324,7 +324,7 @@ contexts:
       set:
         - meta_scope: string.quoted.double.tcl
         - include: cmd-string-match-pattern-body
-        - include: string-end-pop
+        - include: string-quoted-double-end
     - match: (?=\S)
       set:
         - meta_scope: string.unquoted.tcl
@@ -742,12 +742,15 @@ contexts:
       scope: punctuation.definition.string.begin.tcl
       push:
         - meta_scope: string.quoted.double.tcl
-        - include: string-end-pop
-        - include: escape
-        - include: substitution
-        - include: variable
+        - include: string-quoted-double-body
+        - include: string-quoted-double-end
 
-  string-end-pop:
+  string-quoted-double-body:
+    - include: escape
+    - include: substitution
+    - include: variable
+
+  string-quoted-double-end:
     # Note: The end of a quoted string is always the end of the word.
     - match: \"
       scope: punctuation.definition.string.end.tcl
