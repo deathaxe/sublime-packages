@@ -76,6 +76,7 @@ contexts:
     - include: cmd-array
     - include: cmd-after
     - include: cmd-expr
+    - include: cmd-file
     - include: cmd-incr
     - include: cmd-regexp
     - include: cmd-string
@@ -157,7 +158,28 @@ contexts:
     - include: expressions
     - include: eoc-pop
 
-##[ REGEXP COMMANDS ]#########################################################
+##[ FILE COMMANDS ]###########################################################
+
+  cmd-file:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/file.htm
+    - match: file{{b}}
+      scope: keyword.other.builtin.tcl
+      push: [cmd-generic-end, cmd-file-args]
+
+  cmd-file-args:
+    - match: |-
+        (?x:
+          atime|attributes|attributes|attributes|channels|copy|copy|delete|
+          dirname|executable|exists|extension|isdirectory|isfile|join|link|
+          lstat|mkdir|mtime|nativename|normalize|owned|pathtype|readable|
+          readlink|rename|rename|rootname|separator|size|split|stat|system|
+          tail|tempfile|type|volumes|writable
+        ){{b}}
+      scope: variable.function.tcl
+      pop: true
+    - include: else-pop
+
+##[ INCR COMMANDS ]###########################################################
 
   cmd-incr:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/incr.htm
