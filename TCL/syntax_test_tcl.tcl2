@@ -2114,6 +2114,104 @@ set regexp {(.{0,200})}
 # switch commands
 ##############################################################################
 
+    switch
+#   ^^^^^^ keyword.control.flow.switch.tcl
+
+    switch; switch
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#         ^ punctuation.terminator.command.tcl
+#           ^^^^^^ keyword.control.flow.switch.tcl
+
+    switch $var; switch
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^ variable.other.tcl
+#              ^ punctuation.terminator.command.tcl
+#                ^^^^^^ keyword.control.flow.switch.tcl
+
+    switch $var match $body default $body
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^ variable.other.tcl
+#               ^^^^^ string.unquoted.tcl
+#                     ^^^^^ variable.other.tcl
+#                           ^^^^^^^ string.unquoted.tcl
+#                                   ^^^^^ variable.other.tcl
+
+    switch\
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    $var\
+#   ^^^^ variable.other.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    match\
+#   ^^^^^ string.unquoted.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    $body\
+#   ^^^^^ variable.other.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    default\
+#   ^^^^^^^ string.unquoted.tcl
+#          ^ punctuation.separator.continuation.newline.tcl
+    $body
+#   ^^^^^ variable.other.tcl
+
+    switch $var match {} default {}
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^ variable.other.tcl
+#               ^^^^^ string.unquoted.tcl
+#                     ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                      ^ meta.block.tcl punctuation.section.block.end.tcl
+#                        ^^^^^^^ string.unquoted.tcl
+#                                ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                                 ^ meta.block.tcl punctuation.section.block.end.tcl
+
+    switch $var {match {} default {}}
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^ variable.other.tcl
+#               ^ punctuation.section.list.begin.tcl
+#               ^^^^^^^^^^^^^^^^^^^^^ meta.list.tcl
+#                ^^^^^ string.unquoted.tcl
+#                      ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                       ^ meta.block.tcl punctuation.section.block.end.tcl
+#                         ^^^^^^^ string.unquoted.tcl
+#                                 ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                                  ^ meta.block.tcl punctuation.section.block.end.tcl
+#                                   ^ punctuation.section.list.end.tcl
+
+    switch $var {"match" {} "default" {}} illegal
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^ variable.other.tcl
+#               ^ punctuation.section.list.begin.tcl
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^ meta.list.tcl
+#                ^^^^^^^ string.quoted.double.tcl
+#                        ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                         ^ meta.block.tcl punctuation.section.block.end.tcl
+#                           ^^^^^^^^^ string.quoted.double.tcl
+#                                     ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                                      ^ meta.block.tcl punctuation.section.block.end.tcl
+#                                       ^ punctuation.section.list.end.tcl
+#                                         ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+    switch $var {
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^ variable.other.tcl
+#               ^ punctuation.section.list.begin.tcl
+#               ^^ meta.list.tcl
+        label -
+#       ^^^^^ string.unquoted.tcl
+
+        match {
+#       ^^^^^ string.unquoted.tcl
+#             ^ punctuation.section.block.begin.tcl
+#             ^^ meta.block.tcl
+        }
+#       ^ meta.block.tcl punctuation.section.block.end.tcl
+        default {}
+#       ^^^^^^^ string.unquoted.tcl
+#               ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                ^ meta.block.tcl punctuation.section.block.end.tcl
+    }
+#   ^ meta.list.tcl punctuation.section.list.end.tcl
+
     switch -glob -- $var {
 #   ^^^^^^ keyword.control.flow.switch.tcl
 #          ^^^^^ variable.parameter.tcl
