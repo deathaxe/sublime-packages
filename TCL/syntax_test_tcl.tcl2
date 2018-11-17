@@ -2133,7 +2133,7 @@ set regexp {(.{0,200})}
 #          ^^^^ variable.other.tcl
 #               ^^^^^ string.unquoted.tcl
 #                     ^^^^^ variable.other.tcl
-#                           ^^^^^^^ string.unquoted.tcl
+#                           ^^^^^^^ keyword.control.flow.default.tcl
 #                                   ^^^^^ variable.other.tcl
 
     switch\
@@ -2149,7 +2149,7 @@ set regexp {(.{0,200})}
 #   ^^^^^ variable.other.tcl
 #        ^ punctuation.separator.continuation.newline.tcl
     default\
-#   ^^^^^^^ string.unquoted.tcl
+#   ^^^^^^^ keyword.control.flow.default.tcl
 #          ^ punctuation.separator.continuation.newline.tcl
     $body
 #   ^^^^^ variable.other.tcl
@@ -2160,11 +2160,11 @@ set regexp {(.{0,200})}
 #               ^^^^^ string.unquoted.tcl
 #                     ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                      ^ meta.block.tcl punctuation.section.block.end.tcl
-#                        ^^^^^^^ string.unquoted.tcl
+#                        ^^^^^^^ keyword.control.flow.default.tcl
 #                                ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                                 ^ meta.block.tcl punctuation.section.block.end.tcl
 
-    switch $var {match {} default {}}
+    switch $var {match {} default {}} #illegal; #comment
 #   ^^^^^^ keyword.control.flow.switch.tcl
 #          ^^^^ variable.other.tcl
 #               ^ punctuation.section.list.begin.tcl
@@ -2172,12 +2172,15 @@ set regexp {(.{0,200})}
 #                ^^^^^ string.unquoted.tcl
 #                      ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                       ^ meta.block.tcl punctuation.section.block.end.tcl
-#                         ^^^^^^^ string.unquoted.tcl
+#                         ^^^^^^^ keyword.control.flow.default.tcl
 #                                 ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                                  ^ meta.block.tcl punctuation.section.block.end.tcl
 #                                   ^ punctuation.section.list.end.tcl
+#                                     ^^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                             ^ punctuation.terminator.command.tcl
+#                                               ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
-    switch $var {"match" {} "default" {}} illegal
+    switch $var {"match" {} "default" {}}
 #   ^^^^^^ keyword.control.flow.switch.tcl
 #          ^^^^ variable.other.tcl
 #               ^ punctuation.section.list.begin.tcl
@@ -2189,7 +2192,6 @@ set regexp {(.{0,200})}
 #                                     ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                                      ^ meta.block.tcl punctuation.section.block.end.tcl
 #                                       ^ punctuation.section.list.end.tcl
-#                                         ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 
     switch $var {
 #   ^^^^^^ keyword.control.flow.switch.tcl
@@ -2206,19 +2208,19 @@ set regexp {(.{0,200})}
         }
 #       ^ meta.block.tcl punctuation.section.block.end.tcl
         default {}
-#       ^^^^^^^ string.unquoted.tcl
+#       ^^^^^^^ keyword.control.flow.default.tcl
 #               ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                ^ meta.block.tcl punctuation.section.block.end.tcl
     }
 #   ^ meta.list.tcl punctuation.section.list.end.tcl
 
-    switch -glob -- $var {
+    switch -exact -- $var {
 #   ^^^^^^ keyword.control.flow.switch.tcl
-#          ^^^^^ variable.parameter.tcl
-#                ^^ punctuation.terminator.switches.tcl
-#                   ^^^^ variable.other.tcl
-#                        ^^ meta.list.tcl
-#                        ^ punctuation.section.list.begin.tcl
+#          ^^^^^^ variable.parameter.tcl
+#                 ^^ punctuation.terminator.switches.tcl
+#                    ^^^^ variable.other.tcl
+#                         ^^ meta.list.tcl
+#                         ^ punctuation.section.list.begin.tcl
         label1 {
 #<- meta.list.tcl
 #       ^^^^^^ string.unquoted.tcl
@@ -2233,12 +2235,149 @@ set regexp {(.{0,200})}
         label2 {
             puts "label 2"
         }
-        "label 3" {puts "label 3"}
+        "label [set x 3]" {puts "label 3"}
 #<- meta.list.tcl
-#       ^^^^^^^^^ string.quoted.double.tcl
-#                 ^ punctuation.section.block.begin.tcl
-#                 ^^^^^^^^^^^^^^^^ meta.list.tcl meta.block.tcl
-#                                ^ punctuation.section.block.end.tcl
-#                                 ^ meta.list.tcl - meta.block
-#
+#       ^^^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#              ^^^^^^^^^ meta.substitution.tcl
+#                         ^ punctuation.section.block.begin.tcl
+#                         ^^^^^^^^^^^^^^^^ meta.list.tcl meta.block.tcl
+#                                        ^ punctuation.section.block.end.tcl
+#                                         ^ meta.list.tcl - meta.block
     }
+
+    switch -glob aaab a*b - b {expr {1}} a* {expr {2}}; # comment
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^^ variable.parameter.tcl
+#                ^^^^ string.unquoted.tcl
+#                     ^^^ string.unquoted.tcl
+#                      ^ constant.other.placeholder.tcl
+#                         ^ punctuation.separator.sequence.tcl
+#                           ^ string.unquoted.tcl
+#                             ^^^^^^^^^^ meta.block.tcl
+#                                        ^^ string.unquoted.tcl
+#                                         ^ constant.other.placeholder.tcl
+#                                           ^^^^^^^^^^ meta.block.tcl
+#                                                     ^ punctuation.terminator.command.tcl
+#                                                       ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    switch -glob {aaab} a*b - b {expr {1}} a* {expr {2}}; # comment
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^^ variable.parameter.tcl
+#                ^^^^^^ meta.braces.tcl string.quoted.brace.tcl
+#                       ^^^ string.unquoted.tcl
+#                        ^ constant.other.placeholder.tcl
+#                           ^ punctuation.separator.sequence.tcl
+#                             ^ string.unquoted.tcl
+#                               ^^^^^^^^^^ meta.block.tcl
+#                                          ^^ string.unquoted.tcl
+#                                           ^ constant.other.placeholder.tcl
+#                                             ^^^^^^^^^^ meta.block.tcl
+#                                                       ^ punctuation.terminator.command.tcl
+#                                                         ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    switch -glob -nocase aaab a*b - b {expr {1}} a* {expr {2}}; # comment
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^^ variable.parameter.tcl
+#                ^^^^^^^ variable.parameter.tcl
+#                        ^^^^ string.unquoted.tcl
+#                             ^^^ string.unquoted.tcl
+#                              ^ constant.other.placeholder.tcl
+#                                 ^ punctuation.separator.sequence.tcl
+#                                   ^ string.unquoted.tcl
+#                                     ^^^^^^^^^^ meta.block.tcl
+#                                                ^^ string.unquoted.tcl
+#                                                 ^ constant.other.placeholder.tcl
+#                                                   ^^^^^^^^^^ meta.block.tcl
+#                                                             ^ punctuation.terminator.command.tcl
+#                                                               ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    switch -nocase -glob -invalid aaab a*b - b {expr {1}} a* {expr {2}}; # comment
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^^^^ variable.parameter.tcl
+#                  ^^^^^ variable.parameter.tcl
+#                        ^^^^^^^^ invalid.illegal.parameter.tcl
+#                                 ^^^^ string.unquoted.tcl
+#                                      ^^^ string.unquoted.tcl
+#                                       ^ constant.other.placeholder.tcl
+#                                          ^ punctuation.separator.sequence.tcl
+#                                            ^ string.unquoted.tcl
+#                                              ^^^^^^^^^^ meta.block.tcl
+#                                                         ^^ string.unquoted.tcl
+#                                                          ^ constant.other.placeholder.tcl
+#                                                            ^^^^^^^^^^ meta.block.tcl
+#                                                                      ^ punctuation.terminator.command.tcl
+#                                                                        ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    switch -glob -nocase -- -aab a*b - b {expr {1}} a* {expr {2}}; # comment
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^^ variable.parameter.tcl
+#                ^^^^^^^ variable.parameter.tcl
+#                        ^^ punctuation.terminator.switches.tcl
+#                           ^^^^ string.unquoted.tcl - variable.parameter
+#                                ^^^ string.unquoted.tcl
+#                                 ^ constant.other.placeholder.tcl
+#                                    ^ punctuation.separator.sequence.tcl
+#                                      ^ string.unquoted.tcl
+#                                        ^^^^^^^^^^ meta.block.tcl
+#                                                   ^^ string.unquoted.tcl
+#                                                    ^ constant.other.placeholder.tcl
+#                                                      ^^^^^^^^^^ meta.block.tcl
+#                                                                ^ punctuation.terminator.command.tcl
+#                                                                  ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    switch -glob aaab {
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^^ variable.parameter.tcl
+#                ^^^^ string.unquoted.tcl
+#                     ^ meta.list.tcl punctuation.section.list.begin.tcl
+        a*b     -
+#       ^^^ string.unquoted.tcl
+#        ^ constant.other.placeholder.tcl
+#               ^ punctuation.separator.sequence.tcl
+        b       {expr {1}}
+#       ^ string.unquoted.tcl
+#               ^^^^^^^^^^ meta.block.tcl
+        a*      {expr {2}}
+#       ^^ string.unquoted.tcl
+#        ^ constant.other.placeholder.tcl
+#               ^^^^^^^^^^ meta.block.tcl
+        default {expr {3}}
+#       ^^^^^^^ keyword.control.flow.default.tcl
+#               ^^^^^^^^^^ meta.block.tcl
+    } illegal; # comment
+#   ^ meta.list.tcl punctuation.section.list.end.tcl
+#     ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#            ^ punctuation.terminator.command.tcl
+#              ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    switch -regexp "aaab" [a-b]{,2} {expr {1}} b\b {expr {2}}; # comment
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^^^^ variable.parameter.tcl
+#                  ^^^^^^ string.quoted.double.tcl
+#                        ^ - string
+#                         ^^^^^^^^^ string.unquoted.tcl string.regexp.tcl
+#                                  ^ - string - meta.block
+#                                   ^^^^^^^^^^ meta.block.tcl
+#                                             ^ - string - meta.block
+#                                              ^^^ string.unquoted.tcl string.regexp.tcl
+#                                                 ^ - string - meta.block
+#                                                  ^^^^^^^^^^ meta.block.tcl
+#                                                            ^ punctuation.terminator.command.tcl
+#                                                              ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    switch -regexp "aaab" {[a-b]{,2} {expr {1}} b\b {expr {2}}};# comment
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^^^^ variable.parameter.tcl
+#                  ^^^^^^ string.quoted.double.tcl
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.list.tcl
+#                         ^ punctuation.section.list.begin.tcl - string
+#                          ^^^^^^^^^ string.unquoted.tcl string.regexp.tcl
+#                                   ^ - string - meta.block
+#                                    ^^^^^^^^^^ meta.block.tcl
+#                                              ^ - string - meta.block
+#                                               ^^^ string.unquoted.tcl string.regexp.tcl
+#                                                  ^ - string - meta.block
+#                                                   ^^^^^^^^^^ meta.block.tcl
+#                                                             ^ punctuation.section.list.end.tcl
+#                                                              ^ punctuation.terminator.command.tcl
+#                                                               ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
