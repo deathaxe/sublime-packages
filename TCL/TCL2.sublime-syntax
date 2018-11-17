@@ -195,9 +195,9 @@ contexts:
       pop: true
     # Normal switches
     - match: -(about|expanded|indices|line|linestop|lineanchor|nocase|all|inline){{b}}
-      scope: variable.parameter.regexp.tcl
+      scope: variable.parameter.tcl
     - match: -(start){{b}}
-      scope: variable.parameter.regexp.tcl
+      scope: variable.parameter.tcl
       push: word-pop
     - include: else-pop
 
