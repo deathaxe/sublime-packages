@@ -55,6 +55,9 @@ contexts:
     - include: comments
     - match: ;
       scope: punctuation.terminator.command.tcl
+    # used for completions
+    - match: \s+
+      scope: meta.expect-command.tcl
 
     # known commands
     - match: '{{keywords}}'
