@@ -989,7 +989,7 @@ set regexp {(.{0,200})}
 #                    ^^^^^ string.quoted.double.tcl
 #                                 ^^ punctuation.section.braces.end.tcl
 #                                    ^ punctuation.section.block.begin.tcl
-#                                     ^^^^ keyword.other.builtin.tcl
+#                                     ^^^^ support.function.builtin.tcl
 #                                          ^^^^^ variable.other.tcl
 #                                               ^ punctuation.section.block.end.tcl
 
@@ -1037,7 +1037,7 @@ set regexp {(.{0,200})}
 #             ^^^ variable.other.tcl
 #                 ^^^ variable.other.tcl
         puts\
-#       ^^^^ meta.function.tcl meta.block.tcl meta.function-call.tcl keyword.other.builtin.tcl
+#       ^^^^ meta.function.tcl meta.block.tcl meta.function-call.tcl support.function.builtin.tcl
 #           ^ meta.function.tcl meta.block.tcl meta.function-call.tcl punctuation.separator.continuation.newline.tcl
         $text
 #       ^^^^^ meta.function.tcl meta.block.tcl meta.function-call.tcl variable.other.tcl
@@ -1197,7 +1197,7 @@ set regexp {(.{0,200})}
 #                                                           ^ - meta.braces - meta.block - punctuation
 #                                                            ^ punctuation.section.block.begin.tcl
 #                                                            ^^^^^^^^^^^^^^^^^^^^ meta.block.tcl
-#                                                             ^^^^ keyword.other.builtin.tcl
+#                                                             ^^^^ support.function.builtin.tcl
 #                                                                  ^ punctuation.definition.string.begin.tcl
 #                                                                  ^^^^^^^^^^^^^ string.quoted.double.tcl
 #                                                                   ^ variable.other.tcl punctuation.definition.variable.tcl
@@ -1236,7 +1236,7 @@ set regexp {(.{0,200})}
 #                          ^^ meta.block.tcl
         puts "$code: $msg"
 #^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.tcl
-#       ^^^^ keyword.other.builtin.tcl
+#       ^^^^ support.function.builtin.tcl
 #            ^ punctuation.definition.string.begin.tcl
 #            ^^^^^^^^^^^^^ string.quoted.double.tcl
 #             ^ variable.other.tcl punctuation.definition.variable.tcl
@@ -1305,7 +1305,7 @@ set regexp {(.{0,200})}
 #                            ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                             ^ meta.block.tcl
         puts "failed to open /some/file/name: it's a directory"
-#       ^^^^ meta.block.tcl meta.function-call.tcl keyword.other.builtin.tcl
+#       ^^^^ meta.block.tcl meta.function-call.tcl support.function.builtin.tcl
 #            ^ meta.block.tcl meta.function-call.tcl string.quoted.double.tcl punctuation.definition.string.begin.tcl
     } trap {POSIX ENOENT} {} {
 #   ^ meta.block.tcl punctuation.section.block.end.tcl
@@ -1319,7 +1319,7 @@ set regexp {(.{0,200})}
 #                            ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                             ^ meta.block.tcl
         puts "failed to open /some/file/name: it doesn't exist"
-#       ^^^^ meta.block.tcl meta.function-call.tcl keyword.other.builtin.tcl
+#       ^^^^ meta.block.tcl meta.function-call.tcl support.function.builtin.tcl
 #            ^ meta.block.tcl meta.function-call.tcl string.quoted.double.tcl punctuation.definition.string.begin.tcl
     } finally {
 #   ^ meta.block.tcl punctuation.section.block.end.tcl
@@ -1754,7 +1754,7 @@ set regexp {(.{0,200})}
 ##############################################################################
 
     regexp -start 5 {\mfoo(?!bar\M)(\w*)} $string -> restOfWord
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 #          ^^^^^^ variable.parameter.tcl
 #                 ^ constant.numeric.integer.tcl
 #                   ^ punctuation.section.braces.begin.tcl
@@ -1765,7 +1765,7 @@ set regexp {(.{0,200})}
 
 # https://github.com/sublimehq/Packages/issues/779
     regexp -inline -all -- {%[a-zA-Z_]*%} "whatever"
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 #          ^^^^^^^ variable.parameter.tcl
 #                 ^ - punctuation - variable
 #                  ^^^^ variable.parameter.tcl
@@ -1778,7 +1778,7 @@ set regexp {(.{0,200})}
 #                                        ^ - meta.braces - string
 #                                         ^^^^^^^^^^ string.quoted.double.tcl
     regexp\
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 #         ^ punctuation.separator.continuation.newline.tcl
     -inline\
 #   ^^^^^^^ variable.parameter.tcl
@@ -1800,7 +1800,7 @@ set regexp {(.{0,200})}
 #   ^^^^^^^^^^ string.quoted.double.tcl
 
     regexp {instance="?([^" \t]+)"?} $counter matchedstring instance; # comment
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 #         ^ - keyword - meta.braces - string
 #          ^ punctuation.section.braces.begin.tcl
 #          ^^^^^^^^^^^^^^^^^^^^^^^^^ meta.braces.tcl
@@ -1814,17 +1814,17 @@ set regexp {(.{0,200})}
 #                                                                     ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
     regsub
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 
     regsub ; regexp;#
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 #          ^ punctuation.terminator.command.tcl
-#            ^^^^^^ keyword.other.builtin.tcl
+#            ^^^^^^ support.function.builtin.tcl
 #                  ^ punctuation.terminator.command.tcl
 #                   ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
     regsub -all {"} $args {""}
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 #          ^^^^ variable.parameter.tcl
 #              ^ - meta.braces - constant - string - variable
 #               ^ punctuation.section.braces.begin.tcl
@@ -1840,7 +1840,7 @@ set regexp {(.{0,200})}
 #                             ^ - meta.braces - string
 
     regsub -start 5 -all -- -all\b[set var] $var
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 #          ^^^^^^ variable.parameter.tcl
 #                 ^ constant.numeric.integer.tcl
 #                   ^^^^ variable.parameter.tcl
@@ -1852,7 +1852,7 @@ set regexp {(.{0,200})}
 #                                           ^^^^ variable.other.tcl
 
     regsub -all {[A-z]\d+na\/\b} $args {\\} varname illegal
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 #          ^^^^ variable.parameter.tcl
 #               ^ punctuation.section.braces.begin.tcl
 #               ^^^^^^^^^^^^^^^^ meta.braces.tcl
@@ -1865,7 +1865,7 @@ set regexp {(.{0,200})}
 #                                                   ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 
     regsub\
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 #         ^ punctuation.separator.continuation.newline.tcl
     -all\
 #   ^^^^ variable.parameter.tcl
@@ -1890,7 +1890,7 @@ set regexp {(.{0,200})}
 #   ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 
     regsub -all "[A-z]\d+na\/\b" $args "\\" args
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 #          ^^^^ variable.parameter.tcl
 #               ^ punctuation.definition.string.begin.tcl
 #               ^^^^^^^^^^^^^^^^ string.quoted.double.tcl string.regexp.tcl
@@ -1901,7 +1901,7 @@ set regexp {(.{0,200})}
 #                                         ^ punctuation.definition.string.end.tcl
 
     regsub -- "${one_arg_opt_pattern}\\s+\\S+" $args {} args
-#   ^^^^^^ keyword.other.builtin.tcl
+#   ^^^^^^ support.function.builtin.tcl
 #          ^^ punctuation.terminator.switches.tcl
 #             ^ string.quoted.double.tcl string.regexp.tcl punctuation.definition.string.begin.tcl
 #                                              ^ variable.other.tcl punctuation.definition.variable.tcl
@@ -2228,7 +2228,7 @@ set regexp {(.{0,200})}
 #              ^ punctuation.section.block.begin.tcl
             puts $var
 #<- meta.list.tcl meta.block.tcl
-#           ^^^^ meta.list.tcl meta.block.tcl meta.function-call.tcl keyword.other.builtin.tcl
+#           ^^^^ meta.statement.switch.tcl meta.list.tcl meta.block.tcl support.function.builtin.tcl
         }
 #<- meta.list.tcl meta.block.tcl
 #       ^ meta.list.tcl meta.block.tcl punctuation.section.block.end.tcl
@@ -2381,3 +2381,4 @@ set regexp {(.{0,200})}
 #                                                             ^ punctuation.section.list.end.tcl
 #                                                              ^ punctuation.terminator.command.tcl
 #                                                               ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+

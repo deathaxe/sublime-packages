@@ -26,16 +26,18 @@ variables:
     ){{b}}
 
   keywords: |-
+    (?x:coroutine|eval|list|load|next|nextto|uplevel|yield|yieldto|unload|unset|
+    ){{b}}
+
+  builtin_funcs: |-
     (?x:
-      append|apply|bgerror|binary|cd|clock|close|concat|coroutine|dde|encoding|
-      eof|error|eval|exec|fblocked|fconfigure|fcopy|file|fileevent|filename|
-      flush|format|gets|glob|history|http|info|interp|join|library|memory|
-      msgcat|next|nextto|open|package|pid|pkg::create|pkg_mkIndex|puts|pwd|read|
-      registry|rename|resource|scan|seek|socket|source|split|subst|tailcall|
-      tcltest|tclvars|tell|time|trace|unknown|unload|unset|update|uplevel|vwait|
-      yield|yieldto|zlib|
+      append|apply|bgerror|binary|cd|clock|close|concat|dde|encoding|eof|exec|
+      fblocked|fconfigure|fcopy|fileevent|filename|flush|format|gets|glob|history|
+      http|info|interp|join|library|memory|msgcat|open|package|pid|pkg::create|
+      pkg_mkIndex|puts|pwd|read|registry|rename|resource|scan|seek|socket|source|
+      split|subst|tailcall|tcltest|tclvars|tell|time|trace|unknown|update|vwait|zlib|
       # list manipulation commands
-      lappend|lassign|lindex|linsert|list|llength|lmap|load|lrange|lrepeat|
+      lappend|lassign|lindex|linsert|llength|lmap|lrange|lrepeat|
       lreplace|lreverse|lsearch|lset|lsort|
       # https://www.tcl.tk/man/tcl8.6/TclCmd/library.htm#M5
       auto_execok|auto_import|auto_load|auto_mkindex|auto_qualify|auto_reset|
@@ -62,6 +64,9 @@ contexts:
     # known commands
     - match: '{{keywords}}'
       scope: keyword.other.builtin.tcl
+      push: cmd-generic-end
+    - match: '{{builtin_funcs}}'
+      scope: support.function.builtin.tcl
       push: cmd-generic-end
     - match: '{{math_funcs}}'
       scope: support.function.math.tcl
@@ -172,13 +177,13 @@ contexts:
   cmd-regexp:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/regexp.htm
     - match: regexp{{b}}
-      scope: keyword.other.builtin.tcl
+      scope: support.function.builtin.tcl
       push:
         - cmd-regexp-matches     # string, match, submatches
         - cmd-regexp-pattern     # pattern
         - cmd-regexp-switches    # switches
     - match: regsub{{b}}
-      scope: keyword.other.builtin.tcl
+      scope: support.function.builtin.tcl
       push:
         - eoc-pop-or-illegal     # must be end of command
         - cmd-generic-var        # varname
@@ -373,6 +378,12 @@ contexts:
     - match: continue{{b}}
       scope: keyword.control.flow.continue.tcl
       push: eoc-pop-or-illegal
+    - match: error{{b}}
+      scope: keyword.control.flow.error.tcl
+      push:
+        - match: (ok|error|return|break|continue){{b}}
+          scope: constant.language.errorcode.tcl
+        - include: cmd-generic-end
     - match: exit{{b}}
       scope: keyword.control.flow.exit.tcl
       push: eoc-pop-or-illegal
