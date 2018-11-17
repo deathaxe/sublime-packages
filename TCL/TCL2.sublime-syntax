@@ -302,32 +302,36 @@ contexts:
   cmd-string-match-switches:
     - match: (?=[\"\{])
       pop: true
-    - match: -\S+?{{b}}
+    - match: -nocase{{b}}
       scope: variable.parameter.tcl
+      pop: true
+    - match: -{{illegal}}
+      scope: invalid.illegal.parameter.tcl
+      pop: true
     - include: eow-pop-or-illegal
 
   cmd-string-match-pattern:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/string.htm#M35
-    # enable basic pattern highlighting in quoted strings
+    - include: eoc-pop
     - match: \{
       scope: punctuation.section.braces.begin.tcl
       set:
         - meta_scope: meta.braces.tcl string.quoted.brace.tcl
-        - include: pattern-placeholder
+        - include: cmd-string-match-pattern-body
         - include: braces-end-pop
     - match: \"
       scope: punctuation.definition.string.begin.tcl
       set:
         - meta_scope: string.quoted.double.tcl
-        - include: pattern-placeholder
+        - include: cmd-string-match-pattern-body
         - include: string-end-pop
     - match: (?=\S)
       set:
-        - meta_scope: string.unquoted.tcl string.regexp.tcl
-        - include: pattern-placeholder
-        - include: words-pop
+        - meta_scope: string.unquoted.tcl
+        - include: cmd-string-match-pattern-body
+        - include: eow-pop
 
-  pattern-placeholder:
+  cmd-string-match-pattern-body:
     - include: escape
     - include: variable
     # Don't match the first `-` after `[` as punctuation.separator.
