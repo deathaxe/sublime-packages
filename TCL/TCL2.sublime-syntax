@@ -202,32 +202,57 @@ contexts:
     - include: else-pop
 
   cmd-regexp-pattern:
-    - include: eol-pop
+    - include: eoc-pop
     - match: \{
       scope: punctuation.section.braces.begin.tcl
       set:
         - meta_scope: meta.braces.tcl string.quoted.brace.tcl string.regexp.tcl
+        - include: cmd-regexp-pattern-body
         - include: braces-end-pop
-        # - include: scope:source.regexp#base-literal
-
-        # make sure to ignore nested braces
-        - match: escape
-        - match: \{
-          push:
-            - match: \}
-              pop: true
-            - match: escape
     - match: \"
       scope: punctuation.definition.string.begin.tcl
       set:
         - meta_scope: string.quoted.double.tcl string.regexp.tcl
+        - include: cmd-regexp-pattern-body
         - include: string-end-pop
-        # - include: scope:source.regexp#base-literal
-        - match: escape
     - match: (?=\S)
       set:
         - meta_scope: string.unquoted.tcl string.regexp.tcl
-        - include: words-pop
+        - include: cmd-regexp-pattern-body
+        - include: eow-pop
+      with_prototype:
+        # make sure to pop off with whitespace and command termination
+        # even when within a character group/bracket/brace to comply
+        # with TCL's [2] Words rule.
+        - include: eol-pop
+        - match: (?=\s;)
+          pop: true
+
+  cmd-regexp-pattern-body:
+    # TODO: make TCL regexp rules
+    - match: \(
+      scope: punctuation.section.group.begin.tcl
+      push:
+        - meta_scope: meta.group.tcl
+        - match: \)
+          scope: punctuation.section.group.end.tcl
+          pop: true
+    - match: \[
+      scope: punctuation.section.bracket.begin.tcl
+      push:
+        - meta_scope: meta.bracket.tcl
+        - match: \]
+          scope: punctuation.section.bracket.end.tcl
+          pop: true
+    - match: escape
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      push:
+        - meta_scope: meta.braces.tcl
+        - match: \}
+          scope: punctuation.section.braces.end.tcl
+          pop: true
+        - match: escape
 
   cmd-regexp-matches:
     - include: words
