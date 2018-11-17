@@ -7,6 +7,6 @@
 }
 ]]></content>
 	<tabTrigger>switch</tabTrigger>
-	<scope>source.tcl</scope>
+	<scope>meta.command.tcl</scope>
 	<description>switch...</description>
 </snippet>

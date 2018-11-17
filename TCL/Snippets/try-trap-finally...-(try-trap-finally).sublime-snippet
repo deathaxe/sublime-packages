@@ -1,0 +1,13 @@
+<snippet>
+    <content><![CDATA[try {
+    ${0}
+} trap {${1:pattern}} {${2:list}} {
+
+} finally {
+
+}
+]]></content>
+    <tabTrigger>try-trap-finally</tabTrigger>
+    <scope>source.tcl & (meta.expect-command.tcl, meta.command.tcl)</scope>
+    <description>try...trap...finally...</description>
+</snippet>

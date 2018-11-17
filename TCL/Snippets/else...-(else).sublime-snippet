@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[else {
+	${0}
+}
+]]></content>
+	<tabTrigger>else</tabTrigger>
+	<scope>source.tcl & (meta.statement.conditional - meta.expect-command - meta.command)</scope>
+	<description>else...</description>
+</snippet>

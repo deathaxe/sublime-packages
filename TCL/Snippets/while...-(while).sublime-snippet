@@ -4,6 +4,6 @@
 }
 ]]></content>
 	<tabTrigger>while</tabTrigger>
-	<scope>source.tcl</scope>
+	<scope>source.tcl & (meta.expect-command.tcl, meta.command.tcl)</scope>
 	<description>while...</description>
 </snippet>

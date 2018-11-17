@@ -1,9 +1,9 @@
 <snippet>
 	<content><![CDATA[if {${1:condition}} {
-	${2}
+	${0}
 }
 ]]></content>
 	<tabTrigger>if</tabTrigger>
-	<scope>source.tcl</scope>
+	<scope>source.tcl & (meta.expect-command.tcl, meta.command.tcl)</scope>
 	<description>if...</description>
 </snippet>

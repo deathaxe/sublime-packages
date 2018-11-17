@@ -1,0 +1,11 @@
+<snippet>
+    <content><![CDATA[try {
+    ${0}
+} finally {
+
+}
+]]></content>
+    <tabTrigger>try-finally</tabTrigger>
+    <scope>source.tcl & (meta.expect-command.tcl, meta.command.tcl)</scope>
+    <description>try...finally...</description>
+</snippet>
