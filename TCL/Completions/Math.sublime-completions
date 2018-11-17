@@ -1,0 +1,32 @@
+{
+   "scope": "meta.expect-command.tcl, meta.command.tcl",
+   "completions":
+    [
+        {"trigger": "abs arg\tmath", "contents": "abs ${1:arg}$0"},
+        {"trigger": "acos arg\tmath", "contents": "acos ${1:arg}$0"},
+        {"trigger": "asin arg\tmath", "contents": "asin ${1:arg}$0"},
+        {"trigger": "atan arg\tmath", "contents": "atan ${1:arg}$0"},
+        {"trigger": "atan2 y x\tmath", "contents": "atan2 ${1:x} ${2:y}$0"},
+        {"trigger": "ceil arg\tmath", "contents": "ceil ${1:arg}$0"},
+        {"trigger": "cos arg\tmath", "contents": "cos ${1:arg}$0"},
+        {"trigger": "cosh arg\tmath", "contents": "cosh ${1:arg}$0"},
+        {"trigger": "double arg\tmath", "contents": "double ${1:arg}$0"},
+        {"trigger": "exp arg\tmath", "contents": "exp ${1:arg}$0"},
+        {"trigger": "floor arg\tmath", "contents": "floor ${1:arg}$0"},
+        {"trigger": "fmod x y\tmath", "contents": "fmod ${1:x} ${2:y}$0"},
+        {"trigger": "hypot x y\tmath", "contents": "hypot ${1:x} ${2:y}$0"},
+        {"trigger": "int arg\tmath", "contents": "int ${1:arg}$0"},
+        {"trigger": "log arg\tmath", "contents": "log ${1:arg}$0"},
+        {"trigger": "log10 arg\tmath", "contents": "log10 ${1:arg}$0"},
+        {"trigger": "pow x y\tmath", "contents": "pow ${1:x} ${2:y}$0"},
+        {"trigger": "rand\tmath", "contents": "rand ${1:arg}$0"},
+        {"trigger": "round arg\tmath", "contents": "round ${1:arg}$0"},
+        {"trigger": "sin arg\tmath", "contents": "sin ${1:arg}$0"},
+        {"trigger": "sinh arg\tmath", "contents": "sinh ${1:arg}$0"},
+        {"trigger": "sqrt arg\tmath", "contents": "sqrt ${1:arg}$0"},
+        {"trigger": "srand arg\tmath", "contents": "srand ${1:arg}$0"},
+        {"trigger": "tan arg\tmath", "contents": "tan ${1:arg}$0"},
+        {"trigger": "tanh arg\tmath", "contents": "tanh ${1:arg}$0"},
+        {"trigger": "wide arg\tmath", "contents": "wide ${1:arg}$0"}
+    ]
+}
