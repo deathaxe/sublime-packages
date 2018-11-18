@@ -349,8 +349,7 @@ contexts:
     - match: error{{b}}
       scope: keyword.control.flow.error.tcl
       push:
-        - match: (ok|error|return|break|continue){{b}}
-          scope: constant.language.errorcode.tcl
+        - include: errorcodes
         - include: cmd-generic-end
     - match: exit{{b}}
       scope: keyword.control.flow.exit.tcl
@@ -358,8 +357,7 @@ contexts:
     - match: return{{b}}
       scope: keyword.control.flow.return.tcl
       push:
-        - match: (ok|error|return|break|continue){{b}}
-          scope: constant.language.errorcode.tcl
+        - include: errorcodes
         - include: cmd-generic-end
     - match: throw{{b}}
       scope: keyword.control.flow.throw.tcl
@@ -1188,6 +1186,10 @@ contexts:
       scope: constant.numeric.float.tcl
     - match: \b[0-9]+\b
       scope: constant.numeric.integer.tcl
+
+  errorcodes:
+    - match: (ok|error|return|break|continue){{b}}
+      scope: constant.language.errorcode.tcl
 
   operators:
     - match: \b(eq|ne|in|ni){{b}}
