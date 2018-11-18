@@ -131,24 +131,32 @@ contexts:
   cmd-array-args:
     - match: names{{b}}
       scope: variable.function.tcl
-      set:
-        - word-glob-pop
-        - cmd-array-names-switches
-        - cmd-generic-arg
-        - eow-pop
+      set: [cmd-array-names-switches, cmd-generic-arg]
     - match: |-
         (?x:
           anymore|donesearch|exists|get|nextelement|set|size|startsearch|
           statistics|unset
         ){{b}}
       scope: variable.function.tcl
-      set: [cmd-generic-arg, eow-pop]
+      set: cmd-generic-arg
     - include: else-pop
 
   cmd-array-names-switches:
-    - match: -(exact|glob|regexp){{b}}
+    - include: eoc-pop
+    - match: -exact{{b}}
       scope: variable.parameter.tcl
-    - include: else-pop
+      set: [eoc-pop-or-illegal, word-string-pop]
+    - match: -glob{{b}}
+      scope: variable.parameter.tcl
+      set: [eoc-pop-or-illegal, word-glob-pop]
+    - match: -regexp{{b}}
+      scope: variable.parameter.tcl
+      set: [eoc-pop-or-illegal, word-regexp-pop]
+    - match: '-{{illegal}}'
+      scope: invalid.illegal.unexpected-parameter.tcl
+      set: [eoc-pop-or-illegal, word-string-pop]
+    - match: (?=\S)
+      set: [eoc-pop-or-illegal, word-string-pop]
 
 ##[ EXPR COMMAND ]############################################################
 
@@ -698,7 +706,8 @@ contexts:
     - include: words-pop
 
   cmd-generic-arg:
-    - match: $|(?=\S)
+    - include: eoc-pop
+    - match: (?=\S)
       set:
         - meta_content_scope: meta.argument.tcl variable.other.tcl
         - include: words-pop

@@ -1636,8 +1636,43 @@ set regexp {(.{0,200})}
 #                       ^ punctuation.section.substitution.begin.tcl
 #                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
 #                                                                         ^ punctuation.section.substitution.end.tcl
+    array names list_name "pa?[A-z]ttern" illegal; # comment
+#   ^^^^^ keyword.other.builtin.tcl
+#        ^ - keyword - variable
+#         ^^^^^ variable.function.tcl
+#              ^ - variable
+#               ^^^^^^^^^ variable.other.tcl
+#                        ^ - variable - string
+#                         ^ punctuation.definition.string.begin.tcl
+#                         ^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                            ^ - constant.other.placeholder.tcl
+#                             ^^^^^ meta.substitution.tcl
+#                                       ^ punctuation.definition.string.end.tcl
+#                                        ^ - string
+#                                         ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                                ^ punctuation.terminator.command.tcl
+#                                                  ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
-    array names list_name -glob "pa?[A-z]ttern"
+    array names list_name -exact "pa?[A-z]ttern" illegal; # comment
+#   ^^^^^ keyword.other.builtin.tcl
+#        ^ - keyword - variable
+#         ^^^^^ variable.function.tcl
+#              ^ - variable
+#               ^^^^^^^^^ variable.other.tcl
+#                        ^ - variable
+#                         ^^^^^^ variable.parameter.tcl
+#                               ^ - variable - string
+#                                ^ punctuation.definition.string.begin.tcl
+#                                ^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                                   ^ - constant.other.placeholder.tcl
+#                                    ^^^^^ meta.substitution.tcl
+#                                              ^ punctuation.definition.string.end.tcl
+#                                               ^ - string
+#                                                ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                                       ^ punctuation.terminator.command.tcl
+#                                                         ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    array names list_name -glob "pa?[A-z]ttern" illegal; # comment
 #   ^^^^^ keyword.other.builtin.tcl
 #        ^ - keyword - variable
 #         ^^^^^ variable.function.tcl
@@ -1652,6 +1687,47 @@ set regexp {(.{0,200})}
 #                                   ^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
 #                                             ^ punctuation.definition.string.end.tcl
 #                                              ^ - string
+#                                               ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                                      ^ punctuation.terminator.command.tcl
+#                                                        ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    array names list_name -regexp "pa?[A-z]ttern" illegal; # comment
+#   ^^^^^ keyword.other.builtin.tcl
+#        ^ - keyword - variable
+#         ^^^^^ variable.function.tcl
+#              ^ - variable
+#               ^^^^^^^^^ variable.other.tcl
+#                        ^ - variable
+#                         ^^^^^^^ variable.parameter.tcl
+#                                ^ - variable - string
+#                                 ^ punctuation.definition.string.begin.tcl
+#                                 ^^^^^^^^^^^^^^^ string.quoted.double.tcl string.regexp.tcl
+#                                    ^ - constant.other.placeholder.tcl
+#                                     ^^^^^ meta.bracket.tcl
+#                                               ^ punctuation.definition.string.end.tcl
+#                                                ^ - string
+#                                                 ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                                        ^ punctuation.terminator.command.tcl
+#                                                          ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    array names list_name -inval "pa?[A-z]ttern" illegal; # comment
+#   ^^^^^ keyword.other.builtin.tcl
+#        ^ - keyword - variable
+#         ^^^^^ variable.function.tcl
+#              ^ - variable
+#               ^^^^^^^^^ variable.other.tcl
+#                        ^ - variable
+#                         ^^^^^^ invalid.illegal.unexpected-parameter.tcl
+#                               ^ - variable - string
+#                                ^ punctuation.definition.string.begin.tcl
+#                                ^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                                   ^ - constant.other.placeholder.tcl
+#                                    ^^^^^ meta.substitution.tcl
+#                                              ^ punctuation.definition.string.end.tcl
+#                                               ^ - string
+#                                                ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                                       ^ punctuation.terminator.command.tcl
+#                                                         ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
     array\
 #   ^^^^^ keyword.other.builtin.tcl
