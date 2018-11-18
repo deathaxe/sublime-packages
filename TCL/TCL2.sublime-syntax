@@ -352,17 +352,10 @@ contexts:
       push: [block-pop, condition-pop]
 
   condition-pop:
-    - include: operator-expand-args
-    - match: \{
-      scope: punctuation.section.braces.begin.tcl
-      set:
-        - meta_scope: meta.braces.tcl
-        - include: braces-end-pop
-        - include: expressions
     - match: (false|true){{b}}
       scope: constant.language.tcl
       set: eow-pop
-    - include: word-pop
+    - include: word-expr-pop
 
   elseif-pop:
     - meta_scope: meta.statement.conditional.tcl
@@ -750,6 +743,29 @@ contexts:
     - match: (?=\S)
       set:
         - include: words
+        - include: eow-pop
+
+##[ RULE 2 - WORDS / EXPRESSION ]#############################################
+
+  word-expr-pop:
+    - include: eoc-pop
+    - include: operator-expand-args
+    # braced expression
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      set:
+        - meta_scope: meta.braces.tcl meta.expression.tcl
+        - include: expressions
+        - include: braces-end-pop
+    # single word expression,
+    # a substitution or variable of a dynamically created expression
+    - match: (?=\S)
+      set:
+        - meta_scope: meta.expression.tcl
+        - include: escape
+        - include: substitution
+        - include: variable
+        - include: namespace-accessor
         - include: eow-pop
 
 ##[ RULE 2 - WORDS / PATTERN ]################################################
