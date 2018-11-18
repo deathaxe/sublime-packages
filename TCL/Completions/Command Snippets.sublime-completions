@@ -1,0 +1,23 @@
+{
+   "scope": "meta.expect-command.tcl, meta.command.tcl",
+   "completions":
+    [
+        {"trigger": "after ms\tsnippet", "contents": "after ${0:ms}"},
+        {"trigger": "after ms script...\tsnippet", "contents": "after ${1:ms} $0"},
+        {"trigger": "after cancel...\tsnippet", "contents": "after cancel ${0:script}"},
+        {"trigger": "after idle script...\tsnippet", "contents": "after idle ${0:script}"},
+        {"trigger": "after info ?id?\tsnippet", "contents": "after info ${0:id}"},
+
+        {"trigger": "array anymore arrayName searchId\tsnippet", "contents": "array anymore ${1:arrayName} ${2:searchId}"},
+        {"trigger": "array donesearch arrayName searchId\tsnippet", "contents": "array donesearch ${1:arrayName} ${2:searchId}"},
+        {"trigger": "array exists arrayName\tsnippet", "contents": "array exists ${1:arrayName}"},
+        {"trigger": "array get arrayName ?pattern?\tsnippet", "contents": "array get ${1:arrayName} ${2:?pattern?}"},
+        {"trigger": "array names arrayName ?mode? ?pattern?\tsnippet", "contents": "array names ${1:arrayName} ${2:?mode?} ${3:?pattern?}"},
+        {"trigger": "array nextelement arrayName searchId\tsnippet", "contents": "array nextelement ${1:arrayName} ${2:searchId}"},
+        {"trigger": "array set arrayName list\tsnippet", "contents": "array set ${1:arrayName} ${2:list}"},
+        {"trigger": "array size arrayName\tsnippet", "contents": "array size ${1:arrayName}"},
+        {"trigger": "array startsearch arrayName\tsnippet", "contents": "array startsearch ${1:arrayName}"},
+        {"trigger": "array statistics arrayName\tsnippet", "contents": "array statistics ${1:arrayName}"},
+        {"trigger": "array unset arrayName ?pattern?\tsnippet", "contents": "array unset ${1:arrayName} ${2:?pattern?}"},
+    ]
+}

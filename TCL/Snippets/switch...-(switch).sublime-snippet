@@ -1,12 +1,12 @@
 <snippet>
-	<content><![CDATA[switch ${1:-exact} -- ${2:\$var} {
-	${3:match} {
-		${4}
+	<content><![CDATA[switch -- ${1:\$var} {
+	${2:match} {
+		${3}
 	}
-	default {${5}}
+	default {${4}}
 }
 ]]></content>
 	<tabTrigger>switch</tabTrigger>
-	<scope>meta.command.tcl</scope>
+	<scope>meta.expect-command.tcl, meta.command.tcl</scope>
 	<description>switch...</description>
 </snippet>
