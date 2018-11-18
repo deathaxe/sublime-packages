@@ -12,7 +12,7 @@
 #  ^ - meta.function-call
 #   ^^^^^^^^^^^^^ meta.function-call.tcl
 #                ^ punctuation.terminator.command.tcl
-#                 ^ - meta
+#                 ^ - meta.function-call
 #                  ^^^^^^^^^^^^^ meta.function-call.tcl
 #  ^ - variable.function.tcl
 #   ^^^ variable.function.tcl
@@ -280,7 +280,6 @@ set regexp {(.{0,200})}
 #    ^ - meta.substitution - punctuation
 
     set y [set x 0][incr x][incr x]
-#  ^ - meta
 #        ^ - meta.substitution
 #         ^^^^^^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
 #         ^ punctuation.section.substitution.begin.tcl
@@ -832,7 +831,6 @@ set regexp {(.{0,200})}
 #   ^ punctuation.section.block.end.tcl
 
     namespace eval A {
-#  ^ - meta
 #   ^^^^^^^^^^^^^^^^^^^ meta.namespace.tcl
 #                    ^^ meta.block.tcl
 #   ^^^^^^^^^ keyword.other.builtin.tcl
@@ -2178,7 +2176,6 @@ set regexp {(.{0,200})}
 ##############################################################################
 
     set var "val"
-#  ^ - meta - keyword
 #   ^^^ keyword.other.builtin.tcl
 #      ^ - keyword - variable
 #       ^^^ variable.other.tcl
@@ -2187,7 +2184,6 @@ set regexp {(.{0,200})}
 #                ^ - string
 
     set\
-#  ^ - meta - keyword
 #   ^^^ keyword.other.builtin.tcl
 #      ^ punctuation.separator.continuation.newline.tcl
     var\
@@ -2198,7 +2194,6 @@ set regexp {(.{0,200})}
 #
 
     set var {val}
-#  ^ - meta - keyword
 #   ^^^ keyword.other.builtin.tcl
 #      ^ - keyword - variable
 #       ^^^ variable.other.tcl
@@ -2206,7 +2201,6 @@ set regexp {(.{0,200})}
 #
 
     set {var1 var2} [list "val1" {val2}]
-#  ^ - meta - keyword
 #   ^^^ keyword.other.builtin.tcl
 #      ^ - keyword - variable
 #       ^ punctuation.section.braces.begin.tcl
@@ -2222,7 +2216,6 @@ set regexp {(.{0,200})}
 #                                      ^ punctuation.section.substitution.end.tcl
 
     set anAry(msg) "Hello, World!"
-#  ^ - meta - keyword
 #   ^^^ keyword.other.builtin.tcl
 #      ^ - keyword - variable
 #       ^^^^^^^^^^ variable.other.tcl
