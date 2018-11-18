@@ -675,6 +675,58 @@ set regexp {(.{0,200})}
 #             ^^^^^^^^^^^^^^ - comment
 
 ##############################################################################
+# coroutine tests
+##############################################################################
+
+    coroutine name func $arg
+#   ^^^^^^^^^ keyword.other.builtin.tcl
+#             ^^^^ entity.name.function.tcl
+#                  ^^^^^^^^^^ meta.script.tcl
+#                  ^^^^ variable.function.tcl
+#                       ^^^^ variable.other.tcl
+
+    coroutine\
+#   ^^^^^^^^^ keyword.other.builtin.tcl
+#            ^ punctuation.separator.continuation.newline.tcl
+    name\
+#   ^^^^ entity.name.function.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    func\
+#  ^ - meta.script.tcl
+#   ^^^^^^ meta.script.tcl
+#   ^^^^ variable.function.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    $arg
+#^^^^^^^^ meta.script.tcl
+#   ^^^^ variable.other.tcl
+
+    coroutine [concat "na" "me"] func $arg
+#   ^^^^^^^^^ meta.coroutine.tcl - meta.corountine.name.tcl
+#            ^^^^^^^^^^^^^^^^^^^^ meta.coroutine.name.tcl
+#             ^^^^^^^^^^^^^^^^^^  meta.substitution.tcl
+#                                ^^^^^^^^^^ meta.coroutine.body.tcl meta.script.tcl
+#   ^^^^^^^^^ keyword.other.builtin.tcl
+#                                ^^^^ variable.function.tcl
+#                                     ^^^^ variable.other.tcl
+
+    coroutine [concat "na" "me"] {
+#   ^^^^^^^^^ meta.coroutine.tcl - meta.corountine.name.tcl
+#            ^^^^^^^^^^^^^^^^^^^^ meta.coroutine.name.tcl
+#             ^^^^^^^^^^^^^^^^^^  meta.substitution.tcl
+#                                ^^ meta.coroutine.body.tcl meta.block.tcl meta.script.tcl
+#                                ^ punctuation.section.block.begin.tcl
+#   ^^^^^^^^^ keyword.other.builtin.tcl
+        func $arg
+#<- meta.coroutine.body.tcl meta.block.tcl meta.script.tcl
+#       ^^^^ variable.function.tcl
+#            ^^^^ variable.other.tcl
+    }
+#<- meta.coroutine.body.tcl meta.block.tcl meta.script.tcl
+#^^^^ meta.coroutine.body.tcl meta.block.tcl meta.script.tcl
+#   ^ punctuation.section.block.end.tcl
+#    ^ - meta
+
+##############################################################################
 # expr tests
 ##############################################################################
 

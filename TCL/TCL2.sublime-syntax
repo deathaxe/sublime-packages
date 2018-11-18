@@ -26,7 +26,7 @@ variables:
     ){{b}}
 
   keywords: |-
-    (?x:coroutine|eval|list|load|next|nextto|uplevel|yield|yieldto|unload|unset|
+    (?x:eval|list|load|next|nextto|uplevel|yield|yieldto|unload|unset|
     ){{b}}
 
   builtin_funcs: |-
@@ -75,6 +75,7 @@ contexts:
     # special commands
     - include: cmd-array
     - include: cmd-after
+    - include: cmd-coroutine
     - include: cmd-expr
     - include: cmd-file
     - include: cmd-incr
@@ -176,6 +177,35 @@ contexts:
 
   cmd-array-meta:
     - meta_scope: meta.command.array.tcl
+    - include: eoc-pop-or-illegal
+
+##[ COROUTINE COMMAND ]#######################################################
+
+  cmd-coroutine:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/coroutine.htm
+    - match: coroutine{{b}}
+      scope: meta.coroutine.tcl keyword.other.builtin.tcl
+      push:
+        - cmd-coroutine-meta
+        - cmd-after-script
+        - cmd-coroutine-name-meta
+        - cmd-coroutine-name
+
+  cmd-coroutine-name:
+    # simple coroutine name
+    - match: '{{ident}}'
+      scope: entity.name.function.tcl
+      pop: true
+    # scripted coroutine name
+    - include: word-any-pop
+
+  cmd-coroutine-name-meta:
+    - clear_scopes: 1
+    - meta_content_scope: meta.coroutine.name.tcl
+    - include: any-pop
+
+  cmd-coroutine-meta:
+    - meta_content_scope: meta.coroutine.body.tcl
     - include: eoc-pop-or-illegal
 
 ##[ EXPR COMMAND ]############################################################
