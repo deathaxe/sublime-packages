@@ -970,16 +970,6 @@ contexts:
 
 ##[ RULE 6 - BRACES ]#########################################################
 
-  block:
-    - match: \{
-      scope: punctuation.section.block.begin.tcl
-      push:
-        - meta_scope: meta.block.tcl
-        - match: \}
-          scope: punctuation.section.block.end.tcl
-          pop: true
-        - include: main
-
   braces:
     - include: operator-expand-args
     - include: braces-string
