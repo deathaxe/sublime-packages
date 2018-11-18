@@ -692,6 +692,7 @@ contexts:
     - match: \{
       scope: punctuation.section.braces.begin.tcl
       set:
+        - clear_scopes: 1
         - meta_scope: meta.function.parameters.tcl meta.braces.tcl
         # braced parameter with at most 2 items: {name default}
         - match: \{

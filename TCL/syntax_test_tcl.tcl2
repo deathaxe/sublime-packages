@@ -1041,12 +1041,13 @@ set regexp {(.{0,200})}
 # default value.
     proc name {} {}
 #  ^ - meta.function
-#   ^^^^^^^^^^^^^^^^ meta.function.tcl
+#   ^^^^^^^^^^ meta.function.tcl - meta.function.parameters
 #   ^^^^ keyword.declaration.proc.tcl
 #        ^^^^ entity.name.function.tcl
 #             ^ punctuation.section.braces.begin.tcl
 #             ^^ meta.function.parameters.tcl meta.braces.tcl
 #              ^ punctuation.section.braces.end.tcl
+#               ^^^ meta.function.tcl - meta.function.parameters
 #                ^ punctuation.section.block.begin.tcl
 #                ^^ meta.block.tcl
 #                 ^ punctuation.section.block.end.tcl
@@ -1054,10 +1055,10 @@ set regexp {(.{0,200})}
     proc echo {{text "foo" invalid}} {puts $text}
 #  ^ - meta.function
 #   ^^^^^^^^^^ meta.function.tcl - meta.function.parameters - meta.braces
-#             ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
-#              ^^^^^^^^^^^^^^^^^^^^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl
+#             ^ meta.function.parameters.tcl meta.braces.tcl
+#              ^^^^^^^^^^^^^^^^^^^^ meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl
 #                          ^^^^^^^ invalid.illegal.end-of-word-expected.tcl
-#                                  ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
+#                                  ^ meta.function.parameters.tcl meta.braces.tcl
 #                                   ^ meta.function.tcl - meta.function.parameters - meta.braces - meta.block
 #                                    ^^^^^^^^^^^^ meta.block.tcl
 #                                     ^^^^^^^^^^ meta.function-call.tcl
@@ -1084,12 +1085,12 @@ set regexp {(.{0,200})}
     {\
 #  ^ meta.function.tcl - meta.function.parameters - meta.braces
 #   ^ punctuation.section.braces.begin.tcl
-#   ^^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
+#   ^^ meta.function.parameters.tcl meta.braces.tcl
 #    ^ punctuation.separator.continuation.newline.tcl
         {\
-#      ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
+#      ^ meta.function.parameters.tcl meta.braces.tcl
 #       ^ punctuation.section.braces.begin.tcl
-#       ^^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl
+#       ^^ meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl
 #        ^ punctuation.separator.continuation.newline.tcl
             text\
 #           ^^^^ variable.parameter.tcl
@@ -1101,12 +1102,12 @@ set regexp {(.{0,200})}
 #           ^^^^^^^ invalid.illegal.end-of-word-expected.tcl
 #                  ^ punctuation.separator.continuation.newline.tcl
         }\
-#      ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl - punctuation
-#       ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl punctuation.section.braces.end.tcl
-#        ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl punctuation.separator.continuation.newline.tcl
+#      ^ meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl - punctuation
+#       ^ meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl punctuation.section.braces.end.tcl
+#        ^ meta.function.parameters.tcl meta.braces.tcl punctuation.separator.continuation.newline.tcl
     }\
-#  ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl - punctuation
-#   ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl punctuation.section.braces.end.tcl
+#  ^ meta.function.parameters.tcl meta.braces.tcl - punctuation
+#   ^ meta.function.parameters.tcl meta.braces.tcl punctuation.section.braces.end.tcl
 #    ^ meta.function.tcl punctuation.separator.continuation.newline.tcl
     {
 #   ^ meta.function.tcl meta.block.tcl punctuation.section.block.begin.tcl
@@ -1126,9 +1127,9 @@ set regexp {(.{0,200})}
     proc mult {par {multiplier 2}} {
 #  ^ - meta.function
 #   ^^^^^^^^^^ meta.function.tcl - meta.function.parameters - meta.braces
-#             ^^^^^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
-#                  ^^^^^^^^^^^^^^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl
-#                                ^ meta.function.tcl meta.function.parameters.tcl meta.braces.tcl
+#             ^^^^^ meta.function.parameters.tcl meta.braces.tcl
+#                  ^^^^^^^^^^^^^^ meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl
+#                                ^ meta.function.parameters.tcl meta.braces.tcl
 #                                 ^ meta.function.tcl - meta.function.parameters - meta.braces
 #                                  ^ meta.function.tcl meta.block.tcl punctuation.section.block.begin.tcl
 #             ^ punctuation.section.braces.begin.tcl
