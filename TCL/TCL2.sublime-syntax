@@ -715,29 +715,6 @@ contexts:
     - match: -{{ident}}{{b}}
       scope: variable.parameter.tcl
 
-##[ RULE 2 - WORDS ]##########################################################
-
-  expressions:
-    - include: words
-    - include: operators
-
-  expressions-pop:
-    - include: expressions
-    - include: eow-pop
-
-  words:
-    - include: escape
-    - include: numbers
-    - include: substitution
-    - include: string-quoted-double
-    - include: braces
-    - include: variable
-    - include: namespace-accessor
-
-  words-pop:
-    - include: words
-    - include: eow-pop
-
 ##[ RULE 2 - WORDS / ANYTHING ]###############################################
 
   word-any-pop:
@@ -940,6 +917,29 @@ contexts:
         - include: substitution
         - include: variable
         - include: eow-pop
+
+##[ RULE 2 - WORDS ]##########################################################
+
+  expressions:
+    - include: words
+    - include: operators
+
+  expressions-pop:
+    - include: expressions
+    - include: eow-pop
+
+  words:
+    - include: escape
+    - include: numbers
+    - include: substitution
+    - include: string-quoted-double
+    - include: braces
+    - include: variable
+    - include: namespace-accessor
+
+  words-pop:
+    - include: words
+    - include: eow-pop
 
 ##[ RULE 4 - DOUBLE QUOTED ]##################################################
 
