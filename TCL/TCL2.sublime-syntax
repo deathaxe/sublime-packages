@@ -228,7 +228,7 @@ contexts:
       scope: variable.parameter.tcl
     - match: -(start){{b}}
       scope: variable.parameter.tcl
-      push: word-pop
+      push: word-any-pop
     - include: else-pop
 
   cmd-regexp-matches:
@@ -408,7 +408,7 @@ contexts:
   switch-options-common:
     - match: -(indexvar|matchvar){{b}}
       scope: variable.parameter.tcl
-      push: word-pop
+      push: word-any-pop
     - match: -nocase{{b}}
       scope: variable.parameter.tcl
     - match: -{{illegal}}
@@ -738,11 +738,32 @@ contexts:
     - include: words
     - include: eow-pop
 
-  word-pop:
+##[ RULE 2 - WORDS / ANYTHING ]###############################################
+
+  word-any-pop:
+    # A generally usable word whose type is not defined in detail.
+    # It can be a string/variable/number.
     - include: eoc-pop
+    - include: operator-expand-args
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      set:
+        - meta_scope: meta.braces.tcl string.quoted.brace.tcl
+        - include: braces-string-body
+        - include: braces-end-pop
+    - match: \"
+      scope: punctuation.definition.string.begin.tcl
+      set:
+        - meta_scope: string.quoted.double.tcl
+        - include: string-quoted-double-body
+        - include: string-quoted-double-end
     - match: (?=\S)
       set:
-        - include: words
+        - include: escape
+        - include: numbers
+        - include: substitution
+        - include: variable
+        - include: namespace-accessor
         - include: eow-pop
 
 ##[ RULE 2 - WORDS / EXPRESSION ]#############################################
