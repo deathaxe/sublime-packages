@@ -85,10 +85,10 @@
     "
 #^^^^ string.quoted.double.tcl
 #   ^ punctuation.definition.string.end.tcl
-#    - string - punctuation
+#    ^ - string - punctuation
 
 # Command substitution, variable substitution, and backslash substitution are performed
-    "$foo ${bar + 2} [baz]""invalid"
+    "$foo ${bar + 2} \h [set x "str"]""invalid"
 #  ^ - string - punctuation
 #   ^ punctuation.definition.string.begin.tcl
 #   ^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.double.tcl
@@ -98,16 +98,20 @@
 #         ^^ punctuation.definition.variable.begin.tcl
 #         ^^^^^^^^^^ variable.other.tcl
 #                  ^ punctuation.definition.variable.end.tcl
-#                   ^ - variable.other
-#                    ^ punctuation.section.substitution.begin.tcl
-#                    ^^^^^ meta.substitution.tcl
-#                        ^ punctuation.section.substitution.end.tcl
-#                         ^ punctuation.definition.string.end.tcl
-#                          ^ - string - punctuation
-#                          ^^^^^^^^^ invalid.illegal.end-of-word-expected.tcl
-
-# backslash substitution
-    "foo $bar # baz ${bar + 2} [proc eval {}] \h \" "
+#                   ^ - constant - variable.other
+#                    ^^ constant.character.escape.other.tcl
+#                      ^ - constant - meta.substitution
+#                       ^ punctuation.section.substitution.begin.tcl
+#                       ^^^^^^^^^^^^^ meta.substitution.tcl
+#                        ^^^ keyword.other.builtin.tcl
+#                            ^ variable.other.tcl
+#                              ^ punctuation.definition.string.begin.tcl
+#                              ^^^^^ string.quoted.double.tcl
+#                                  ^ punctuation.definition.string.end.tcl
+#                                   ^ punctuation.section.substitution.end.tcl
+#                                    ^ punctuation.definition.string.end.tcl
+#                                     ^ - string - punctuation
+#                                     ^^^^^^^^^ invalid.illegal.end-of-word-expected.tcl
 
 
 ##############################################################################
