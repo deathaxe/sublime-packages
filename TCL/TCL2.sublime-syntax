@@ -126,37 +126,57 @@ contexts:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/array.htm
     - match: array{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-generic-end, cmd-array-args]
+      push: [cmd-array-meta, cmd-array-args]
 
   cmd-array-args:
+    # array anymore arrayName searchId
+    # array donesearch arrayName searchId
+    # array nextelement arrayName searchId
+    - match: (anymore|donesearch|nextelement){{b}}
+      scope: variable.function.tcl
+      set: [word-any-pop, cmd-generic-arg]
+    # array exists arrayName
+    # array size arrayName
+    # array startsearch arrayName
+    # array statistics arrayName
+    - match: (exists|size|startsearch|statistics){{b}}
+      scope: variable.function.tcl
+      set: cmd-generic-arg
+    # array get arrayName ?pattern?
+    # array unset arrayName ?pattern?
+    - match: (get|unset){{b}}
+      scope: variable.function.tcl
+      set: [word-glob-pop, cmd-generic-arg]
+    # array set arrayName list
+    - match: set{{b}}
+      scope: variable.function.tcl
+      set: [cmd-generic-end, cmd-generic-arg]
+    # array names arrayName ?mode? ?pattern?
     - match: names{{b}}
       scope: variable.function.tcl
       set: [cmd-array-names-switches, cmd-generic-arg]
-    - match: |-
-        (?x:
-          anymore|donesearch|exists|get|nextelement|set|size|startsearch|
-          statistics|unset
-        ){{b}}
-      scope: variable.function.tcl
-      set: cmd-generic-arg
     - include: else-pop
 
   cmd-array-names-switches:
     - include: eoc-pop
     - match: -exact{{b}}
       scope: variable.parameter.tcl
-      set: [eoc-pop-or-illegal, word-string-pop]
+      set: word-string-pop
     - match: -glob{{b}}
       scope: variable.parameter.tcl
-      set: [eoc-pop-or-illegal, word-glob-pop]
+      set: word-glob-pop
     - match: -regexp{{b}}
       scope: variable.parameter.tcl
-      set: [eoc-pop-or-illegal, word-regexp-pop]
+      set: word-regexp-pop
     - match: '-{{illegal}}'
-      scope: invalid.illegal.unexpected-parameter.tcl
-      set: [eoc-pop-or-illegal, word-string-pop]
+      scope: invalid.illegal.parameter.tcl
+      set: word-string-pop
     - match: (?=\S)
-      set: [eoc-pop-or-illegal, word-string-pop]
+      set: word-string-pop
+
+  cmd-array-meta:
+    - meta_scope: meta.command.array.tcl
+    - include: eoc-pop-or-illegal
 
 ##[ EXPR COMMAND ]############################################################
 
@@ -811,6 +831,24 @@ contexts:
         - include: namespace-accessor
         - include: eow-pop
 
+##[ RULE 2 - WORDS / LIST ]###################################################
+
+  word-list-pop:
+    - include: eoc-pop
+    - include: operator-expand-args
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      set:
+        - meta_scope: meta.braces.tcl meta.list.tcl
+        - include: words
+        - include: braces-end-pop
+    - match: (?=\S)
+      set:
+        - include: numbers
+        - include: string-body
+        - include: namespace-accessor
+        - include: eow-pop
+
 ##[ RULE 2 - WORDS / PATTERN ]################################################
 
   word-glob-pop:
@@ -980,6 +1018,7 @@ contexts:
   operator-expand-args:
     - match: \{\*\}(?=\S)
       scope: keyword.operator.word.tcl
+      push: word-list-pop
 
 ##[ RULE 6 - BRACES ]#########################################################
 
@@ -1036,7 +1075,6 @@ contexts:
     - match: \\\\
     - match: \\[n{[()]}]
       scope: constant.character.escape.other.tcl
-    - include: numbers
 
   braces-end-pop:
     - match: \}

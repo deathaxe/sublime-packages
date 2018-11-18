@@ -1629,6 +1629,28 @@ set regexp {(.{0,200})}
 # array commands
 ##############################################################################
 
+    array exists name illegal; # comment
+#   ^^^^^ keyword.other.builtin.tcl
+#         ^^^^^^ variable.function.tcl
+#                ^^^^ variable.other.tcl
+#                     ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                            ^ punctuation.terminator.command.tcl
+#                              ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    array get name "pa?[A-z]ttern" illegal; # comment
+#   ^^^^^ keyword.other.builtin.tcl
+#         ^^^ variable.function.tcl
+#             ^^^^ variable.other.tcl
+#                  ^ punctuation.definition.string.begin.tcl
+#                  ^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                     ^ constant.other.placeholder.tcl
+#                      ^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
+#                                ^ punctuation.definition.string.end.tcl
+#                                 ^ - string
+#                                  ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                         ^ punctuation.terminator.command.tcl
+#                                           ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
     array set cpe_param [objectGetField -oid $cpeoid -fieldname parameters]
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^^^ variable.function.tcl
@@ -1717,7 +1739,7 @@ set regexp {(.{0,200})}
 #              ^ - variable
 #               ^^^^^^^^^ variable.other.tcl
 #                        ^ - variable
-#                         ^^^^^^ invalid.illegal.unexpected-parameter.tcl
+#                         ^^^^^^ invalid.illegal.parameter.tcl
 #                               ^ - variable - string
 #                                ^ punctuation.definition.string.begin.tcl
 #                                ^^^^^^^^^^^^^^^ string.quoted.double.tcl
