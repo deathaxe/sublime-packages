@@ -692,8 +692,7 @@ set regexp {(.{0,200})}
 #   ^^^^ entity.name.function.tcl
 #       ^ punctuation.separator.continuation.newline.tcl
     func\
-#  ^ - meta.script.tcl
-#   ^^^^^^ meta.script.tcl
+#  ^^^^^^^ meta.script.tcl
 #   ^^^^ variable.function.tcl
 #       ^ punctuation.separator.continuation.newline.tcl
     $arg
@@ -725,6 +724,32 @@ set regexp {(.{0,200})}
 #^^^^ meta.coroutine.body.tcl meta.block.tcl meta.script.tcl
 #   ^ punctuation.section.block.end.tcl
 #    ^ - meta
+
+##############################################################################
+# eval tests
+##############################################################################
+
+    eval $script puts "foo"
+#   ^^^^ meta.eval.tcl - meta.script.tcl
+#       ^^^^^^^^^^^^^^^^^^^^ meta.eval.tcl meta.script.tcl
+#   ^^^^ keyword.other.builtin.tcl
+#        ^^^^^^^ variable.function.tcl
+#                ^^^^ - keyword
+#                     ^^^^^ string.quoted.double.tcl
+
+    eval {puts} "foo"
+#   ^^^^ meta.eval.tcl - meta.script.tcl
+#       ^^^^^^^^^^^^^^ meta.eval.tcl meta.script.tcl
+#   ^^^^ keyword.other.builtin.tcl
+#        ^^^^^^ variable.function.tcl meta.braces.tcl string.quoted.brace.tcl
+#               ^^^^^ string.quoted.double.tcl
+
+    eval {
+#   ^^^^ keyword.other.builtin.tcl
+        puts
+#       ^^^^ support.function.builtin.tcl
+    } "foo"
+#     ^^^^^ string.quoted.double.tcl
 
 ##############################################################################
 # expr tests

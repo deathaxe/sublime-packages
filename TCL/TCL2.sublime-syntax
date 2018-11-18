@@ -26,7 +26,7 @@ variables:
     ){{b}}
 
   keywords: |-
-    (?x:eval|list|load|next|nextto|uplevel|yield|yieldto|unload|unset|
+    (?x:list|load|next|nextto|uplevel|yield|yieldto|unload|unset|
     ){{b}}
 
   builtin_funcs: |-
@@ -76,6 +76,7 @@ contexts:
     - include: cmd-array
     - include: cmd-after
     - include: cmd-coroutine
+    - include: cmd-eval
     - include: cmd-expr
     - include: cmd-file
     - include: cmd-incr
@@ -207,6 +208,18 @@ contexts:
   cmd-coroutine-meta:
     - meta_content_scope: meta.coroutine.body.tcl
     - include: eoc-pop-or-illegal
+
+##[ EVAL COMMAND ]############################################################
+
+  cmd-eval:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/eval.htm
+    - match: eval{{b}}
+      scope: keyword.other.builtin.tcl
+      push:
+        - meta_scope: meta.eval.tcl
+        - meta_content_scope: meta.script.tcl
+        - include: eoc-pop
+        - include: main
 
 ##[ EXPR COMMAND ]############################################################
 
