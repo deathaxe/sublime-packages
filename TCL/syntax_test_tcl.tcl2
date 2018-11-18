@@ -1704,27 +1704,28 @@ set regexp {(.{0,200})}
 
     after cancel $id
 #   ^^^^^ keyword.other.builtin.tcl
-#         ^^^^^^ constant.language.tcl
-#                ^^^ variable.other.tcl
+#         ^^^^^^ variable.function.tcl
+#                ^^^ variable.function.tcl
 
     after\
 #   ^^^^^ keyword.other.builtin.tcl
 #        ^ punctuation.separator.continuation.newline.tcl
     cancel\
-#   ^^^^^^ constant.language.tcl
+#   ^^^^^^ variable.function.tcl
 #         ^ punctuation.separator.continuation.newline.tcl
     $id
-#   ^^^ variable.other.tcl
+#   ^^^ variable.function.tcl
 
     after info $id
 #   ^^^^^ keyword.other.builtin.tcl
-#         ^^^^ constant.language.tcl
+#         ^^^^ variable.function.tcl
 #              ^^^ variable.other.tcl
 
     after idle [list after 0 doOneStep]
 #   ^^^^^ keyword.other.builtin.tcl
-#         ^^^^ constant.language.tcl
-#              ^^^^^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
+#         ^^^^ variable.parameter.tcl
+#             ^ - meta.script.tcl meta.substitution.tcl
+#              ^^^^^^^^^^^^^^^^^^^^^^^^ meta.script.tcl meta.substitution.tcl
 
     after\
 #   ^^^^^ keyword.other.builtin.tcl
@@ -1733,7 +1734,17 @@ set regexp {(.{0,200})}
 #   ^^^^^^ variable.other.tcl
 #         ^ punctuation.separator.continuation.newline.tcl
     $id
-#   ^^^ variable.other.tcl
+#   ^^^ variable.function.tcl
+
+    after [expr 1000 * 60] puts "test"; # comment
+#   ^^^^^ keyword.other.builtin.tcl
+#         ^^^^^^^^^^^^^^^^ meta.substitution.tcl
+#                         ^ - meta.substitution - meta.script
+#                          ^^^^^^^^^^^ meta.script.tcl
+#                          ^^^^ support.function.builtin.tcl
+#                               ^^^^^^ string.quoted.double.tcl
+#                                     ^ punctuation.terminator.command.tcl
+#                                       ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
 ##############################################################################
 # file commands

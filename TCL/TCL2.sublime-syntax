@@ -98,13 +98,27 @@ contexts:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/after.htm
     - match: after{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-generic-end, cmd-after-args]
+      push: [cmd-after-meta, cmd-after-script, cmd-after-args]
 
   cmd-after-args:
-    - match: (cancel|idle|info){{b}}
-      scope: constant.language.tcl
+    - match: idle{{b}}
+      scope: variable.parameter.tcl
       pop: true
-    - include: else-pop
+    - match: (cancel|info){{b}}
+      scope: variable.function.tcl
+      pop: true
+    - include: word-any-pop
+
+  cmd-after-script:
+    - match: ''
+      set:
+        - meta_scope: meta.script.tcl
+        - include: eoc-pop
+        - include: main
+
+  cmd-after-meta:
+    - meta_scope: meta.after.tcl
+    - include: any-pop
 
 ##[ ARRAY COMMANDS ]##########################################################
 
