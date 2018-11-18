@@ -732,14 +732,12 @@ contexts:
       scope: punctuation.definition.string.begin.tcl
       set:
         - meta_scope: string.quoted.double.tcl
-        - include: string-quoted-double-body
+        - include: string-body
         - include: string-quoted-double-end
     - match: (?=\S)
       set:
-        - include: escape
         - include: numbers
-        - include: substitution
-        - include: variable
+        - include: string-body
         - include: namespace-accessor
         - include: eow-pop
 
@@ -765,9 +763,7 @@ contexts:
     - match: (?=\S)
       set:
         - meta_scope: meta.script.tcl
-        - include: escape
-        - include: substitution
-        - include: variable
+        - include: string-body
         - include: namespace-accessor
         - include: eow-pop
 
@@ -788,9 +784,7 @@ contexts:
     - match: (?=\S)
       set:
         - meta_scope: meta.expression.tcl
-        - include: escape
-        - include: substitution
-        - include: variable
+        - include: string-body
         - include: namespace-accessor
         - include: eow-pop
 
@@ -908,14 +902,12 @@ contexts:
       scope: punctuation.definition.string.begin.tcl
       set:
         - meta_scope: string.quoted.double.tcl
-        - include: string-quoted-double-body
+        - include: string-body
         - include: string-quoted-double-end
     - match: (?=\S)
       set:
         - meta_scope: string.unquoted.tcl
-        - include: escape
-        - include: substitution
-        - include: variable
+        - include: string-body
         - include: eow-pop
 
 ##[ RULE 2 - WORDS ]##########################################################
@@ -929,17 +921,20 @@ contexts:
     - include: eow-pop
 
   words:
-    - include: escape
     - include: numbers
-    - include: substitution
     - include: string-quoted-double
+    - include: string-body
     - include: braces
-    - include: variable
     - include: namespace-accessor
 
   words-pop:
     - include: words
     - include: eow-pop
+
+  string-body:
+    - include: escape
+    - include: substitution
+    - include: variable
 
 ##[ RULE 4 - DOUBLE QUOTED ]##################################################
 
@@ -948,13 +943,8 @@ contexts:
       scope: punctuation.definition.string.begin.tcl
       push:
         - meta_scope: string.quoted.double.tcl
-        - include: string-quoted-double-body
+        - include: string-body
         - include: string-quoted-double-end
-
-  string-quoted-double-body:
-    - include: escape
-    - include: substitution
-    - include: variable
 
   string-quoted-double-end:
     # Note: The end of a quoted string is always the end of the word.
