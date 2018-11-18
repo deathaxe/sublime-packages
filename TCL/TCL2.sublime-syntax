@@ -334,10 +334,7 @@ contexts:
   cmd-set:
     - match: set{{b}}
       scope: keyword.other.builtin.tcl
-      push:
-        - cmd-generic-end
-        - cmd-generic-var
-        - eow-pop
+      push: [cmd-generic-end, cmd-generic-var]
 
 ##[ FLOW CONTROL ]############################################################
 
