@@ -1706,265 +1706,6 @@ set regexp {(.{0,200})}
 #     ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 
 ##############################################################################
-# flow control keyword tests
-##############################################################################
-
-    break invalid ; # comment
-#   ^^^^^ keyword.control.flow.break.tcl
-#        ^ - keyword - invalid
-#         ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
-#                ^ - invalid
-#                 ^ punctuation.terminator.command.tcl
-#                   ^ comment.line.double-dash.tcl
-
-    break-me
-#   ^^^^^ - keyword.control.flow
-
-    break[incr x]
-#   ^^^^^ - keyword.control.flow
-
-    break(5)
-#   ^^^^^ - keyword.control.flow
-
-    continue "test";# comment
-#   ^^^^^^^^ keyword.control.flow.continue.tcl
-#           ^ - keyword - invalid
-#            ^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
-#                  ^ punctuation.terminator.command.tcl
-#                   ^ comment.line.double-dash.tcl
-
-    continue-me
-#   ^^^^^^^^ - keyword.control.flow
-
-    continue[incr x]
-#   ^^^^^^^^ - keyword.control.flow
-
-    continue(2)
-#   ^^^^^^^^ - keyword.control.flow
-
-    exit
-
-    return
-#  ^ - keyword
-#   ^^^^^^ keyword.control.flow.return.tcl
-#         ^ - keyword
-    returnme
-#   ^^^^^^^^^ - keyword.control.flow
-
-    return(1)
-#   ^^^^^^^^^ - keyword.control.flow
-
-    return 1
-#  ^ - keyword
-#   ^^^^^^ keyword.control.flow.return.tcl
-#         ^ - keyword
-#          ^ constant.numeric.integer.tcl
-
-    return -code $code $factor
-#  ^ - keyword
-#   ^^^^^^ keyword.control.flow.return.tcl
-#         ^ - keyword
-#          ^^^^^ variable.parameter.tcl
-#                ^^^^^ variable.other.tcl
-#                      ^^^^^^^ variable.other.tcl
-
-    return -code error \
-#  ^ - keyword
-#   ^^^^^^ keyword.control.flow.return.tcl
-#         ^ - keyword
-#          ^^^^^ variable.parameter.tcl
-#                ^^^^^ constant.language.errorcode.tcl
-        "overflow computing factorial of $n"
-#       ^ string.quoted.double.tcl punctuation.definition.string.begin.tcl
-
-##############################################################################
-# try..trap..finally tests
-##############################################################################
-
-    try $foo on error {} $handler
-#   ^^^ keyword.control.flow.try.tcl
-#       ^^^^ variable.other.tcl
-#            ^^ keyword.control.flow.on.tcl
-#               ^^^^^ constant.language.errorcode.tcl
-#                     ^^ meta.braces.tcl
-#                        ^^^^^^^^ variable.other.tcl
-
-    try\
-#   ^^^ keyword.control.flow.try.tcl
-#      ^ punctuation.separator.continuation.newline.tcl
-    $foo\
-#   ^^^^ variable.other.tcl
-#       ^ punctuation.separator.continuation.newline.tcl
-    on\
-#   ^^ keyword.control.flow.on.tcl
-#     ^ punctuation.separator.continuation.newline.tcl
-    error\
-#   ^^^^^ constant.language.errorcode.tcl
-#        ^ punctuation.separator.continuation.newline.tcl
-    {}\
-#   ^^ meta.braces.tcl
-#     ^ punctuation.separator.continuation.newline.tcl
-    $handler
-#   ^^^^^^^^ variable.other.tcl
-
-    try {return -errorcode error "msg"} on return {code msg} {puts "$code: $msg"}
-#   ^^^ keyword.control.flow.try.tcl
-#      ^ - meta.block - keyword - punctuation
-#       ^ punctuation.section.block.begin.tcl
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.tcl
-#        ^^^^^^ keyword.control.flow.return.tcl
-#               ^^^^^^^^^^ variable.parameter.tcl
-#                          ^^^^^ constant.language.errorcode.tcl
-#                                ^ punctuation.definition.string.begin.tcl
-#                                ^^^^^ string.quoted.double.tcl
-#                                    ^ punctuation.definition.string.end.tcl
-#                                     ^ punctuation.section.block.end.tcl
-#                                      ^ - meta.block - keyword - punctuation
-#                                       ^^ keyword.control.flow.on.tcl
-#                                         ^ - keyword - constant
-#                                          ^^^^^^ constant.language.errorcode.tcl
-#                                                 ^ punctuation.section.braces.begin.tcl
-#                                                 ^^^^^^^^^^ meta.braces.tcl
-#                                                  ^^^^ variable.other.tcl
-#                                                      ^ - variable
-#                                                       ^^^ variable.other.tcl
-#                                                          ^ punctuation.section.braces.end.tcl
-#                                                           ^ - meta.braces - meta.block - punctuation
-#                                                            ^ punctuation.section.block.begin.tcl
-#                                                            ^^^^^^^^^^^^^^^^^^^^ meta.block.tcl
-#                                                             ^^^^ support.function.builtin.tcl
-#                                                                  ^ punctuation.definition.string.begin.tcl
-#                                                                  ^^^^^^^^^^^^^ string.quoted.double.tcl
-#                                                                   ^ variable.other.tcl punctuation.definition.variable.tcl
-#                                                                    ^^^^ variable.other.tcl
-#                                                                          ^ variable.other.tcl punctuation.definition.variable.tcl
-#                                                                           ^^^ variable.other.tcl
-#                                                                              ^ punctuation.definition.string.end.tcl
-#                                                                               ^ punctuation.section.block.end.tcl
-#                                                                                ^ - meta.block - punctuation
-
-    try {
-#   ^^^ keyword.control.flow.try.tcl
-#      ^ - meta.block - keyword - punctuation
-#       ^ punctuation.section.block.begin.tcl
-#       ^^ meta.block.tcl
-        return -errorcode error "msg"
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.tcl
-#       ^^^^^^ keyword.control.flow.return.tcl
-#              ^^^^^^^^^^ variable.parameter.tcl
-#                         ^^^^^ constant.language.errorcode.tcl
-#                               ^^^^^ string.quoted.double.tcl
-    } on return {code msg} {
-#   ^ punctuation.section.block.end.tcl
-#    ^ - meta.block - keyword - punctuation
-#     ^^ keyword.control.flow.on.tcl
-#       ^ - keyword - constant
-#        ^^^^^^ constant.language.errorcode.tcl
-#               ^ punctuation.section.braces.begin.tcl
-#               ^^^^^^^^^^ meta.braces.tcl
-#                ^^^^ variable.other.tcl
-#                    ^ - variable
-#                     ^^^ variable.other.tcl
-#                        ^ punctuation.section.braces.end.tcl
-#                         ^ - meta.braces - meta.block - punctuation
-#                          ^ punctuation.section.block.begin.tcl
-#                          ^^ meta.block.tcl
-        puts "$code: $msg"
-#^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.tcl
-#       ^^^^ support.function.builtin.tcl
-#            ^ punctuation.definition.string.begin.tcl
-#            ^^^^^^^^^^^^^ string.quoted.double.tcl
-#             ^ variable.other.tcl punctuation.definition.variable.tcl
-#              ^^^^ variable.other.tcl
-#                    ^ variable.other.tcl punctuation.definition.variable.tcl
-#                     ^^^ variable.other.tcl
-#                        ^ punctuation.definition.string.end.tcl
-    }
-#<- meta.block.tcl
-#^^^^ meta.block.tcl
-#   ^ punctuation.section.block.end.tcl
-#    ^ - meta.block - punctuation
-
-    try {error 5} on 5 {} {puts "foo"}
-#       ^^^^^^^^^ meta.block.tcl
-#                 ^^ keyword.control.flow.on.tcl
-#                    ^ constant.numeric.integer.tcl
-#                      ^^ meta.braces.tcl
-#                         ^^^^^^^^^^^^ meta.block.tcl
-
-    try {error 5} on [set x 5] {} {puts "foo"}
-#   ^^^ keyword.control.flow.try.tcl
-#       ^^^^^^^^^ meta.block.tcl
-#                 ^^ keyword.control.flow.on.tcl
-#                    ^^^^^^^^^ meta.substitution.tcl
-#                              ^^ meta.braces.tcl
-#                                 ^^^^^^^^^^^^ meta.block.tcl
-
-    try {error 5} on $code {} {puts "foo"}
-#   ^^^ keyword.control.flow.try.tcl
-#       ^^^^^^^^^ meta.block.tcl
-#                 ^^ keyword.control.flow.on.tcl
-#                    ^^^^^ variable.other.tcl
-#                          ^^ meta.braces.tcl
-#                             ^^^^^^^^^^^^ meta.block.tcl
-
-    try {error 5} on illegal {} {puts "foo"}
-#   ^^^ keyword.control.flow.try.tcl
-#       ^^^^^^^^^ meta.block.tcl
-#                 ^^ keyword.control.flow.on.tcl
-#                    ^^^^^^^ invalid.illegal.errorcode.tcl
-#                            ^^ meta.braces.tcl
-#                               ^^^^^^^^^^^^ meta.block.tcl
-
-    try $foo trap $pattern {} $handler finally $handler2
-#   ^^^ keyword.control.flow.try.tcl
-#       ^^^^ variable.other.tcl
-#            ^^^^ keyword.control.flow.trap.tcl
-#                 ^^^^^^^^ variable.other.tcl
-#                          ^^ meta.braces.tcl
-#                             ^^^^^^^^ variable.other.tcl
-#                                      ^^^^^^^ keyword.control.flow.finally.tcl
-#                                              ^^^^^^^^^ variable.other.tcl
-
-    try {
-        set f [open /some/file/name w]
-    } trap {POSIX EISDIR} {} {
-#   ^ meta.block.tcl punctuation.section.block.end.tcl
-#     ^^^^ keyword.control.flow.trap.tcl
-#          ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#           ^^^^^ meta.braces.tcl variable.other.tcl
-#                 ^^^^^^ meta.braces.tcl variable.other.tcl
-#                       ^ meta.braces.tcl punctuation.section.braces.end.tcl
-#                         ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#                          ^ meta.braces.tcl punctuation.section.braces.end.tcl
-#                            ^ meta.block.tcl punctuation.section.block.begin.tcl
-#                             ^ meta.block.tcl
-        puts "failed to open /some/file/name: it's a directory"
-#       ^^^^ meta.block.tcl meta.function-call.tcl support.function.builtin.tcl
-#            ^ meta.block.tcl meta.function-call.tcl string.quoted.double.tcl punctuation.definition.string.begin.tcl
-    } trap {POSIX ENOENT} {} {
-#   ^ meta.block.tcl punctuation.section.block.end.tcl
-#     ^^^^ keyword.control.flow.trap.tcl
-#          ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#           ^^^^^ meta.braces.tcl variable.other.tcl
-#                 ^^^^^^ meta.braces.tcl variable.other.tcl
-#                       ^ meta.braces.tcl punctuation.section.braces.end.tcl
-#                         ^ meta.braces.tcl punctuation.section.braces.begin.tcl
-#                          ^ meta.braces.tcl punctuation.section.braces.end.tcl
-#                            ^ meta.block.tcl punctuation.section.block.begin.tcl
-#                             ^ meta.block.tcl
-        puts "failed to open /some/file/name: it doesn't exist"
-#       ^^^^ meta.block.tcl meta.function-call.tcl support.function.builtin.tcl
-#            ^ meta.block.tcl meta.function-call.tcl string.quoted.double.tcl punctuation.definition.string.begin.tcl
-    } finally {
-#   ^ meta.block.tcl punctuation.section.block.end.tcl
-#     ^^^^^^^ keyword.control.flow.finally.tcl
-#             ^ meta.block.tcl punctuation.section.block.begin.tcl
-#              ^ meta.block.tcl
-    }
-#   ^ meta.block.tcl punctuation.section.block.end.tcl
-
-##############################################################################
 # regexp commands
 ##############################################################################
 
@@ -2259,6 +2000,265 @@ set regexp {(.{0,200})}
 #                                           ^ constant.other.placeholder.tcl
 #                                             ^ constant.other.placeholder.tcl
 #                                               ^ punctuation.section.braces.end.tcl
+
+##############################################################################
+# flow control keyword tests
+##############################################################################
+
+    break invalid ; # comment
+#   ^^^^^ keyword.control.flow.break.tcl
+#        ^ - keyword - invalid
+#         ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                ^ - invalid
+#                 ^ punctuation.terminator.command.tcl
+#                   ^ comment.line.double-dash.tcl
+
+    break-me
+#   ^^^^^ - keyword.control.flow
+
+    break[incr x]
+#   ^^^^^ - keyword.control.flow
+
+    break(5)
+#   ^^^^^ - keyword.control.flow
+
+    continue "test";# comment
+#   ^^^^^^^^ keyword.control.flow.continue.tcl
+#           ^ - keyword - invalid
+#            ^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                  ^ punctuation.terminator.command.tcl
+#                   ^ comment.line.double-dash.tcl
+
+    continue-me
+#   ^^^^^^^^ - keyword.control.flow
+
+    continue[incr x]
+#   ^^^^^^^^ - keyword.control.flow
+
+    continue(2)
+#   ^^^^^^^^ - keyword.control.flow
+
+    exit
+
+    return
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+    returnme
+#   ^^^^^^^^^ - keyword.control.flow
+
+    return(1)
+#   ^^^^^^^^^ - keyword.control.flow
+
+    return 1
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+#          ^ constant.numeric.integer.tcl
+
+    return -code $code $factor
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+#          ^^^^^ variable.parameter.tcl
+#                ^^^^^ variable.other.tcl
+#                      ^^^^^^^ variable.other.tcl
+
+    return -code error \
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+#          ^^^^^ variable.parameter.tcl
+#                ^^^^^ constant.language.errorcode.tcl
+        "overflow computing factorial of $n"
+#       ^ string.quoted.double.tcl punctuation.definition.string.begin.tcl
+
+##############################################################################
+# try..trap..finally tests
+##############################################################################
+
+    try $foo on error {} $handler
+#   ^^^ keyword.control.flow.try.tcl
+#       ^^^^ variable.other.tcl
+#            ^^ keyword.control.flow.on.tcl
+#               ^^^^^ constant.language.errorcode.tcl
+#                     ^^ meta.braces.tcl
+#                        ^^^^^^^^ variable.other.tcl
+
+    try\
+#   ^^^ keyword.control.flow.try.tcl
+#      ^ punctuation.separator.continuation.newline.tcl
+    $foo\
+#   ^^^^ variable.other.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    on\
+#   ^^ keyword.control.flow.on.tcl
+#     ^ punctuation.separator.continuation.newline.tcl
+    error\
+#   ^^^^^ constant.language.errorcode.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    {}\
+#   ^^ meta.braces.tcl
+#     ^ punctuation.separator.continuation.newline.tcl
+    $handler
+#   ^^^^^^^^ variable.other.tcl
+
+    try {return -errorcode error "msg"} on return {code msg} {puts "$code: $msg"}
+#   ^^^ keyword.control.flow.try.tcl
+#      ^ - meta.block - keyword - punctuation
+#       ^ punctuation.section.block.begin.tcl
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.tcl
+#        ^^^^^^ keyword.control.flow.return.tcl
+#               ^^^^^^^^^^ variable.parameter.tcl
+#                          ^^^^^ constant.language.errorcode.tcl
+#                                ^ punctuation.definition.string.begin.tcl
+#                                ^^^^^ string.quoted.double.tcl
+#                                    ^ punctuation.definition.string.end.tcl
+#                                     ^ punctuation.section.block.end.tcl
+#                                      ^ - meta.block - keyword - punctuation
+#                                       ^^ keyword.control.flow.on.tcl
+#                                         ^ - keyword - constant
+#                                          ^^^^^^ constant.language.errorcode.tcl
+#                                                 ^ punctuation.section.braces.begin.tcl
+#                                                 ^^^^^^^^^^ meta.braces.tcl
+#                                                  ^^^^ variable.other.tcl
+#                                                      ^ - variable
+#                                                       ^^^ variable.other.tcl
+#                                                          ^ punctuation.section.braces.end.tcl
+#                                                           ^ - meta.braces - meta.block - punctuation
+#                                                            ^ punctuation.section.block.begin.tcl
+#                                                            ^^^^^^^^^^^^^^^^^^^^ meta.block.tcl
+#                                                             ^^^^ support.function.builtin.tcl
+#                                                                  ^ punctuation.definition.string.begin.tcl
+#                                                                  ^^^^^^^^^^^^^ string.quoted.double.tcl
+#                                                                   ^ variable.other.tcl punctuation.definition.variable.tcl
+#                                                                    ^^^^ variable.other.tcl
+#                                                                          ^ variable.other.tcl punctuation.definition.variable.tcl
+#                                                                           ^^^ variable.other.tcl
+#                                                                              ^ punctuation.definition.string.end.tcl
+#                                                                               ^ punctuation.section.block.end.tcl
+#                                                                                ^ - meta.block - punctuation
+
+    try {
+#   ^^^ keyword.control.flow.try.tcl
+#      ^ - meta.block - keyword - punctuation
+#       ^ punctuation.section.block.begin.tcl
+#       ^^ meta.block.tcl
+        return -errorcode error "msg"
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.tcl
+#       ^^^^^^ keyword.control.flow.return.tcl
+#              ^^^^^^^^^^ variable.parameter.tcl
+#                         ^^^^^ constant.language.errorcode.tcl
+#                               ^^^^^ string.quoted.double.tcl
+    } on return {code msg} {
+#   ^ punctuation.section.block.end.tcl
+#    ^ - meta.block - keyword - punctuation
+#     ^^ keyword.control.flow.on.tcl
+#       ^ - keyword - constant
+#        ^^^^^^ constant.language.errorcode.tcl
+#               ^ punctuation.section.braces.begin.tcl
+#               ^^^^^^^^^^ meta.braces.tcl
+#                ^^^^ variable.other.tcl
+#                    ^ - variable
+#                     ^^^ variable.other.tcl
+#                        ^ punctuation.section.braces.end.tcl
+#                         ^ - meta.braces - meta.block - punctuation
+#                          ^ punctuation.section.block.begin.tcl
+#                          ^^ meta.block.tcl
+        puts "$code: $msg"
+#^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.tcl
+#       ^^^^ support.function.builtin.tcl
+#            ^ punctuation.definition.string.begin.tcl
+#            ^^^^^^^^^^^^^ string.quoted.double.tcl
+#             ^ variable.other.tcl punctuation.definition.variable.tcl
+#              ^^^^ variable.other.tcl
+#                    ^ variable.other.tcl punctuation.definition.variable.tcl
+#                     ^^^ variable.other.tcl
+#                        ^ punctuation.definition.string.end.tcl
+    }
+#<- meta.block.tcl
+#^^^^ meta.block.tcl
+#   ^ punctuation.section.block.end.tcl
+#    ^ - meta.block - punctuation
+
+    try {error 5} on 5 {} {puts "foo"}
+#       ^^^^^^^^^ meta.block.tcl
+#                 ^^ keyword.control.flow.on.tcl
+#                    ^ constant.numeric.integer.tcl
+#                      ^^ meta.braces.tcl
+#                         ^^^^^^^^^^^^ meta.block.tcl
+
+    try {error 5} on [set x 5] {} {puts "foo"}
+#   ^^^ keyword.control.flow.try.tcl
+#       ^^^^^^^^^ meta.block.tcl
+#                 ^^ keyword.control.flow.on.tcl
+#                    ^^^^^^^^^ meta.substitution.tcl
+#                              ^^ meta.braces.tcl
+#                                 ^^^^^^^^^^^^ meta.block.tcl
+
+    try {error 5} on $code {} {puts "foo"}
+#   ^^^ keyword.control.flow.try.tcl
+#       ^^^^^^^^^ meta.block.tcl
+#                 ^^ keyword.control.flow.on.tcl
+#                    ^^^^^ variable.other.tcl
+#                          ^^ meta.braces.tcl
+#                             ^^^^^^^^^^^^ meta.block.tcl
+
+    try {error 5} on illegal {} {puts "foo"}
+#   ^^^ keyword.control.flow.try.tcl
+#       ^^^^^^^^^ meta.block.tcl
+#                 ^^ keyword.control.flow.on.tcl
+#                    ^^^^^^^ invalid.illegal.errorcode.tcl
+#                            ^^ meta.braces.tcl
+#                               ^^^^^^^^^^^^ meta.block.tcl
+
+    try $foo trap $pattern {} $handler finally $handler2
+#   ^^^ keyword.control.flow.try.tcl
+#       ^^^^ variable.other.tcl
+#            ^^^^ keyword.control.flow.trap.tcl
+#                 ^^^^^^^^ variable.other.tcl
+#                          ^^ meta.braces.tcl
+#                             ^^^^^^^^ variable.other.tcl
+#                                      ^^^^^^^ keyword.control.flow.finally.tcl
+#                                              ^^^^^^^^^ variable.other.tcl
+
+    try {
+        set f [open /some/file/name w]
+    } trap {POSIX EISDIR} {} {
+#   ^ meta.block.tcl punctuation.section.block.end.tcl
+#     ^^^^ keyword.control.flow.trap.tcl
+#          ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+#           ^^^^^ meta.braces.tcl variable.other.tcl
+#                 ^^^^^^ meta.braces.tcl variable.other.tcl
+#                       ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#                         ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+#                          ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#                            ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                             ^ meta.block.tcl
+        puts "failed to open /some/file/name: it's a directory"
+#       ^^^^ meta.block.tcl meta.function-call.tcl support.function.builtin.tcl
+#            ^ meta.block.tcl meta.function-call.tcl string.quoted.double.tcl punctuation.definition.string.begin.tcl
+    } trap {POSIX ENOENT} {} {
+#   ^ meta.block.tcl punctuation.section.block.end.tcl
+#     ^^^^ keyword.control.flow.trap.tcl
+#          ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+#           ^^^^^ meta.braces.tcl variable.other.tcl
+#                 ^^^^^^ meta.braces.tcl variable.other.tcl
+#                       ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#                         ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+#                          ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#                            ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                             ^ meta.block.tcl
+        puts "failed to open /some/file/name: it doesn't exist"
+#       ^^^^ meta.block.tcl meta.function-call.tcl support.function.builtin.tcl
+#            ^ meta.block.tcl meta.function-call.tcl string.quoted.double.tcl punctuation.definition.string.begin.tcl
+    } finally {
+#   ^ meta.block.tcl punctuation.section.block.end.tcl
+#     ^^^^^^^ keyword.control.flow.finally.tcl
+#             ^ meta.block.tcl punctuation.section.block.begin.tcl
+#              ^ meta.block.tcl
+    }
+#   ^ meta.block.tcl punctuation.section.block.end.tcl
 
 ##############################################################################
 # list commands
