@@ -855,14 +855,13 @@ contexts:
     - match: \{
       scope: punctuation.section.braces.begin.tcl
       set:
-        - meta_scope: meta.braces.tcl meta.expression.tcl
+        - meta_scope: meta.braces.tcl
         - include: expressions
         - include: braces-end-pop
     # single word expression,
     # a substitution or variable of a dynamically created expression
     - match: (?=\S)
       set:
-        - meta_scope: meta.expression.tcl
         - include: string-body
         - include: namespace-accessor
         - include: eow-pop
