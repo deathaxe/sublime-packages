@@ -1010,20 +1010,12 @@ contexts:
     - include: words
     - include: operators
 
-  expressions-pop:
-    - include: expressions
-    - include: eow-pop
-
   words:
     - include: numbers
     - include: string-quoted-double
     - include: string-body
     - include: braces
     - include: namespace-accessor
-
-  words-pop:
-    - include: words
-    - include: eow-pop
 
   word-unquoted-pop:
     - include: numbers
