@@ -758,7 +758,7 @@ set regexp {(.{0,200})}
     after cancel $id
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^^^^^^ variable.function.tcl
-#                ^^^ variable.function.tcl
+#                ^^^ variable.other.tcl
 
     after\
 #   ^^^^^ keyword.other.builtin.tcl
@@ -767,7 +767,7 @@ set regexp {(.{0,200})}
 #   ^^^^^^ variable.function.tcl
 #         ^ punctuation.separator.continuation.newline.tcl
     $id
-#   ^^^ variable.function.tcl
+#   ^^^ variable.other.tcl
 
     after info $id
 #   ^^^^^ keyword.other.builtin.tcl

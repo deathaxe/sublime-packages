@@ -98,12 +98,14 @@ contexts:
       pop: true
     - match: (cancel|info){{b}}
       scope: variable.function.tcl
-      pop: true
+      set: cmd-command-end
     - include: word-any-pop
 
   cmd-after-script:
     - match: ''
       set:
+        - clear_scopes: 1
+        - meta_scope: meta.after.body.tcl
         - include: eoc-pop
         - include: main
 
