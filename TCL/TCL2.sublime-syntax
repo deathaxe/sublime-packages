@@ -136,27 +136,27 @@ contexts:
     # array nextelement arrayName searchId
     - match: (anymore|donesearch|nextelement){{b}}
       scope: variable.function.tcl
-      set: [word-any-pop, cmd-generic-arg]
+      set: [word-any-pop, cmd-generic-var]
     # array exists arrayName
     # array size arrayName
     # array startsearch arrayName
     # array statistics arrayName
     - match: (exists|size|startsearch|statistics){{b}}
       scope: variable.function.tcl
-      set: cmd-generic-arg
+      set: cmd-generic-var
     # array get arrayName ?pattern?
     # array unset arrayName ?pattern?
     - match: (get|unset){{b}}
       scope: variable.function.tcl
-      set: [word-glob-pop, cmd-generic-arg]
+      set: [word-glob-pop, cmd-generic-var]
     # array set arrayName list
     - match: set{{b}}
       scope: variable.function.tcl
-      set: [cmd-generic-end, cmd-generic-arg]
+      set: [cmd-generic-end, cmd-generic-var]
     # array names arrayName ?mode? ?pattern?
     - match: names{{b}}
       scope: variable.function.tcl
-      set: [cmd-array-names-switches, cmd-generic-arg]
+      set: [cmd-array-names-switches, cmd-generic-var]
     - match: (?=\S)
       set:
         - include: words
@@ -276,7 +276,7 @@ contexts:
       scope: keyword.other.builtin.tcl
       push:
         - cmd-incr-end
-        - cmd-generic-arg
+        - word-any-pop
         - cmd-generic-var
 
   cmd-incr-end:
@@ -299,7 +299,7 @@ contexts:
         - eoc-pop-or-illegal     # must be end of command
         - cmd-generic-var        # varname
         - word-regexp-pop        # substitution
-        - cmd-generic-arg        # string
+        - word-string-pop        # string
         - word-regexp-pop        # pattern
         - cmd-regexp-switches    # switches
 
@@ -774,14 +774,6 @@ contexts:
         - meta_scope: variable.function.tcl
         - include: string-body
         - include: namespace-accessor
-        - include: eow-pop
-
-  cmd-generic-arg:
-    - include: eoc-pop
-    - match: (?=\S)
-      set:
-        - meta_content_scope: variable.other.tcl
-        - include: words
         - include: eow-pop
 
   cmd-generic-var:
