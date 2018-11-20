@@ -673,6 +673,79 @@ set regexp {(.{0,200})}
 
     set w { ; # no commet }
 #             ^^^^^^^^^^^^^^ - comment
+
+##############################################################################
+# common flow control keyword tests
+##############################################################################
+
+    break invalid ; # comment
+#   ^^^^^ keyword.control.flow.break.tcl
+#        ^ - keyword - invalid
+#         ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                ^ - invalid
+#                 ^ punctuation.terminator.command.tcl
+#                   ^ comment.line.double-dash.tcl
+
+    break-me
+#   ^^^^^ - keyword.control.flow
+
+    break[incr x]
+#   ^^^^^ - keyword.control.flow
+
+    break(5)
+#   ^^^^^ - keyword.control.flow
+
+    continue "test";# comment
+#   ^^^^^^^^ keyword.control.flow.continue.tcl
+#           ^ - keyword - invalid
+#            ^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                  ^ punctuation.terminator.command.tcl
+#                   ^ comment.line.double-dash.tcl
+
+    continue-me
+#   ^^^^^^^^ - keyword.control.flow
+
+    continue[incr x]
+#   ^^^^^^^^ - keyword.control.flow
+
+    continue(2)
+#   ^^^^^^^^ - keyword.control.flow
+
+    exit
+
+    return
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+    returnme
+#   ^^^^^^^^^ - keyword.control.flow
+
+    return(1)
+#   ^^^^^^^^^ - keyword.control.flow
+
+    return 1
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+#          ^ constant.numeric.integer.tcl
+
+    return -code $code $factor
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+#          ^^^^^ variable.parameter.tcl
+#                ^^^^^ variable.other.tcl
+#                      ^^^^^^^ variable.other.tcl
+
+    return -code error \
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+#          ^^^^^ variable.parameter.tcl
+#                ^^^^^ constant.language.errorcode.tcl
+        "overflow computing factorial of $n"
+#       ^ string.quoted.double.tcl punctuation.definition.string.begin.tcl
+
 ##############################################################################
 # array commands
 ##############################################################################
@@ -2000,78 +2073,6 @@ set regexp {(.{0,200})}
 #                                           ^ constant.other.placeholder.tcl
 #                                             ^ constant.other.placeholder.tcl
 #                                               ^ punctuation.section.braces.end.tcl
-
-##############################################################################
-# flow control keyword tests
-##############################################################################
-
-    break invalid ; # comment
-#   ^^^^^ keyword.control.flow.break.tcl
-#        ^ - keyword - invalid
-#         ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
-#                ^ - invalid
-#                 ^ punctuation.terminator.command.tcl
-#                   ^ comment.line.double-dash.tcl
-
-    break-me
-#   ^^^^^ - keyword.control.flow
-
-    break[incr x]
-#   ^^^^^ - keyword.control.flow
-
-    break(5)
-#   ^^^^^ - keyword.control.flow
-
-    continue "test";# comment
-#   ^^^^^^^^ keyword.control.flow.continue.tcl
-#           ^ - keyword - invalid
-#            ^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
-#                  ^ punctuation.terminator.command.tcl
-#                   ^ comment.line.double-dash.tcl
-
-    continue-me
-#   ^^^^^^^^ - keyword.control.flow
-
-    continue[incr x]
-#   ^^^^^^^^ - keyword.control.flow
-
-    continue(2)
-#   ^^^^^^^^ - keyword.control.flow
-
-    exit
-
-    return
-#  ^ - keyword
-#   ^^^^^^ keyword.control.flow.return.tcl
-#         ^ - keyword
-    returnme
-#   ^^^^^^^^^ - keyword.control.flow
-
-    return(1)
-#   ^^^^^^^^^ - keyword.control.flow
-
-    return 1
-#  ^ - keyword
-#   ^^^^^^ keyword.control.flow.return.tcl
-#         ^ - keyword
-#          ^ constant.numeric.integer.tcl
-
-    return -code $code $factor
-#  ^ - keyword
-#   ^^^^^^ keyword.control.flow.return.tcl
-#         ^ - keyword
-#          ^^^^^ variable.parameter.tcl
-#                ^^^^^ variable.other.tcl
-#                      ^^^^^^^ variable.other.tcl
-
-    return -code error \
-#  ^ - keyword
-#   ^^^^^^ keyword.control.flow.return.tcl
-#         ^ - keyword
-#          ^^^^^ variable.parameter.tcl
-#                ^^^^^ constant.language.errorcode.tcl
-        "overflow computing factorial of $n"
-#       ^ string.quoted.double.tcl punctuation.definition.string.begin.tcl
 
 ##############################################################################
 # try..trap..finally tests
