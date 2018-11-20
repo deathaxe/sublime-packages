@@ -815,11 +815,7 @@ contexts:
         - include: string-body
         - include: string-quoted-double-end
     - match: (?=\S)
-      set:
-        - include: numbers
-        - include: string-body
-        - include: namespace-accessor
-        - include: eow-pop
+      set: word-unquoted-pop
 
 ##[ RULE 2 - WORDS / SCRIPT ]#################################################
 
@@ -841,10 +837,7 @@ contexts:
     # single word script,
     # a substitution or variable of a dynamically created script
     - match: (?=\S)
-      set:
-        - include: string-body
-        - include: namespace-accessor
-        - include: eow-pop
+      set: word-unquoted-pop
 
 ##[ RULE 2 - WORDS / EXPRESSION ]#############################################
 
@@ -861,10 +854,7 @@ contexts:
     # single word expression,
     # a substitution or variable of a dynamically created expression
     - match: (?=\S)
-      set:
-        - include: string-body
-        - include: namespace-accessor
-        - include: eow-pop
+      set: word-unquoted-pop
 
 ##[ RULE 2 - WORDS / LIST ]###################################################
 
@@ -878,11 +868,7 @@ contexts:
         - include: words
         - include: braces-end-pop
     - match: (?=\S)
-      set:
-        - include: numbers
-        - include: string-body
-        - include: namespace-accessor
-        - include: eow-pop
+      set: word-unquoted-pop
 
 ##[ RULE 2 - WORDS / PATTERN ]################################################
 
@@ -1025,6 +1011,12 @@ contexts:
 
   words-pop:
     - include: words
+    - include: eow-pop
+
+  word-unquoted-pop:
+    - include: numbers
+    - include: string-body
+    - include: namespace-accessor
     - include: eow-pop
 
   string-body:
