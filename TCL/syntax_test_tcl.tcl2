@@ -10,10 +10,12 @@
 
     cmd arg1 arg2; cmd arg1 arg2
 #  ^ - meta.function-call
-#   ^^^^^^^^^^^^^ meta.function-call.tcl
+#   ^^^ meta.function-call.tcl
+#       ^^^^^^^^^ meta.function-call.parameters.tcl
 #                ^ punctuation.terminator.command.tcl
 #                 ^ - meta.function-call
-#                  ^^^^^^^^^^^^^ meta.function-call.tcl
+#                  ^^^ meta.function-call.tcl
+#                      ^^^^^^^^^ meta.function-call.parameters.tcl
 #  ^ - variable.function.tcl
 #   ^^^ variable.function.tcl
 #      ^ - variable.function.tcl
@@ -1054,7 +1056,7 @@ set regexp {(.{0,200})}
         puts
 #       ^^^^ meta.braces.tcl string.quoted.brace.tcl
     } "foo"
-#<- meta.eval.tcl meta.function-call.tcl meta.braces.tcl string.quoted.brace.tcl
+#<- meta.eval.tcl meta.braces.tcl string.quoted.brace.tcl
 #^^^^ meta.eval.tcl meta.braces.tcl string.quoted.brace.tcl
 #   ^ punctuation.section.braces.end.tcl
 #    ^ meta.eval.tcl - meta.braces
@@ -1697,7 +1699,7 @@ set regexp {(.{0,200})}
 #                                  ^ meta.function.parameters.tcl meta.braces.tcl
 #                                   ^ meta.function.tcl - meta.function.parameters - meta.braces - meta.block
 #                                    ^^^^^^^^^^^^ meta.block.tcl
-#                                     ^^^^^^^^^^ meta.function-call.tcl
+#                                     ^ meta.function-call.tcl
 #   ^^^^ keyword.declaration.proc.tcl
 #        ^^^^ entity.name.function.tcl
 #             ^^ punctuation.section.braces.begin.tcl
@@ -1754,9 +1756,9 @@ set regexp {(.{0,200})}
 #                 ^^^ variable.other.tcl
         puts\
 #       ^^^^ meta.function.tcl meta.block.tcl meta.function-call.tcl support.function.builtin.tcl
-#           ^ meta.function.tcl meta.block.tcl meta.function-call.tcl punctuation.separator.continuation.newline.tcl
+#           ^ meta.function.tcl meta.block.tcl meta.function-call.parameters.tcl punctuation.separator.continuation.newline.tcl
         $text
-#       ^^^^^ meta.function.tcl meta.block.tcl meta.function-call.tcl variable.other.tcl
+#       ^^^^^ meta.function.tcl meta.block.tcl meta.function-call.parameters.tcl variable.other.tcl
     }
 #   ^ meta.function.tcl meta.block.tcl punctuation.section.block.end.tcl
 
@@ -2572,7 +2574,7 @@ set regexp {(.{0,200})}
 #                             ^ meta.block.tcl
         puts "failed to open /some/file/name: it's a directory"
 #       ^^^^ meta.block.tcl meta.function-call.tcl support.function.builtin.tcl
-#            ^ meta.block.tcl meta.function-call.tcl string.quoted.double.tcl punctuation.definition.string.begin.tcl
+#            ^ meta.block.tcl meta.function-call.parameters.tcl string.quoted.double.tcl punctuation.definition.string.begin.tcl
     } trap {POSIX ENOENT} {} {
 #   ^ meta.block.tcl punctuation.section.block.end.tcl
 #     ^^^^ keyword.control.flow.trap.tcl
@@ -2586,7 +2588,7 @@ set regexp {(.{0,200})}
 #                             ^ meta.block.tcl
         puts "failed to open /some/file/name: it doesn't exist"
 #       ^^^^ meta.block.tcl meta.function-call.tcl support.function.builtin.tcl
-#            ^ meta.block.tcl meta.function-call.tcl string.quoted.double.tcl punctuation.definition.string.begin.tcl
+#            ^ meta.block.tcl meta.function-call.parameters.tcl string.quoted.double.tcl punctuation.definition.string.begin.tcl
     } finally {
 #   ^ meta.block.tcl punctuation.section.block.end.tcl
 #     ^^^^^^^ keyword.control.flow.finally.tcl
