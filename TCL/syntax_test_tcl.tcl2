@@ -1186,6 +1186,11 @@ set regexp {(.{0,200})}
 #        ^^^^^ variable.function.tcl
 #              ^^^^^^^^^^^^^^ string.quoted.double.tcl
 
+    file atime /var/pid.log
+#   ^^^^ keyword.other.builtin.tcl
+#        ^^^^^ variable.function.tcl
+#              ^^^^^^^^^^^^^^ string.unquoted.tcl
+
 ##############################################################################
 # for loop tests
 ##############################################################################

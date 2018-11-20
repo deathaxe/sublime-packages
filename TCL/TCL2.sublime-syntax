@@ -251,12 +251,13 @@ contexts:
   cmd-file-args:
     - match: |-
         (?x:
-          atime|attributes|attributes|attributes|channels|copy|copy|delete|
-          dirname|executable|exists|extension|isdirectory|isfile|join|link|
-          lstat|mkdir|mtime|nativename|normalize|owned|pathtype|readable|
-          readlink|rename|rename|rootname|separator|size|split|stat|system|
-          tail|tempfile|type|volumes|writable
+          atime|attributes|dirname|executable|exists|extension|isdirectory|
+          isfile|lstat|mtime|nativename|normalize|owned|pathtype|readable|readlink|
+          rootname|size|split|stat|system|tail|type|writable
         ){{b}}
+      scope: variable.function.tcl
+      set: word-string-pop
+    - match: (channels|copy|delete|join|link|mkdir|rename|separator|tempfile|volumes){{b}}
       scope: variable.function.tcl
       pop: true
     - include: else-pop
