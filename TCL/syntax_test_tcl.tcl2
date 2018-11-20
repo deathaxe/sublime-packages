@@ -1707,6 +1707,23 @@ set regexp {(.{0,200})}
 # array commands
 ##############################################################################
 
+    array ; array
+#   ^^^^^ keyword.other.builtin.tcl
+#         ^ punctuation.terminator.command.tcl
+#           ^^^^^ keyword.other.builtin.tcl
+
+    array 1 2 3
+#   ^^^^^ keyword.other.builtin.tcl
+#         ^ constant.numeric.integer.tcl
+#           ^ constant.numeric.integer.tcl
+#             ^ constant.numeric.integer.tcl
+
+    array str1 str2 str3
+#   ^^^^^ keyword.other.builtin.tcl
+#         ^^^^ string.unquoted.tcl
+#              ^^^^ string.unquoted.tcl
+#                   ^^^^ string.unquoted.tcl
+
     array exists name illegal; # comment
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^^^^^^ variable.function.tcl

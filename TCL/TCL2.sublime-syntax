@@ -130,6 +130,7 @@ contexts:
       push: [cmd-array-meta, cmd-array-args]
 
   cmd-array-args:
+    - include: eoc-pop
     # array anymore arrayName searchId
     # array donesearch arrayName searchId
     # array nextelement arrayName searchId
@@ -156,7 +157,12 @@ contexts:
     - match: names{{b}}
       scope: variable.function.tcl
       set: [cmd-array-names-switches, cmd-generic-arg]
-    - include: else-pop
+    - match: (?=\S)
+      set:
+        - include: words
+        - match: '{{illegal}}'
+          scope: string.unquoted.tcl
+        - include: eoc-pop
 
   cmd-array-names-switches:
     - include: eoc-pop
@@ -176,7 +182,7 @@ contexts:
       set: word-string-pop
 
   cmd-array-meta:
-    - meta_scope: meta.command.array.tcl
+    - meta_scope: meta.array.tcl
     - include: eoc-pop-or-illegal
 
 ##[ COROUTINE COMMAND ]#######################################################
