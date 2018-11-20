@@ -1581,7 +1581,7 @@ set regexp {(.{0,200})}
 #       ^ punctuation.section.substitution.begin.tcl
 #        ^^^^^ keyword.control.flow.catch.tcl
 #              ^ punctuation.section.block.begin.tcl
-#               ^^^^^^^^ meta.command.tcl variable.function.tcl
+#               ^^^^^^^^ variable.function.tcl
 #                 ^^ punctuation.accessor.colon.tcl
 #                        ^^^^^^ variable.parameter.tcl
 #                                         ^ punctuation.separator.continuation.newline.tcl

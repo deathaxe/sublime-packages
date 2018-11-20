@@ -750,24 +750,33 @@ contexts:
       push: [cmd-generic-end, cmd-generic-name]
 
   cmd-generic-name:
-    - meta_scope: meta.command.tcl variable.function.tcl
-    - match: \[
-      scope: punctuation.section.substitution.begin.tcl
-      push:
-        - clear_scopes: 1
-        - meta_scope: meta.substitution.tcl
-        - match: \]
-          scope: punctuation.section.substitution.end.tcl
-          pop: true
-        - include: main
-    - include: words-pop
+    - include: operator-expand-args
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      set:
+        - meta_scope: meta.braces.tcl string.quoted.brace.tcl
+        - include: braces-string-body
+        - include: braces-end-pop
+    - match: \"
+      scope: punctuation.definition.string.begin.tcl
+      set:
+        - meta_scope: string.quoted.double.tcl
+        - include: string-body
+        - include: string-quoted-double-end
+    - match: ''
+      set:
+        - meta_scope: variable.function.tcl
+        - include: string-body
+        - include: namespace-accessor
+        - include: eow-pop
 
   cmd-generic-arg:
     - include: eoc-pop
     - match: (?=\S)
       set:
-        - meta_content_scope: meta.argument.tcl variable.other.tcl
-        - include: words-pop
+        - meta_content_scope: variable.other.tcl
+        - include: words
+        - include: eow-pop
 
   cmd-generic-var:
     - include: operator-expand-args
