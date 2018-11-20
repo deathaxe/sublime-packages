@@ -681,7 +681,6 @@ set regexp {(.{0,200})}
     coroutine name func $arg
 #   ^^^^^^^^^ keyword.other.builtin.tcl
 #             ^^^^ entity.name.function.tcl
-#                  ^^^^^^^^^^ meta.script.tcl
 #                  ^^^^ variable.function.tcl
 #                       ^^^^ variable.other.tcl
 
@@ -692,63 +691,66 @@ set regexp {(.{0,200})}
 #   ^^^^ entity.name.function.tcl
 #       ^ punctuation.separator.continuation.newline.tcl
     func\
-#  ^^^^^^^ meta.script.tcl
 #   ^^^^ variable.function.tcl
 #       ^ punctuation.separator.continuation.newline.tcl
     $arg
-#^^^^^^^^ meta.script.tcl
 #   ^^^^ variable.other.tcl
 
-    coroutine [concat "na" "me"] func $arg
+    coroutine [concat "na" "me"] puts $arg
 #   ^^^^^^^^^ meta.coroutine.tcl - meta.corountine.name.tcl
 #            ^^^^^^^^^^^^^^^^^^^^ meta.coroutine.name.tcl
 #             ^^^^^^^^^^^^^^^^^^  meta.substitution.tcl
-#                                ^^^^^^^^^^ meta.coroutine.body.tcl meta.script.tcl
+#                                ^^^^^^^^^^ meta.coroutine.body.tcl
 #   ^^^^^^^^^ keyword.other.builtin.tcl
-#                                ^^^^ variable.function.tcl
+#                                ^^^^ support.function.builtin.tcl
 #                                     ^^^^ variable.other.tcl
 
     coroutine [concat "na" "me"] {
 #   ^^^^^^^^^ meta.coroutine.tcl - meta.corountine.name.tcl
 #            ^^^^^^^^^^^^^^^^^^^^ meta.coroutine.name.tcl
 #             ^^^^^^^^^^^^^^^^^^  meta.substitution.tcl
-#                                ^^ meta.coroutine.body.tcl meta.block.tcl meta.script.tcl
-#                                ^ punctuation.section.block.begin.tcl
+#                                ^^ meta.coroutine.body.tcl meta.braces.tcl string.quoted.brace.tcl
+#                                ^ punctuation.section.braces.begin.tcl
 #   ^^^^^^^^^ keyword.other.builtin.tcl
         func $arg
-#<- meta.coroutine.body.tcl meta.block.tcl meta.script.tcl
-#       ^^^^ variable.function.tcl
-#            ^^^^ variable.other.tcl
+#<- meta.coroutine.body.tcl meta.braces.tcl string.quoted.brace.tcl
+#       ^^^^ - variable.function - support.function.builtin
+#            ^^^^ - variable
     }
-#<- meta.coroutine.body.tcl meta.block.tcl meta.script.tcl
-#^^^^ meta.coroutine.body.tcl meta.block.tcl meta.script.tcl
-#   ^ punctuation.section.block.end.tcl
-#    ^ - meta
+#<- meta.coroutine.body.tcl meta.braces.tcl string.quoted.brace.tcl
+#   ^ meta.coroutine.body.tcl meta.braces.tcl string.quoted.brace.tcl punctuation.section.braces.end.tcl
 
 ##############################################################################
 # eval tests
 ##############################################################################
 
     eval $script puts "foo"
-#   ^^^^ meta.eval.tcl - meta.script.tcl
-#       ^^^^^^^^^^^^^^^^^^^^ meta.eval.tcl meta.script.tcl
+#   ^^^^ meta.eval.tcl
+#       ^^^^^^^^^^^^^^^^^^^^ meta.eval.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^^^^^^^ variable.function.tcl
 #                ^^^^ - keyword
 #                     ^^^^^ string.quoted.double.tcl
 
     eval {puts} "foo"
-#   ^^^^ meta.eval.tcl - meta.script.tcl
-#       ^^^^^^^^^^^^^^ meta.eval.tcl meta.script.tcl
+#   ^^^^ meta.eval.tcl
+#       ^^^^^^^^^^^^^^ meta.eval.tcl
 #   ^^^^ keyword.other.builtin.tcl
-#        ^^^^^^ variable.function.tcl meta.braces.tcl string.quoted.brace.tcl
+#        ^^^^^^ meta.braces.tcl string.quoted.brace.tcl
 #               ^^^^^ string.quoted.double.tcl
 
     eval {
+#   ^^^^^^^ meta.eval.tcl
 #   ^^^^ keyword.other.builtin.tcl
+#        ^ punctuation.section.braces.begin.tcl
+#        ^^ meta.braces.tcl string.quoted.brace.tcl
         puts
-#       ^^^^ support.function.builtin.tcl
+#       ^^^^ meta.braces.tcl string.quoted.brace.tcl
     } "foo"
+#<- meta.eval.tcl meta.function-call.tcl meta.braces.tcl string.quoted.brace.tcl
+#^^^^ meta.eval.tcl meta.braces.tcl string.quoted.brace.tcl
+#   ^ punctuation.section.braces.end.tcl
+#    ^ meta.eval.tcl - meta.braces
 #     ^^^^^ string.quoted.double.tcl
 
 ##############################################################################
@@ -1898,8 +1900,8 @@ set regexp {(.{0,200})}
     after idle [list after 0 doOneStep]
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^^^^ variable.parameter.tcl
-#             ^ - meta.script.tcl meta.substitution.tcl
-#              ^^^^^^^^^^^^^^^^^^^^^^^^ meta.script.tcl meta.substitution.tcl
+#             ^ - meta.substitution.tcl
+#              ^^^^^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
 
     after\
 #   ^^^^^ keyword.other.builtin.tcl
@@ -1914,7 +1916,6 @@ set regexp {(.{0,200})}
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^^^^^^^^^^^^^^^^ meta.substitution.tcl
 #                         ^ - meta.substitution - meta.script
-#                          ^^^^^^^^^^^ meta.script.tcl
 #                          ^^^^ support.function.builtin.tcl
 #                               ^^^^^^ string.quoted.double.tcl
 #                                     ^ punctuation.terminator.command.tcl

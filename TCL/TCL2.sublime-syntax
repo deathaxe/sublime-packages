@@ -114,7 +114,6 @@ contexts:
   cmd-after-script:
     - match: ''
       set:
-        - meta_scope: meta.script.tcl
         - include: eoc-pop
         - include: main
 
@@ -217,7 +216,6 @@ contexts:
       scope: keyword.other.builtin.tcl
       push:
         - meta_scope: meta.eval.tcl
-        - meta_content_scope: meta.script.tcl
         - include: eoc-pop
         - include: main
 
@@ -835,7 +833,7 @@ contexts:
     - match: \{
       scope: punctuation.section.block.begin.tcl
       set:
-        - meta_scope: meta.block.tcl meta.script.tcl
+        - meta_scope: meta.block.tcl
         - match: \}
           scope: punctuation.section.block.end.tcl
           set: eow-pop-or-illegal
@@ -844,7 +842,6 @@ contexts:
     # a substitution or variable of a dynamically created script
     - match: (?=\S)
       set:
-        - meta_scope: meta.script.tcl
         - include: string-body
         - include: namespace-accessor
         - include: eow-pop
