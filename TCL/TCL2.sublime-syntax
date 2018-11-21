@@ -338,17 +338,12 @@ contexts:
         - cmd-regexp-switches    # switches
 
   cmd-regexp-switches:
-    - include: cmd-switches-end
-    # quoted string indicates start of pattern
-    - match: (?=[""{])
-      pop: true
-    # Normal switches
     - match: -(about|expanded|indices|line|linestop|lineanchor|nocase|all|inline){{b}}
       scope: variable.parameter.tcl
-    - match: -(start){{b}}
+    - match: -start{{b}}
       scope: variable.parameter.tcl
       push: word-any-pop
-    - include: else-pop
+    - include: cmd-maybe-switches-end
 
   cmd-regexp-matches:
     - include: words

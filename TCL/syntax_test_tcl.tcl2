@@ -1931,6 +1931,10 @@ set regexp {(.{0,200})}
 #                                       ^ punctuation.section.braces.end.tcl
 #                                         ^^^^^^^ variable.other.tcl
 #                                                 ^^ variable.other
+    regexp -invalid {% pattern %}
+#   ^^^^^^ support.function.builtin.tcl
+#          ^^^^^^^^ invalid.illegal.parameter.tcl
+#                   ^^^^^^^^^^^^^ meta.braces.tcl string.quoted.brace.tcl string.regexp.tcl
 
 # https://github.com/sublimehq/Packages/issues/779
     regexp -inline -all -- {%[a-zA-Z_]*%} "whatever"
