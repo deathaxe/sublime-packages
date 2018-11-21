@@ -502,9 +502,8 @@ contexts:
       set: [switch-exact-patterns, word-string-pop]
 
   switch-options-remaining:
-    - include: cmd-switches-end
     - include: switch-options-common
-    - include: else-pop
+    - include: cmd-maybe-switches-end
 
   switch-options-common:
     - match: -(indexvar|matchvar){{b}}
@@ -512,8 +511,6 @@ contexts:
       push: word-any-pop
     - match: -nocase{{b}}
       scope: variable.parameter.tcl
-    - match: -{{illegal}}
-      scope: invalid.illegal.parameter.tcl
 
   switch-exact-patterns:
     - include: eoc-pop
