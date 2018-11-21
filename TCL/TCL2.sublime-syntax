@@ -494,12 +494,9 @@ contexts:
       scope: variable.parameter.tcl
       set: [switch-regexp-patterns, word-string-pop, switch-options-remaining]
     # end of options
-    - match: \-\-{{b}}
-      scope: punctuation.terminator.switches.tcl
-      set: [switch-exact-patterns, word-string-pop]
     - include: switch-options-common
     - match: (?=\S)
-      set: [switch-exact-patterns, word-string-pop]
+      set: [switch-exact-patterns, word-string-pop, cmd-maybe-switches-end]
 
   switch-options-remaining:
     - include: switch-options-common
