@@ -246,21 +246,61 @@ contexts:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/file.htm
     - match: file{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-generic-end, cmd-generic-args, cmd-file-args]
+      push: [cmd-file-end, cmd-file-args]
 
   cmd-file-args:
+    - clear_scopes: 1
+    - meta_scope: meta.function-call.tcl
+    - include: eoc-pop
+    # file functions without arguments
+    - match: volumes{{b}}
+      scope: variable.function.tcl
+      pop: true
+    # file functions with one string arguments
     - match: |-
         (?x:
-          atime|attributes|dirname|executable|exists|extension|isdirectory|
+          atime|dirname|executable|exists|extension|isdirectory|
           isfile|lstat|mtime|nativename|normalize|owned|pathtype|readable|readlink|
-          rootname|size|split|stat|system|tail|type|writable
+          rootname|separator|size|split|stat|system|tail|type|writable
         ){{b}}
       scope: variable.function.tcl
       set: word-string-pop
-    - match: (channels|copy|delete|join|link|mkdir|rename|separator|tempfile|volumes){{b}}
+    # file functions with one string-match pattern argument
+    - match: channels{{b}}
       scope: variable.function.tcl
-      pop: true
-    - include: else-pop
+      set: word-glob-pop
+    # file functions with two string arguments
+    - match: link{{b}}
+      scope: variable.function.tcl
+      set: [word-string-pop, word-string-pop, cmd-file-linktype]
+    - match: (copy|rename|separator|tempfile){{b}}
+      scope: variable.function.tcl
+      set: [word-string-pop, word-string-pop, cmd-file-force]
+    # file functions with string arguments list
+    - match: (attributes|delete|join|mkdir){{b}}
+      scope: variable.function.tcl
+      set: [cmd-generic-args, cmd-file-force]
+    # fallback to generic function highlighting without syntax check
+    - match: (?=\S)
+      set: [cmd-generic-args, cmd-generic-name]
+
+  cmd-file-force:
+    # the only allowed optional switch
+    - match: -force{{b}}
+      scope: variable.parameter.tcl
+      set: cmd-maybe-switches-end
+    - include: cmd-maybe-switches-end
+
+  cmd-file-linktype:
+    # the only allowed optional switch
+    - match: -linktype{{b}}
+      scope: variable.parameter.tcl
+      set: cmd-maybe-switches-end
+    - include: cmd-maybe-switches-end
+
+  cmd-file-end:
+    - meta_content_scope: meta.function-call.parameters.tcl
+    - include: eoc-pop-or-illegal
 
 ##[ INCR COMMANDS ]###########################################################
 
@@ -796,6 +836,15 @@ contexts:
     - match: -{{ident}}{{b}}
       scope: variable.parameter.tcl
     - include: cmd-generic-end
+
+  cmd-invalid-switch:
+    - match: -{{illegal}}
+      scope: invalid.illegal.parameter.tcl
+
+  cmd-maybe-switches-end:
+    - include: cmd-switches-end
+    - include: cmd-invalid-switch
+    - include: else-pop
 
   cmd-switches-end:
     # Marks the end of switches. The argument following this one will be treated

@@ -1206,15 +1206,115 @@ set regexp {(.{0,200})}
 # file commands
 ##############################################################################
 
-    file atime "/var/pid.log"
+    file volumes illegal
 #   ^^^^ keyword.other.builtin.tcl
-#        ^^^^^ variable.function.tcl
-#              ^^^^^^^^^^^^^^ string.quoted.double.tcl
+#       ^ - keyword - variable
+#        ^^^^^^^ variable.function.tcl
+#               ^ - variable.function
+#                ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 
-    file atime /var/pid.log
+    file atime "/var/pid.log" illegal
+#   ^^^^ keyword.other.builtin.tcl
+#       ^ - keyword - variable.function
+#        ^^^^^ variable.function.tcl
+#             ^ - string - variable
+#              ^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                            ^ - string - invalid
+#                             ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+    file atime /var/pid.log illegal
 #   ^^^^ keyword.other.builtin.tcl
 #        ^^^^^ variable.function.tcl
-#              ^^^^^^^^^^^^^^ string.unquoted.tcl
+#             ^ - string - variable
+#              ^^^^^^^^^^^^ string.unquoted.tcl
+#                          ^ - string - invalid
+#                           ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+    file copy /source/pid.log /target/pid.log illegal
+#   ^^^^ keyword.other.builtin.tcl
+#       ^ - keyword - variable.function
+#        ^^^^ variable.function.tcl
+#            ^ - string - variable
+#             ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                            ^ - string
+#                             ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                                             ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+    file copy -force /source/pid.log /target/pid.log invalid
+#   ^^^^ keyword.other.builtin.tcl
+#       ^ - keyword - variable.function
+#        ^^^^ variable.function.tcl
+#             ^^^^^^ variable.parameter.tcl
+#                   ^ - string - variable
+#                    ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                                   ^ - string
+#                                    ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                                                    ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+    file copy -inval /source/pid.log /target/pid.log invalid
+#   ^^^^ keyword.other.builtin.tcl
+#       ^ - keyword - variable
+#        ^^^^ variable.function.tcl
+#             ^^^^^^ invalid.illegal.parameter.tcl
+#                   ^ - string - variable
+#                    ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                                   ^ - string
+#                                    ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                                                    ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+
+    file copy -force -- /source/pid.log /target/pid.log invalid
+#   ^^^^ keyword.other.builtin.tcl
+#       ^ - keyword - variable
+#        ^^^^ variable.function.tcl
+#             ^^^^^^ variable.parameter.tcl
+#                   ^ - variable - punctuation
+#                    ^^ punctuation.terminator.switches.tcl
+#                      ^ - string - punctuation
+#                       ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                                      ^ - string
+#                                       ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                                                       ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+    file copy -inval -- /source/pid.log /target/pid.log invalid
+#   ^^^^ keyword.other.builtin.tcl
+#       ^ - keyword - variable
+#        ^^^^ variable.function.tcl
+#             ^^^^^^ invalid.illegal.parameter.tcl
+#                   ^ - variable - punctuation
+#                    ^^ punctuation.terminator.switches.tcl
+#                      ^ - string - punctuation
+#                       ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                                      ^ - string
+#                                       ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                                                       ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+    file\
+#   ^^^^ keyword.other.builtin.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    copy\
+#   ^^^^ variable.function.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    -inval\
+#   ^^^^^^ invalid.illegal.parameter.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    --\
+#   ^^ punctuation.terminator.switches.tcl
+#     ^ punctuation.separator.continuation.newline.tcl
+    /source/pid.log\
+#   ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                  ^ punctuation.separator.continuation.newline.tcl
+    /target/pid.log\
+#   ^^^^^^^^^^^^^^^ string.unquoted.tcl
+#                  ^ punctuation.separator.continuation.newline.tcl
+    invalid
+#   ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+# generic function highlighting without command specific syntax checks
+    file unknown -unknown str
+#   ^^^^ keyword.other.builtin.tcl
+#        ^^^^^^^ variable.function.tcl
+#                ^^^^^^^^ variable.parameter.tcl
 
 ##############################################################################
 # for loop tests
