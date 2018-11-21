@@ -316,6 +316,13 @@ contexts:
       scope: variable.other.tcl
     - include: eoc-pop
 
+##[ SET COMMAND ]#############################################################
+
+  cmd-set:
+    - match: set{{b}}
+      scope: keyword.other.builtin.tcl
+      push: [cmd-generic-end, cmd-generic-args, cmd-generic-var]
+
 ##[ STRING COMMANDS ]#########################################################
 
   cmd-string:
@@ -365,13 +372,6 @@ contexts:
       scope: invalid.illegal.parameter.tcl
       pop: true
     - include: eow-pop-or-illegal
-
-##[ SET COMMAND ]#############################################################
-
-  cmd-set:
-    - match: set{{b}}
-      scope: keyword.other.builtin.tcl
-      push: [cmd-generic-end, cmd-generic-args, cmd-generic-var]
 
 ##[ FLOW CONTROL ]############################################################
 
