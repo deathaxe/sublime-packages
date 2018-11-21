@@ -398,15 +398,10 @@ contexts:
     - include: else-pop
 
   cmd-string-match-switches:
-    - match: (?=[\"\{])
-      pop: true
     - match: -nocase{{b}}
       scope: variable.parameter.tcl
-      pop: true
-    - match: -{{illegal}}
-      scope: invalid.illegal.parameter.tcl
-      pop: true
-    - include: eow-pop-or-illegal
+      set: cmd-maybe-switches-end
+    - include: cmd-maybe-switches-end
 
 ##[ FLOW CONTROL ]############################################################
 

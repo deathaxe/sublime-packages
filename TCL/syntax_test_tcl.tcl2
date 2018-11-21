@@ -2272,6 +2272,13 @@ set regexp {(.{0,200})}
 #                                             ^ constant.other.placeholder.tcl
 #                                               ^ punctuation.section.braces.end.tcl
 
+    string match -invalid {pattern} $str
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^^^^ variable.function.string.tcl
+#                ^^^^^^^^ invalid.illegal.parameter.tcl
+#                         ^^^^^^^^^ meta.braces.tcl string.quoted.brace.tcl
+#                                   ^^^^ variable.other.tcl
+
 ##############################################################################
 # switch commands
 ##############################################################################
