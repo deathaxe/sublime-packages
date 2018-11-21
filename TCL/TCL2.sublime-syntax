@@ -98,7 +98,7 @@ contexts:
       pop: true
     - match: (cancel|info){{b}}
       scope: variable.function.tcl
-      set: cmd-command-end
+      set: cmd-generic-end
     - include: word-any-pop
 
   cmd-after-script:
@@ -144,7 +144,7 @@ contexts:
     # array set arrayName list
     - match: set{{b}}
       scope: variable.function.tcl
-      set: [cmd-command-end, cmd-generic-var]
+      set: [cmd-generic-end, cmd-generic-var]
     # array names arrayName ?mode? ?pattern?
     - match: names{{b}}
       scope: variable.function.tcl
@@ -246,7 +246,7 @@ contexts:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/file.htm
     - match: file{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-command-end, cmd-file-args]
+      push: [cmd-generic-end, cmd-generic-args, cmd-file-args]
 
   cmd-file-args:
     - match: |-
@@ -298,13 +298,9 @@ contexts:
         - cmd-regexp-switches    # switches
 
   cmd-regexp-switches:
+    - include: cmd-switches-end
     # quoted string indicates start of pattern
     - match: (?=[""{])
-      pop: true
-    # Marks the end of switches. The argument following this one will be treated
-    # as exp even if it starts with a -.
-    - match: \-\-
-      scope: punctuation.terminator.switches.tcl
       pop: true
     # Normal switches
     - match: -(about|expanded|indices|line|linestop|lineanchor|nocase|all|inline){{b}}
@@ -326,7 +322,7 @@ contexts:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/string.htm
     - match: string{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-command-end, cmd-string-args]
+      push: [cmd-generic-end, cmd-generic-args, cmd-string-args]
 
   cmd-string-args:
     - match: is{{b}}
@@ -375,9 +371,13 @@ contexts:
   cmd-set:
     - match: set{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-command-end, cmd-generic-var]
+      push: [cmd-generic-end, cmd-generic-args, cmd-generic-var]
 
 ##[ FLOW CONTROL ]############################################################
+
+  errorcode-pop:
+    - include: cmd-generic-args
+    - include: errorcodes
 
   flow-control:
     # flow
@@ -389,20 +389,16 @@ contexts:
       push: eoc-pop-or-illegal
     - match: error{{b}}
       scope: keyword.control.flow.error.tcl
-      push:
-        - include: errorcodes
-        - include: cmd-command-end
+      push: [cmd-generic-end, errorcode-pop]
     - match: exit{{b}}
       scope: keyword.control.flow.exit.tcl
       push: eoc-pop-or-illegal
     - match: return{{b}}
       scope: keyword.control.flow.return.tcl
-      push:
-        - include: errorcodes
-        - include: cmd-command-end
+      push: [cmd-generic-end, errorcode-pop]
     - match: throw{{b}}
       scope: keyword.control.flow.throw.tcl
-      push: cmd-command-end
+      push: cmd-generic-end
     - match: catch{{b}}
       scope: keyword.control.flow.catch.tcl
       push: [cmd-generic-var, word-script-pop]
@@ -476,10 +472,7 @@ contexts:
       set: [switch-exact-patterns, word-string-pop]
 
   switch-options-remaining:
-    # end of options
-    - match: \-\-{{b}}
-      scope: punctuation.terminator.switches.tcl
-      pop: true
+    - include: cmd-switches-end
     - include: switch-options-common
     - include: else-pop
 
@@ -630,7 +623,7 @@ contexts:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/namespace.htm
     - match: namespace{{b}}
       scope: keyword.other.builtin.tcl
-      push: [namespace-meta, namespace-type, eow-pop]
+      push: [namespace-meta, cmd-generic-args, namespace-type, eow-pop]
 
   namespace-type:
     - match: eval{{b}}
@@ -656,7 +649,7 @@ contexts:
 
   namespace-meta:
     - meta_scope: meta.namespace.tcl
-    - include: cmd-command-end
+    - include: cmd-generic-end
 
   namespace-accessor:
     - match: :{2,}
@@ -749,17 +742,17 @@ contexts:
     # known commands
     - match: '{{keywords}}'
       scope: keyword.other.builtin.tcl
-      push: cmd-command-end
+      push: [cmd-generic-end, cmd-generic-args]
     # builtin functions
     - match: '{{builtin_funcs}}'
       scope: meta.function-call.tcl support.function.builtin.tcl
-      push: cmd-generic-end
+      push: [cmd-function-end, cmd-generic-args]
     - match: '{{math_funcs}}'
       scope: meta.function-call.tcl support.function.math.tcl
-      push: cmd-generic-end
+      push: cmd-function-end
     # unknown generic commands
     - match: (?=\S)
-      push: [cmd-generic-end, cmd-generic-name]
+      push: [cmd-function-end, cmd-generic-args, cmd-generic-name]
 
   cmd-generic-name:
     - include: operator-expand-args
@@ -798,18 +791,26 @@ contexts:
       set: [variable-simple-end, variable-simple-name]
     - include: word-string-pop
 
-  cmd-generic-switches:
+  cmd-generic-args:
+    - include: cmd-switches-end
     - match: -{{ident}}{{b}}
       scope: variable.parameter.tcl
+    - include: cmd-generic-end
+
+  cmd-switches-end:
+    # Marks the end of switches. The argument following this one will be treated
+    # as exp even if it starts with a -.
+    - match: \-\-{{b}}
+      scope: punctuation.terminator.switches.tcl
+      pop: true
 
   cmd-generic-end:
-    - meta_content_scope: meta.function-call.parameters.tcl
-    - include: cmd-command-end
-
-  cmd-command-end:
-    - include: cmd-generic-switches
     - include: words
     - include: eoc-pop
+
+  cmd-function-end:
+    - meta_content_scope: meta.function-call.parameters.tcl
+    - include: cmd-generic-end
 
 ##[ RULE 2 - WORDS / ANYTHING ]###############################################
 

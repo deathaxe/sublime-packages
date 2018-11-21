@@ -45,6 +45,31 @@
 #                 ^^^ meta.substitution.tcl
 #                   ^ punctuation.section.substitution.end.tcl
 
+    cmd -switch "arg" -sw2 -- -noswitch
+#   ^^^ variable.function.tcl
+#       ^^^^^^^ variable.parameter.tcl
+#               ^^^^^ string.quoted.double.tcl
+#                     ^^^^ variable.parameter.tcl
+#                          ^^ punctuation.terminator.switches.tcl
+#                             ^^^^^^^^^ - variable.parameter
+
+    cmd\
+#   ^^^ variable.function.tcl
+#      ^ punctuation.separator.continuation.newline.tcl
+    -switch\
+#   ^^^^^^^ variable.parameter.tcl
+#          ^ punctuation.separator.continuation.newline.tcl
+    "arg"\
+#   ^^^^^ string.quoted.double.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    -sw2\
+#   ^^^^ variable.parameter.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    --\
+#   ^^ punctuation.terminator.switches.tcl
+#     ^ punctuation.separator.continuation.newline.tcl
+    -noswitch
+#   ^^^^^^^^^ - variable.parameter
 
     [cmd arg][cmd arg] {puts "str"}
 
