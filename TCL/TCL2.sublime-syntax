@@ -1093,40 +1093,22 @@ contexts:
 
   braces:
     - include: operator-expand-args
+    - include: braces-script
     - include: braces-string
-    - include: braces-expr
 
-  braces-expr:
-    - match: \{
-      scope: punctuation.section.braces.begin.tcl
+  braces-script:
+    - match: \{(?=\s*$)
+      scope: punctuation.section.block.begin.tcl
       push:
-        - meta_scope: meta.braces.tcl
-        - include: braces-end-pop
-        - include: braces-expr-body
-
-  braces-expr-body:
-    - include: operator-expand-args
-    - match: \{
-      scope: punctuation.section.braces.begin.tcl
-      push:
-        - meta_scope: meta.braces.tcl
+        - meta_scope: meta.block.tcl
         - match: \}
-          scope: punctuation.section.braces.end.tcl
-          pop: true
-        - include: braces-expr-body
-    - include: continuation
-    - include: expressions
-    # Note: Each new line within a brace quoted word starts with a command,
-    #       if the previous line was not terminated with a line continuation
-    - match: \n
-      push:
-        - match: (?=\})
-          pop: true
+          scope: punctuation.section.block.end.tcl
+          set: eow-pop-or-illegal
         - include: main
 
   braces-string:
     # A single-line braced block without any other braces is handled as string.
-    - match: \{(?=[^\{]*\})
+    - match: \{
       scope: punctuation.section.braces.begin.tcl
       push:
         - meta_scope: meta.braces.tcl string.quoted.brace.tcl
