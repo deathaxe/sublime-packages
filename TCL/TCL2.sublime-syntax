@@ -1050,9 +1050,9 @@ contexts:
 
   words:
     - include: numbers
+    - include: braces
     - include: string-quoted-double
     - include: string-body
-    - include: braces
     - include: namespace-accessor
 
   word-unquoted-pop:
