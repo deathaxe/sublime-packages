@@ -70,6 +70,7 @@ contexts:
     - include: cmd-expr
     - include: cmd-file
     - include: cmd-incr
+    - include: cmd-list
     - include: cmd-regexp
     - include: cmd-string
     - include: cmd-set
@@ -151,10 +152,8 @@ contexts:
       set: [cmd-array-names-switches, cmd-generic-var]
     - match: (?=\S)
       set:
-        - include: words
-        - match: '{{illegal}}'
-          scope: string.unquoted.tcl
         - include: eoc-pop
+        - include: list-body
 
   cmd-array-names-switches:
     - include: eoc-pop
@@ -316,6 +315,18 @@ contexts:
   cmd-incr-end:
     - meta_scope: meta.function-call.tcl
     - include: eoc-pop-or-illegal
+
+##[ LIST COMMANDS ]###########################################################
+
+  cmd-list:
+    - match: list{{b}}
+      scope: keyword.other.builtin.tcl
+      push: cmd-list-body
+
+  cmd-list-body:
+    - meta_scope: meta.list.tcl
+    - include: eoc-pop
+    - include: list-body
 
 ##[ REGEXP COMMANDS ]#########################################################
 
@@ -915,13 +926,13 @@ contexts:
 
   word-list-pop:
     - include: eoc-pop
-    - include: operator-expand-args
     - match: \{
       scope: punctuation.section.braces.begin.tcl
       set:
-        - meta_scope: meta.braces.tcl meta.list.tcl
-        - include: words
+        - meta_scope: meta.braces.tcl
         - include: braces-end-pop
+        - include: continuation
+        - include: list-body
     - match: (?=\S)
       set: word-unquoted-pop
 
@@ -971,6 +982,7 @@ contexts:
 ##[ RULE 2 - WORDS / REGEXP ]#################################################
 
   word-regexp-pop:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/re_syntax.htm
     - include: eoc-pop
     - include: operator-expand-args
     - match: \{
@@ -1066,6 +1078,13 @@ contexts:
     - include: namespace-accessor
     - include: eow-pop
 
+  list-body:
+    - include: braces-list
+    - include: numbers
+    - include: string-quoted-double
+    - include: string-body
+    - include: namespace-accessor
+
   string-body:
     - include: escape
     - include: substitution
@@ -1092,7 +1111,6 @@ contexts:
   operator-expand-args:
     - match: \{\*\}(?=\S)
       scope: keyword.operator.word.tcl
-      push: word-list-pop
 
 ##[ RULE 6 - BRACES ]#########################################################
 
@@ -1100,6 +1118,15 @@ contexts:
     - include: operator-expand-args
     - include: braces-script
     - include: braces-string
+
+  braces-list:
+    - match: \{
+      scope: punctuation.section.braces.begin.tcl
+      push:
+        - meta_scope: meta.braces.tcl
+        - include: braces-end-pop
+        - include: continuation
+        - include: list-body
 
   braces-script:
     - match: \{(?=\s*$)

@@ -1630,9 +1630,98 @@ set regexp {(.{0,200})}
 # list commands
 ##############################################################################
 
-    lappend listName value
-#   ^^^^^^^ support.function.builtin.tcl
-#           ^^^^^^^^ variable.other.tcl
+    list
+#   ^^^^^ meta.list.tcl
+#   ^^^^ keyword.other.builtin.tcl
+
+    list;list 1;#comment
+#   ^^^^ meta.list.tcl keyword.other.builtin.tcl
+#       ^ punctuation.terminator.command.tcl
+#        ^^^^ meta.list.tcl keyword.other.builtin.tcl
+#             ^ meta.list.tcl constant.numeric.integer.tcl
+#              ^ punctuation.terminator.command.tcl
+#               ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    list 1 3 str[sub] {str[nosub]} -> "quot"
+#  ^ - meta.list
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.list.tcl
+#   ^^^^ keyword.other.builtin.tcl
+#        ^ constant.numeric.integer.tcl
+#          ^ constant.numeric.integer.tcl
+#               ^^^^^ meta.substitution.tcl
+#                     ^^^^^^^^^^^^ meta.braces.tcl
+#                         ^^^^^^^ meta.substitution.tcl
+#                                     ^^^^^^ string.quoted.double.tcl
+
+    list\
+#  ^ - meta.list
+#   ^^^^ meta.list.tcl keyword.other.builtin.tcl
+#       ^ meta.list.tcl punctuation.separator.continuation.newline.tcl
+    1\
+#   ^ meta.list.tcl constant.numeric.integer.tcl
+#    ^ meta.list.tcl punctuation.separator.continuation.newline.tcl
+    3\
+#   ^ meta.list.tcl constant.numeric.integer.tcl
+#    ^ meta.list.tcl punctuation.separator.continuation.newline.tcl
+    str[sub]\
+#  ^^^^^^^^^^^ meta.list.tcl
+#      ^^^^^ meta.substitution.tcl
+#           ^ punctuation.separator.continuation.newline.tcl
+    {str[nosub]}\
+#   ^^^^^^^^^^^^ meta.list.tcl meta.braces.tcl
+#       ^^^^^^^ meta.substitution.tcl
+#               ^ meta.list.tcl punctuation.separator.continuation.newline.tcl
+    ->\
+#   ^^^^ meta.list.tcl
+#     ^ punctuation.separator.continuation.newline.tcl
+    "quot"
+#   ^^^^^^^ meta.list.tcl
+#   ^^^^^^ string.quoted.double.tcl
+
+    list {{1 2 3} {1 {2 str [incr x]} 3} {-1 -2 -3}}
+#  ^ - meta.list
+#   ^^^^^ meta.list.tcl - meta.braces
+#        ^ meta.list.tcl meta.braces.tcl
+#         ^^^^^^^ meta.list.tcl meta.braces.tcl meta.braces.tcl
+#                ^ meta.list.tcl meta.braces.tcl
+#                 ^^^ meta.list.tcl meta.braces.tcl meta.braces.tcl
+#                    ^^^^^^^^^^^^^^^^ meta.list.tcl meta.braces.tcl meta.braces.tcl meta.braces.tcl
+#                                    ^^^ meta.list.tcl meta.braces.tcl meta.braces.tcl
+#                                       ^ meta.list.tcl meta.braces.tcl
+#                                        ^^^^^^^^^^ meta.list.tcl meta.braces.tcl meta.braces.tcl
+#                                                  ^ meta.list.tcl meta.braces.tcl
+#                                                   ^ meta.list.tcl
+#   ^^^^ keyword.other.builtin.tcl
+#        ^^ punctuation.section.braces.begin.tcl
+#          ^ constant.numeric.integer.tcl
+#            ^ constant.numeric.integer.tcl
+#              ^ constant.numeric.integer.tcl
+#               ^ punctuation.section.braces.end.tcl
+#                 ^ punctuation.section.braces.begin.tcl
+#                  ^ constant.numeric.integer.tcl
+#                    ^ punctuation.section.braces.begin.tcl
+#                     ^ constant.numeric.integer.tcl
+#                           ^ punctuation.section.substitution.begin.tcl
+#                            ^^^^ keyword.other.builtin.tcl
+#                                  ^ punctuation.section.substitution.end.tcl
+#                                   ^ punctuation.section.braces.end.tcl
+#                                     ^ constant.numeric.integer.tcl
+#                                      ^ punctuation.section.braces.end.tcl
+#                                        ^ punctuation.section.braces.begin.tcl
+#                                         ^^ constant.numeric.integer.tcl
+#                                            ^^ constant.numeric.integer.tcl
+#                                               ^^ constant.numeric.integer.tcl
+#                                                 ^^ punctuation.section.braces.end.tcl
+
+    list unquoted $words "without" \special {meaning}
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.list.tcl
+#   ^^^^ keyword.other.builtin.tcl
+#                 ^^^^^^ variable.other.tcl
+#                        ^^^^^^^^^ string.quoted.double.tcl
+#                                  ^^ constant.character.escape.other.tcl
+#                                           ^ punctuation.section.braces.begin.tcl
+#                                           ^^^^^^^^^ meta.braces.tcl
+#                                                   ^ punctuation.section.braces.end.tcl
 
 ##############################################################################
 # namespace tests
