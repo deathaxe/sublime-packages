@@ -828,143 +828,169 @@ set regexp {(.{0,200})}
 ##############################################################################
 
     array ; array
+#   ^^^^^^ meta.array.tcl
+#         ^ - meta.array
+#           ^^^^^^ meta.array.tcl
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^ punctuation.terminator.command.tcl
 #           ^^^^^ keyword.other.builtin.tcl
 
     array 1 2 3
+#   ^^^^^^^^^^^^ meta.array.tcl
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^ constant.numeric.integer.tcl
 #           ^ constant.numeric.integer.tcl
 #             ^ constant.numeric.integer.tcl
 
-    array str1 str2 str3
+    array foo bar baz[incr x]
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.array.tcl
 #   ^^^^^ keyword.other.builtin.tcl
-#         ^^^^ string.unquoted.tcl
-#              ^^^^ string.unquoted.tcl
-#                   ^^^^ string.unquoted.tcl
+#                    ^^^^^^^^ meta.substitution.tcl
+    array\
+#   ^^^^^^^ meta.array.tcl
+#   ^^^^^ keyword.other.builtin.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    foo\
+#^^^^^^^^ meta.array.tcl
+#      ^ punctuation.separator.continuation.newline.tcl
+    bar\
+#^^^^^^^^ meta.array.tcl
+#      ^ punctuation.separator.continuation.newline.tcl
+    baz[incr\
+#^^^^^^^^^^^^^ meta.array.tcl
+#      ^ punctuation.section.substitution.begin.tcl
+#      ^^^^^^^ meta.substitution.tcl
+#       ^^^^ keyword.other.builtin.tcl
+#           ^ punctuation.separator.continuation.newline.tcl
+    x\
+#^^^^^^ meta.array.tcl meta.substitution.tcl
+    ]
+#^^^^^ meta.array.tcl
+#^^^^ meta.substitution.tcl
+#   ^ punctuation.section.substitution.end.tcl
 
-    array exists name illegal; # comment
+    array exists foo illegal; # comment
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^^^^^^ variable.function.tcl
-#                ^^^^ variable.other.tcl
-#                     ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
-#                            ^ punctuation.terminator.command.tcl
-#                              ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+#                ^^^ variable.other.tcl
+#                    ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                           ^ punctuation.terminator.command.tcl
+#                             ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
-    array get name "pa?[A-z]ttern" illegal; # comment
+    array get foo "pa?[A-z]ttern" illegal; # comment
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^^^ variable.function.tcl
-#             ^^^^ variable.other.tcl
-#                  ^ punctuation.definition.string.begin.tcl
-#                  ^^^^^^^^^^^^^^^ string.quoted.double.tcl
-#                     ^ constant.other.placeholder.tcl
-#                      ^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
-#                                ^ punctuation.definition.string.end.tcl
-#                                 ^ - string
-#                                  ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
-#                                         ^ punctuation.terminator.command.tcl
-#                                           ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+#             ^^^ variable.other.tcl
+#                 ^ punctuation.definition.string.begin.tcl
+#                 ^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                    ^ constant.other.placeholder.tcl
+#                     ^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
+#                               ^ punctuation.definition.string.end.tcl
+#                                ^ - string
+#                                 ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                        ^ punctuation.terminator.command.tcl
+#                                          ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
-    array set cpe_param [objectGetField -oid $cpeoid -fieldname parameters]
+    array set foo [objectGetField -oid $cpeoid -fieldname parameters]
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^^^ variable.function.tcl
-#             ^^^^^^^^^ variable.other.tcl
-#                       ^ punctuation.section.substitution.begin.tcl
-#                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
-#                                                                         ^ punctuation.section.substitution.end.tcl
-    array names list_name "pa?[A-z]ttern" illegal; # comment
+#             ^^^ variable.other.tcl
+#                 ^ punctuation.section.substitution.begin.tcl
+#                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
+#                                                                   ^ punctuation.section.substitution.end.tcl
+
+    array names foo "pa?[A-z]ttern" illegal; # comment
 #   ^^^^^ keyword.other.builtin.tcl
 #        ^ - keyword - variable
 #         ^^^^^ variable.function.tcl
 #              ^ - variable
-#               ^^^^^^^^^ variable.other.tcl
+#               ^^^ variable.other.tcl
+#                  ^ - variable - string
+#                   ^ punctuation.definition.string.begin.tcl
+#                   ^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                      ^ - constant.other.placeholder.tcl
+#                       ^^^^^ meta.substitution.tcl
+#                                 ^ punctuation.definition.string.end.tcl
+#                                  ^ - string
+#                                   ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                          ^ punctuation.terminator.command.tcl
+#                                            ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    array names foo -exact "pa?[A-z]ttern" illegal; # comment
+#   ^^^^^ keyword.other.builtin.tcl
+#        ^ - keyword - variable
+#         ^^^^^ variable.function.tcl
+#              ^ - variable
+#               ^^^ variable.other.tcl
+#                  ^ - variable
+#                   ^^^^^^ variable.parameter.tcl
+#                         ^ - variable - string
+#                          ^ punctuation.definition.string.begin.tcl
+#                          ^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                             ^ - constant.other.placeholder.tcl
+#                              ^^^^^ meta.substitution.tcl
+#                                        ^ punctuation.definition.string.end.tcl
+#                                         ^ - string
+#                                          ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                                 ^ punctuation.terminator.command.tcl
+#                                                   ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    array names foo -glob "pa?[A-z]ttern" illegal; # comment
+#   ^^^^^ keyword.other.builtin.tcl
+#        ^ - keyword - variable
+#         ^^^^^ variable.function.tcl
+#              ^ - variable
+#               ^^^ variable.other.tcl
+#                  ^ - variable
+#                   ^^^^^ variable.parameter.tcl
 #                        ^ - variable - string
 #                         ^ punctuation.definition.string.begin.tcl
 #                         ^^^^^^^^^^^^^^^ string.quoted.double.tcl
-#                            ^ - constant.other.placeholder.tcl
-#                             ^^^^^ meta.substitution.tcl
+#                            ^ constant.other.placeholder.tcl
+#                             ^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
 #                                       ^ punctuation.definition.string.end.tcl
 #                                        ^ - string
 #                                         ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 #                                                ^ punctuation.terminator.command.tcl
 #                                                  ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
-    array names list_name -exact "pa?[A-z]ttern" illegal; # comment
+    array names foo -regexp "pa?[A-z]ttern" illegal; # comment
 #   ^^^^^ keyword.other.builtin.tcl
 #        ^ - keyword - variable
 #         ^^^^^ variable.function.tcl
 #              ^ - variable
-#               ^^^^^^^^^ variable.other.tcl
-#                        ^ - variable
-#                         ^^^^^^ variable.parameter.tcl
-#                               ^ - variable - string
-#                                ^ punctuation.definition.string.begin.tcl
-#                                ^^^^^^^^^^^^^^^ string.quoted.double.tcl
-#                                   ^ - constant.other.placeholder.tcl
-#                                    ^^^^^ meta.substitution.tcl
-#                                              ^ punctuation.definition.string.end.tcl
-#                                               ^ - string
-#                                                ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
-#                                                       ^ punctuation.terminator.command.tcl
-#                                                         ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+#               ^^^ variable.other.tcl
+#                  ^ - variable
+#                   ^^^^^^^ variable.parameter.tcl
+#                          ^ - variable - string
+#                           ^ punctuation.definition.string.begin.tcl
+#                           ^^^^^^^^^^^^^^^ string.quoted.double.tcl string.regexp.tcl
+#                              ^ - constant.other.placeholder.tcl
+#                               ^^^^^ meta.bracket.tcl
+#                                         ^ punctuation.definition.string.end.tcl
+#                                          ^ - string
+#                                           ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                                  ^ punctuation.terminator.command.tcl
+#                                                    ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
-    array names list_name -glob "pa?[A-z]ttern" illegal; # comment
+    array names foo -inval "pa?[A-z]ttern" illegal; # comment
 #   ^^^^^ keyword.other.builtin.tcl
 #        ^ - keyword - variable
 #         ^^^^^ variable.function.tcl
 #              ^ - variable
-#               ^^^^^^^^^ variable.other.tcl
-#                        ^ - variable
-#                         ^^^^^ variable.parameter.tcl
-#                              ^ - variable - string
-#                               ^ punctuation.definition.string.begin.tcl
-#                               ^^^^^^^^^^^^^^^ string.quoted.double.tcl
-#                                  ^ constant.other.placeholder.tcl
-#                                   ^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
-#                                             ^ punctuation.definition.string.end.tcl
-#                                              ^ - string
-#                                               ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
-#                                                      ^ punctuation.terminator.command.tcl
-#                                                        ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
-
-    array names list_name -regexp "pa?[A-z]ttern" illegal; # comment
-#   ^^^^^ keyword.other.builtin.tcl
-#        ^ - keyword - variable
-#         ^^^^^ variable.function.tcl
-#              ^ - variable
-#               ^^^^^^^^^ variable.other.tcl
-#                        ^ - variable
-#                         ^^^^^^^ variable.parameter.tcl
-#                                ^ - variable - string
-#                                 ^ punctuation.definition.string.begin.tcl
-#                                 ^^^^^^^^^^^^^^^ string.quoted.double.tcl string.regexp.tcl
-#                                    ^ - constant.other.placeholder.tcl
-#                                     ^^^^^ meta.bracket.tcl
-#                                               ^ punctuation.definition.string.end.tcl
-#                                                ^ - string
-#                                                 ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
-#                                                        ^ punctuation.terminator.command.tcl
-#                                                          ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
-
-    array names list_name -inval "pa?[A-z]ttern" illegal; # comment
-#   ^^^^^ keyword.other.builtin.tcl
-#        ^ - keyword - variable
-#         ^^^^^ variable.function.tcl
-#              ^ - variable
-#               ^^^^^^^^^ variable.other.tcl
-#                        ^ - variable
-#                         ^^^^^^ invalid.illegal.parameter.tcl
-#                               ^ - variable - string
-#                                ^ punctuation.definition.string.begin.tcl
-#                                ^^^^^^^^^^^^^^^ string.quoted.double.tcl
-#                                   ^ - constant.other.placeholder.tcl
-#                                    ^^^^^ meta.substitution.tcl
-#                                              ^ punctuation.definition.string.end.tcl
-#                                               ^ - string
-#                                                ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
-#                                                       ^ punctuation.terminator.command.tcl
-#                                                         ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+#               ^^^ variable.other.tcl
+#                  ^ - variable
+#                   ^^^^^^ invalid.illegal.parameter.tcl
+#                         ^ - variable - string
+#                          ^ punctuation.definition.string.begin.tcl
+#                          ^^^^^^^^^^^^^^^ string.quoted.double.tcl
+#                             ^ - constant.other.placeholder.tcl
+#                              ^^^^^ meta.substitution.tcl
+#                                        ^ punctuation.definition.string.end.tcl
+#                                         ^ - string
+#                                          ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                                 ^ punctuation.terminator.command.tcl
+#                                                   ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
     array\
 #   ^^^^^ keyword.other.builtin.tcl
@@ -972,9 +998,9 @@ set regexp {(.{0,200})}
     names\
 #   ^^^^^ variable.function.tcl
 #        ^ punctuation.separator.continuation.newline.tcl
-    list_name\
-#   ^^^^^^^^^ variable.other.tcl
-#            ^ punctuation.separator.continuation.newline.tcl
+    foo\
+#   ^^^ variable.other.tcl
+#      ^ punctuation.separator.continuation.newline.tcl
     -glob\
 #   ^^^^^ variable.parameter.tcl
 #        ^ punctuation.separator.continuation.newline.tcl
@@ -993,9 +1019,9 @@ set regexp {(.{0,200})}
     names \
 #   ^^^^^ variable.function.tcl
 #         ^ punctuation.separator.continuation.newline.tcl
-    list_name \
-#   ^^^^^^^^^ variable.other.tcl
-#             ^ punctuation.separator.continuation.newline.tcl
+    foo \
+#   ^^^ variable.other.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
     -glob \
 #   ^^^^^ variable.parameter.tcl
 #         ^ punctuation.separator.continuation.newline.tcl
@@ -1007,6 +1033,12 @@ set regexp {(.{0,200})}
 #       ^^^^^ meta.bracket.tcl constant.other.placeholder.tcl
 #                 ^ punctuation.definition.string.end.tcl
 #                  ^ - string
+
+    array unset foo "pa?[A-z]ttern"
+#                      ^^^^^^ constant.other.placeholder.tcl
+
+    array unset foo {pa?[A-z]ttern}
+#                      ^^^^^^ constant.other.placeholder.tcl
 
 ##############################################################################
 # coroutine tests
