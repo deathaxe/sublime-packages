@@ -1349,9 +1349,8 @@ set regexp {(.{0,200})}
 #                ^^^^^^^^ variable.parameter.tcl
 
 ##############################################################################
-# for loop tests
+# for statement
 ##############################################################################
-
 
     # for loop execution
     for {set a 10} {$a < 20} {incr a} {
@@ -1380,7 +1379,13 @@ set regexp {(.{0,200})}
 #                                     ^^ meta.block.tcl
 #
        puts "value of a: $a"
-    }
+    } illegal
+#   ^ meta.block.tcl punctuation.section.block.end.tcl
+#     ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+##############################################################################
+# foreach statement
+##############################################################################
 
 
     foreach i {

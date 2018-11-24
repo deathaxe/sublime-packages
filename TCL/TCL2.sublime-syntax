@@ -78,8 +78,11 @@ contexts:
     # flow control structures
     - include: flow-control
     - include: if
+    - include: for
+    - include: foreach
     - include: switch
     - include: try-trap
+    - include: while
     - include: proc
     - include: namespace
 
@@ -456,17 +459,6 @@ contexts:
       scope: keyword.control.flow.catch.tcl
       push: [cmd-generic-var, word-script-pop]
 
-    # loops
-    - match: for{{b}}
-      scope: keyword.control.flow.for.tcl
-      push: [word-script-pop, word-script-pop, word-expr-pop, word-script-pop]
-    - match: foreach{{b}}
-      scope: keyword.control.flow.foreach.tcl
-      push: [word-script-pop, word-expr-pop, cmd-generic-var]
-    - match: while{{b}}
-      scope: keyword.control.flow.while.tcl
-      push: [word-script-pop, word-expr-pop]
-
 ##[ IF THEN ELSEIF THEN ELSE ]################################################
 
   if:
@@ -498,6 +490,51 @@ contexts:
 
   if-meta:
     - meta_scope: meta.statement.conditional.tcl
+    - include: eoc-pop-or-illegal
+
+##[ FOR ]#####################################################################
+
+  for:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/for.htm
+    - match: for{{b}}
+      scope: keyword.control.flow.for.tcl
+      push:
+        - for-body-meta     # body meta scope
+        - word-script-pop   # body
+        - for-meta          # statement meta scope
+        - word-script-pop   # iterate
+        - word-expr-pop     # loop condition
+        - word-script-pop   # initialize
+
+  for-meta:
+    - clear_scopes: 1
+    - meta_scope: meta.statement.for.tcl
+    - include: any-pop
+
+  for-body-meta:
+    - meta_scope: meta.statement.for.body.tcl
+    - include: eoc-pop-or-illegal
+
+##[ FOREACH ]#################################################################
+
+  foreach:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/foreach.htm
+    - match: foreach{{b}}
+      scope: keyword.control.flow.foreach.tcl
+      push:
+        - foreach-body-meta
+        - word-script-pop
+        - foreach-meta
+        - word-expr-pop
+        - cmd-generic-var
+
+  foreach-meta:
+    - clear_scopes: 1
+    - meta_scope: meta.statement.foreach.tcl
+    - include: any-pop
+
+  foreach-body-meta:
+    - meta_scope: meta.statement.foreach.body.tcl
     - include: eoc-pop-or-illegal
 
 ##[ SWITCH ]##################################################################
@@ -669,6 +706,27 @@ contexts:
     - match: '{{word}}'
       scope: invalid.illegal.errorcode.tcl
       pop: true
+
+##[ WHILE ]###################################################################
+
+  while:
+    # https://www.tcl.tk/man/tcl8.6/TclCmd/while.htm
+    - match: while{{b}}
+      scope: keyword.control.flow.while.tcl
+      push:
+        - while-body-meta
+        - word-script-pop
+        - while-meta
+        - word-expr-pop
+
+  while-meta:
+    - clear_scopes: 1
+    - meta_scope: meta.statement.while.tcl
+    - include: any-pop
+
+  while-body-meta:
+    - meta_scope: meta.statement.while.body.tcl
+    - include: eoc-pop-or-illegal
 
 ##[ NAMESPACE ]###############################################################
 
