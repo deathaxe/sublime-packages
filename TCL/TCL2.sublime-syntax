@@ -546,23 +546,41 @@ contexts:
       push: [switch-meta, switch-options]
 
   switch-options:
+    - clear_scopes: 1
+    - meta_content_scope: meta.statement.switch.options.tcl
     - include: eoc-pop
     # exact match patterns
     - match: -exact{{b}}
       scope: variable.parameter.tcl
-      set: [switch-exact-patterns, word-string-pop, switch-options-remaining]
+      set:
+        - switch-exact-patterns
+        - word-string-pop
+        - switch-options-meta
+        - switch-options-remaining
     # string match patterns
     - match: -glob{{b}}
       scope: variable.parameter.tcl
-      set: [switch-glob-patterns, word-string-pop, switch-options-remaining]
+      set:
+        - switch-glob-patterns
+        - word-string-pop
+        - switch-options-meta
+        - switch-options-remaining
     # regexp match patterns
     - match: -regexp{{b}}
       scope: variable.parameter.tcl
-      set: [switch-regexp-patterns, word-string-pop, switch-options-remaining]
+      set:
+        - switch-regexp-patterns
+        - word-string-pop
+        - switch-options-meta
+        - switch-options-remaining
     # end of options
     - include: switch-options-common
     - match: (?=\S)
-      set: [switch-exact-patterns, word-string-pop, cmd-maybe-switches-end]
+      set:
+        - switch-exact-patterns
+        - word-string-pop
+        - switch-options-meta
+        - cmd-maybe-switches-end
 
   switch-options-remaining:
     - include: switch-options-common
@@ -575,13 +593,19 @@ contexts:
     - match: -nocase{{b}}
       scope: variable.parameter.tcl
 
+  switch-options-meta:
+    - clear_scopes: 1
+    - meta_content_scope: meta.statement.switch.options.tcl
+    - include: any-pop
+
   switch-exact-patterns:
     - include: eoc-pop
     # braced list of <pattern> <body> pairs
     - match: \{
       scope: punctuation.section.list.begin.tcl
       set:
-        - meta_scope: meta.list.tcl
+        - clear_scopes: 1
+        - meta_scope: meta.statement.switch.body.tcl meta.list.tcl
         - match: \}
           scope: punctuation.section.list.end.tcl
           pop: true
@@ -590,13 +614,15 @@ contexts:
     # word list of <pattern> <body> pairs
     - match: (?=\S)
       set:
+        - clear_scopes: 1
+        - meta_scope: meta.statement.switch.body.tcl
         - include: eoc-pop
         - include: switch-exact-pattern
 
   switch-exact-pattern:
     - include: switch-default-pattern
     - match: (?=\S)
-      push: [switch-body, word-string-pop]
+      push: [switch-branch-body, word-string-pop]
 
   switch-glob-patterns:
     - include: eoc-pop
@@ -604,7 +630,8 @@ contexts:
     - match: \{
       scope: punctuation.section.list.begin.tcl
       set:
-        - meta_scope: meta.list.tcl
+        - clear_scopes: 1
+        - meta_scope: meta.statement.switch.body.tcl meta.list.tcl
         - match: \}
           scope: punctuation.section.list.end.tcl
           pop: true
@@ -613,13 +640,15 @@ contexts:
     # word list of <pattern> <body> pairs
     - match: (?=\S)
       set:
+        - clear_scopes: 1
+        - meta_scope: meta.statement.switch.body.tcl
         - include: eoc-pop
         - include: switch-glob-pattern
 
   switch-glob-pattern:
     - include: switch-default-pattern
     - match: (?=\S)
-      push: [switch-body, word-glob-pop]
+      push: [switch-branch-body, word-glob-pop]
 
   switch-regexp-patterns:
     - include: eoc-pop
@@ -627,7 +656,8 @@ contexts:
     - match: \{
       scope: punctuation.section.list.begin.tcl
       set:
-        - meta_scope: meta.list.tcl
+        - clear_scopes: 1
+        - meta_scope: meta.statement.switch.body.tcl meta.list.tcl
         - match: \}
           scope: punctuation.section.list.end.tcl
           pop: true
@@ -636,21 +666,23 @@ contexts:
     # word list of <pattern> <body> pairs
     - match: (?=\S)
       set:
+        - clear_scopes: 1
+        - meta_scope: meta.statement.switch.body.tcl
         - include: eoc-pop
         - include: switch-regexp-pattern
 
   switch-regexp-pattern:
     - include: switch-default-pattern
     - match: (?=\S)
-      push: [switch-body, word-regexp-pop]
+      push: [switch-branch-body, word-regexp-pop]
 
   switch-default-pattern:
     # A special string value, which is used to capture all unmatched results.
     - match: default{{b}}
       scope: keyword.control.flow.default.tcl
-      push: switch-body
+      push: switch-branch-body
 
-  switch-body:
+  switch-branch-body:
     # If a body is specified as “-” it means that the body for the next pattern
     # should also be used as the body for this pattern.
     - match: \-

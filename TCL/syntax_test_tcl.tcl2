@@ -2475,12 +2475,19 @@ set regexp {(.{0,200})}
 #           ^^^^^^ keyword.control.flow.switch.tcl
 
     switch $var; switch
+#   ^^^^^^ meta.statement.switch.tcl
+#         ^ meta.statement.switch.options.tcl
+#          ^^^^ meta.statement.switch.tcl
 #   ^^^^^^ keyword.control.flow.switch.tcl
 #          ^^^^ variable.other.tcl
 #              ^ punctuation.terminator.command.tcl
 #                ^^^^^^ keyword.control.flow.switch.tcl
 
     switch $var match $body default $body
+#   ^^^^^^ meta.statement.switch.tcl
+#         ^ meta.statement.switch.options.tcl
+#          ^^^^^ meta.statement.switch.tcl
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.switch.body.tcl
 #   ^^^^^^ keyword.control.flow.switch.tcl
 #          ^^^^ variable.other.tcl
 #               ^^^^^ string.unquoted.tcl
@@ -2580,7 +2587,7 @@ set regexp {(.{0,200})}
 #              ^ punctuation.section.block.begin.tcl
             puts $var
 #<- meta.list.tcl meta.block.tcl
-#           ^^^^ meta.statement.switch.tcl meta.list.tcl meta.block.tcl support.function.builtin.tcl
+#           ^^^^ meta.list.tcl meta.block.tcl support.function.builtin.tcl
         }
 #<- meta.list.tcl meta.block.tcl
 #       ^ meta.list.tcl meta.block.tcl punctuation.section.block.end.tcl
