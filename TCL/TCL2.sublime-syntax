@@ -380,25 +380,22 @@ contexts:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/string.htm
     - match: string{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-generic-end, cmd-generic-args, cmd-string-args]
+      push: [cmd-string-end, cmd-string-args, cmd-string-funcs]
 
-  cmd-string-args:
+  cmd-string-funcs:
     - match: is{{b}}
-      scope: variable.function.string.tcl
-      set: [cmd-string-is-args, eow-pop]
+      scope: variable.function.tcl
+      set: cmd-string-is-args
     - match: match{{b}}
-      scope: variable.function.string.tcl
-      set:
-        - word-glob-pop
-        - cmd-string-match-switches
-        - eow-pop
+      scope: variable.function.tcl
+      set: [word-glob-pop, cmd-string-match-switches]
     - match: |-
         (?x:
           cat|compare|equal|first|index|last|length|map|range|repeat|
           replace|reverse|tolower|totitle|toupper|trim|trimleft|trimright|
           bytelength|wordend|wordstart
         ){{b}}
-      scope: variable.function.string.tcl
+      scope: variable.function.tcl
       pop: true
     - include: else-pop
 
@@ -418,6 +415,15 @@ contexts:
       scope: variable.parameter.tcl
       set: cmd-maybe-switches-end
     - include: cmd-maybe-switches-end
+
+  cmd-string-args:
+    - match: \bend\b
+      scope: variable.language.string.end.tcl
+    - include: cmd-generic-args
+
+  cmd-string-end:
+    - meta_scope: meta.string.tcl
+    - include: cmd-generic-end
 
 ##[ FLOW CONTROL ]############################################################
 

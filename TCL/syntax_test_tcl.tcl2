@@ -2258,21 +2258,31 @@ set regexp {(.{0,200})}
 # string commands
 ##############################################################################
 
+    string
+#   ^^^^^^ keyword.other.builtin.tcl
+
+    string ;string;#comment
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^ punctuation.terminator.command.tcl
+#           ^^^^^^ keyword.other.builtin.tcl
+#                 ^ punctuation.terminator.command.tcl
+#                  ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
     string compare $str1 $str2; string last $str3
 #   ^^^^^^ keyword.other.builtin.tcl
-#          ^^^^^^^ variable.function.string.tcl
+#          ^^^^^^^ variable.function.tcl
 #                  ^^^^^ variable.other.tcl
 #                        ^^^^^ variable.other.tcl
 #                             ^ punctuation.terminator.command.tcl
 #                               ^^^^^^ keyword.other.builtin.tcl
-#                                      ^^^^ variable.function.string.tcl
+#                                      ^^^^ variable.function.tcl
 #                                           ^^^^^ variable.other.tcl
 
     string\
 #   ^^^^^^ keyword.other.builtin.tcl
 #         ^ punctuation.separator.continuation.newline.tcl
     compare\
-#   ^^^^^^^ variable.function.string.tcl
+#   ^^^^^^^ variable.function.tcl
 #          ^ punctuation.separator.continuation.newline.tcl
     $str1\
 #   ^^^^^ variable.other.tcl
@@ -2284,7 +2294,7 @@ set regexp {(.{0,200})}
 #   ^^^^^^ keyword.other.builtin.tcl
 #          ^ punctuation.separator.continuation.newline.tcl
     compare \
-#   ^^^^^^^ variable.function.string.tcl
+#   ^^^^^^^ variable.function.tcl
 #           ^ punctuation.separator.continuation.newline.tcl
     $str1 \
 #   ^^^^^ variable.other.tcl
@@ -2294,24 +2304,42 @@ set regexp {(.{0,200})}
 
     string is ascii "my ascii"
 #   ^^^^^^ keyword.other.builtin.tcl
-#          ^^ variable.function.string.tcl
+#          ^^ variable.function.tcl
 #             ^^^^^ storage.type.tcl
+#                   ^^^^^^^^^^ string.quoted.double.tcl
+
+    string\
+#   ^^^^^^ keyword.other.builtin.tcl
+#         ^ punctuation.separator.continuation.newline.tcl
+    is\
+#   ^^ variable.function.tcl
+#     ^ punctuation.separator.continuation.newline.tcl
+    ascii\
+#   ^^^^^ storage.type.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    "my ascii"
+#   ^^^^^^^^^^ string.quoted.double.tcl
+
+    string is $type "my ascii"
+#   ^^^^^^ keyword.other.builtin.tcl
+#          ^^ variable.function.tcl
+#             ^^^^^ variable.other.tcl
 #                   ^^^^^^^^^^ string.quoted.double.tcl
 
     string is inval "my ascii"
 #   ^^^^^^ keyword.other.builtin.tcl
-#          ^^ variable.function.string.tcl
+#          ^^ variable.function.tcl
 #             ^^^^^ - storage.type.tcl
 #                   ^^^^^^^^^^ string.quoted.double.tcl
 
     string inval $str
 #   ^^^^^^ keyword.other.builtin.tcl
-#          ^^^^^ - variable.function.string.tcl
+#          ^^^^^ - variable.function.tcl
 #                ^^^^ variable.other.tcl
 
     string match "patt[-[\]_A-z]r?n" $str
 #   ^^^^^^ keyword.other.builtin.tcl
-#          ^^^^^ variable.function.string.tcl
+#          ^^^^^ variable.function.tcl
 #                ^ punctuation.definition.string.begin.tcl
 #                ^^^^^^^^^^^^^^^^^^^ string.quoted.double.tcl
 #                     ^ punctuation.section.bracket.begin.tcl
@@ -2329,7 +2357,7 @@ set regexp {(.{0,200})}
 #         ^ punctuation.separator.continuation.newline.tcl
     match\
 #  ^ - variable.function
-#   ^^^^^ variable.function.string.tcl
+#   ^^^^^ variable.function.tcl
 #        ^ punctuation.separator.continuation.newline.tcl
     -nocase\
 #   ^^^^^^^ variable.parameter.tcl
@@ -2351,7 +2379,7 @@ set regexp {(.{0,200})}
 #          ^ punctuation.separator.continuation.newline.tcl
     match \
 #  ^ - variable.function
-#   ^^^^^ variable.function.string.tcl
+#   ^^^^^ variable.function.tcl
 #        ^ - variable.function
 #         ^ punctuation.separator.continuation.newline.tcl
     -nocase \
@@ -2379,7 +2407,7 @@ set regexp {(.{0,200})}
 
     string match -nocase {p\?a\*t\[t\][_A-z]*r?n} $str
 #   ^^^^^^ keyword.other.builtin.tcl
-#          ^^^^^ variable.function.string.tcl
+#          ^^^^^ variable.function.tcl
 #                ^^^^^^^ variable.parameter.tcl
 #                        ^ punctuation.section.braces.begin.tcl
 #                        ^^^^^^^^^^^^^^^^^^^^^^^^ meta.braces.tcl string.quoted.brace.tcl
@@ -2395,10 +2423,20 @@ set regexp {(.{0,200})}
 
     string match -invalid {pattern} $str
 #   ^^^^^^ keyword.other.builtin.tcl
-#          ^^^^^ variable.function.string.tcl
+#          ^^^^^ variable.function.tcl
 #                ^^^^^^^^ invalid.illegal.parameter.tcl
 #                         ^^^^^^^^^ meta.braces.tcl string.quoted.brace.tcl
 #                                   ^^^^ variable.other.tcl
+
+    string wordstart "string" 4+2
+#                             ^ constant.numeric.integer.tcl
+#                              ^ keyword.operator.arithmetic.tcl
+#                               ^ constant.numeric.integer.tcl
+
+    string wordstart "string" end-2
+#                             ^^^ variable.language.string.end.tcl
+#                                ^ keyword.operator.arithmetic.tcl
+#                                 ^ constant.numeric.integer.tcl
 
 ##############################################################################
 # switch commands
