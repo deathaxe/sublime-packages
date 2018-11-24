@@ -11,8 +11,8 @@ scope: source.tcl
 variables:
   end_char:   '[\s;\)\]\}]|\\$'
   b:          '(?=[\s;\)\]\}]|\\$)'
-  ident:       '[_A-Za-z][_0-9A-Za-z]*'
-  illegal:    '[^\s;\)\]\}\\]+'
+  ident:      '[_A-Za-z][_0-9A-Za-z]*'
+  word:       '[^\s;\)\]\}\\]+'
 
   # https://www.tutorialspoint.com/tcl-tk/tcl_special_variables.htm
   variables: |-
@@ -167,7 +167,7 @@ contexts:
     - match: -regexp{{b}}
       scope: variable.parameter.tcl
       set: word-regexp-pop
-    - match: '-{{illegal}}'
+    - match: '-{{word}}'
       scope: invalid.illegal.parameter.tcl
       set: word-string-pop
     - match: (?=\S)
@@ -347,7 +347,7 @@ contexts:
 
   cmd-regexp-matches:
     - include: words
-    - match: '{{illegal}}'
+    - match: '{{word}}'
       scope: variable.other.tcl
     - include: eoc-pop
 
@@ -637,7 +637,7 @@ contexts:
       set: eow-pop
     - include: words
     - include: eow-pop
-    - match: '{{illegal}}'
+    - match: '{{word}}'
       scope: invalid.illegal.errorcode.tcl
       pop: true
 
@@ -822,7 +822,7 @@ contexts:
     - include: cmd-generic-end
 
   cmd-invalid-switch:
-    - match: -{{illegal}}
+    - match: -{{word}}
       scope: invalid.illegal.parameter.tcl
 
   cmd-maybe-switches-end:
@@ -1281,7 +1281,7 @@ contexts:
 
   eol-pop-or-illegal:
     - include: eol-pop
-    - match: '{{illegal}}'
+    - match: '{{word}}'
       scope: invalid.illegal.end-of-line-expected.tcl
 
   eow-pop:
@@ -1301,7 +1301,7 @@ contexts:
 
   eow-pop-or-illegal:
     - include: eow-pop
-    - match: '{{illegal}}'
+    - match: '{{word}}'
       scope: invalid.illegal.end-of-word-expected.tcl
 
   eoc-pop:
@@ -1314,5 +1314,5 @@ contexts:
 
   eoc-pop-or-illegal:
     - include: eoc-pop
-    - match: '{{illegal}}'
+    - match: '{{word}}'
       scope: invalid.illegal.end-of-cmd-expected.tcl
