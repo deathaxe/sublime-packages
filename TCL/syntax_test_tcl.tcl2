@@ -1409,7 +1409,7 @@ set regexp {(.{0,200})}
 # if-else tests
 ##############################################################################
 
-    if true {} elseif false {} {}
+    if true {} elseif false {} {} illegal
 #   ^^ keyword.control.flow.if.tcl
 #      ^^^^ constant.language.tcl
 #           ^ meta.block.tcl punctuation.section.block.begin.tcl
@@ -1420,8 +1420,9 @@ set regexp {(.{0,200})}
 #                            ^ meta.block.tcl punctuation.section.block.end.tcl
 #                              ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                               ^ meta.block.tcl punctuation.section.block.end.tcl
+#                                 ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 
-    if true then {} elseif false then {} else {} ; if false {cmd arg}
+    if true then {} elseif false then {} else {} illegal; if false {cmd arg}
 #   ^^ keyword.control.flow.if.tcl
 #      ^^^^ constant.language.tcl
 #           ^^^^ keyword.control.flow.then.tcl
@@ -1435,12 +1436,13 @@ set regexp {(.{0,200})}
 #                                        ^^^^ keyword.control.flow.else.tcl
 #                                             ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                                              ^ meta.block.tcl punctuation.section.block.end.tcl
-#                                                ^ punctuation.terminator.command.tcl
-#                                                  ^^ keyword.control.flow.if.tcl
-#                                                     ^^^^^ constant.language.tcl
-#                                                           ^ punctuation.section.block.begin.tcl
-#                                                           ^^^^^^^^^ meta.block.tcl
-#                                                                   ^ punctuation.section.block.end.tcl
+#                                                ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                                                       ^ punctuation.terminator.command.tcl
+#                                                         ^^ keyword.control.flow.if.tcl
+#                                                            ^^^^^ constant.language.tcl
+#                                                                  ^ punctuation.section.block.begin.tcl
+#                                                                  ^^^^^^^^^ meta.block.tcl
+#                                                                          ^ punctuation.section.block.end.tcl
 
 # check line continuation as word break without preceding whitespace
     if\
