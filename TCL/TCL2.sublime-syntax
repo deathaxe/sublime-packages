@@ -330,7 +330,7 @@ contexts:
     - match: regsub{{b}}
       scope: support.function.builtin.tcl
       push:
-        - eoc-pop-or-illegal     # must be end of command
+        - cmd-regsub-end         # must be end of command
         - cmd-generic-var        # varname
         - word-regexp-pop        # substitution
         - word-string-pop        # string
@@ -346,10 +346,15 @@ contexts:
     - include: cmd-maybe-switches-end
 
   cmd-regexp-matches:
+    - meta_scope: meta.function-call.tcl
     - include: words
     - match: '{{word}}'
       scope: variable.other.tcl
     - include: eoc-pop
+
+  cmd-regsub-end:
+    - meta_scope: meta.function-call.tcl
+    - include: eoc-pop-or-illegal
 
 ##[ SET COMMAND ]#############################################################
 
