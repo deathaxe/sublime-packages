@@ -1409,7 +1409,7 @@ set regexp {(.{0,200})}
 # if-else tests
 ##############################################################################
 
-    if true {} elseif false {} else {} ; if false {cmd arg}
+    if true {} elseif false {} {}
 #   ^^ keyword.control.flow.if.tcl
 #      ^^^^ constant.language.tcl
 #           ^ meta.block.tcl punctuation.section.block.begin.tcl
@@ -1418,15 +1418,29 @@ set regexp {(.{0,200})}
 #                     ^^^^^ constant.language.tcl
 #                           ^ meta.block.tcl punctuation.section.block.begin.tcl
 #                            ^ meta.block.tcl punctuation.section.block.end.tcl
-#                              ^^^^ keyword.control.flow.else.tcl
-#                                   ^ meta.block.tcl punctuation.section.block.begin.tcl
-#                                    ^ meta.block.tcl punctuation.section.block.end.tcl
-#                                      ^ punctuation.terminator.command.tcl
-#                                        ^^ keyword.control.flow.if.tcl
-#                                           ^^^^^ constant.language.tcl
-#                                                 ^ punctuation.section.block.begin.tcl
-#                                                 ^^^^^^^^^ meta.block.tcl
-#                                                         ^ punctuation.section.block.end.tcl
+#                              ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                               ^ meta.block.tcl punctuation.section.block.end.tcl
+
+    if true then {} elseif false then {} else {} ; if false {cmd arg}
+#   ^^ keyword.control.flow.if.tcl
+#      ^^^^ constant.language.tcl
+#           ^^^^ keyword.control.flow.then.tcl
+#                ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                 ^ meta.block.tcl punctuation.section.block.end.tcl
+#                   ^^^^^^ keyword.control.flow.elseif.tcl
+#                          ^^^^^ constant.language.tcl
+#                                ^^^^ keyword.control.flow.then.tcl
+#                                     ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                                      ^ meta.block.tcl punctuation.section.block.end.tcl
+#                                        ^^^^ keyword.control.flow.else.tcl
+#                                             ^ meta.block.tcl punctuation.section.block.begin.tcl
+#                                              ^ meta.block.tcl punctuation.section.block.end.tcl
+#                                                ^ punctuation.terminator.command.tcl
+#                                                  ^^ keyword.control.flow.if.tcl
+#                                                     ^^^^^ constant.language.tcl
+#                                                           ^ punctuation.section.block.begin.tcl
+#                                                           ^^^^^^^^^ meta.block.tcl
+#                                                                   ^ punctuation.section.block.end.tcl
 
 # check line continuation as word break without preceding whitespace
     if\
@@ -1434,6 +1448,9 @@ set regexp {(.{0,200})}
 #     ^ punctuation.separator.continuation.newline.tcl
     true\
 #   ^^^^ constant.language.tcl
+#       ^ punctuation.separator.continuation.newline.tcl
+    then\
+#   ^^^^ keyword.control.flow.then.tcl
 #       ^ punctuation.separator.continuation.newline.tcl
     {cmd arg arg}\
 #   ^ punctuation.section.block.begin.tcl
