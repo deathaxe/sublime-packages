@@ -113,7 +113,7 @@ contexts:
 
   cmd-after-meta:
     - meta_scope: meta.after.tcl
-    - include: any-pop
+    - include: immediately-pop
 
 ##[ ARRAY COMMANDS ]##########################################################
 
@@ -198,7 +198,7 @@ contexts:
 
   cmd-coroutine-name-meta:
     - meta_content_scope: meta.coroutine.name.tcl
-    - include: any-pop
+    - include: immediately-pop
 
   cmd-coroutine-script:
     - match: ''
@@ -518,7 +518,7 @@ contexts:
   for-meta:
     - clear_scopes: 1
     - meta_scope: meta.statement.for.tcl
-    - include: any-pop
+    - include: immediately-pop
 
   for-body-meta:
     - meta_scope: meta.statement.for.body.tcl
@@ -640,7 +640,7 @@ contexts:
   switch-options-meta:
     - clear_scopes: 1
     - meta_content_scope: meta.statement.switch.options.tcl
-    - include: any-pop
+    - include: immediately-pop
 
   switch-exact-patterns:
     - include: eoc-pop
@@ -798,7 +798,7 @@ contexts:
   while-meta:
     - clear_scopes: 1
     - meta_scope: meta.statement.while.tcl
-    - include: any-pop
+    - include: immediately-pop
 
   while-body-meta:
     - meta_scope: meta.statement.while.body.tcl
@@ -826,7 +826,7 @@ contexts:
         ){{b}}
       scope: variable.function.tcl
       pop: true
-    - include: any-pop
+    - include: immediately-pop
 
   namespace-name:
     - match: '{{ident}}{{b}}'
@@ -1344,7 +1344,7 @@ contexts:
 
   variable-simple-end:
     - meta_scope: variable.other.tcl
-    - include: any-pop
+    - include: immediately-pop
 
   variable-braced-name:
     - include: namespace-accessor
@@ -1449,7 +1449,7 @@ contexts:
 
 ##[ CONTEXT POP OFFS ]########################################################
 
-  any-pop:
+  immediately-pop:
     - match: ''
       pop: true
 
