@@ -706,6 +706,7 @@ set regexp {(.{0,200})}
 ##############################################################################
 
     break invalid ; # comment
+#   ^^^^^^^^^^^^^^ meta.statement.flow.break.tcl
 #   ^^^^^ keyword.control.flow.break.tcl
 #        ^ - keyword - invalid
 #         ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
@@ -714,6 +715,7 @@ set regexp {(.{0,200})}
 #                   ^ comment.line.double-dash.tcl
 
     break-me
+#   ^^^^^^^^^ - meta.statement.flow.break.tcl
 #   ^^^^^ - keyword.control.flow
 
     break[incr x]
@@ -723,6 +725,7 @@ set regexp {(.{0,200})}
 #   ^^^^^ - keyword.control.flow
 
     continue "test";# comment
+#   ^^^^^^^^^^^^^^^ meta.statement.flow.continue.tcl
 #   ^^^^^^^^ keyword.control.flow.continue.tcl
 #           ^ - keyword - invalid
 #            ^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
@@ -738,9 +741,45 @@ set regexp {(.{0,200})}
     continue(2)
 #   ^^^^^^^^ - keyword.control.flow
 
-    exit
+    error;error
+#   ^^^^^ meta.statement.flow.error.tcl keyword.control.flow.error.tcl
+#        ^ punctuation.terminator.command.tcl - meta.statement.flow.error.tcl
+#         ^^^^^ meta.statement.flow.error.tcl keyword.control.flow.error.tcl
+
+    error error error
+#   ^^^^^^^^^^^^^^^^^^ meta.statement.flow.error.tcl
+#   ^^^^^ keyword.control.flow.error.tcl
+#         ^^^^^ string.unquoted.tcl
+#               ^^^^^ constant.language.errorcode.tcl
+
+    error error $info error
+#   ^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.flow.error.tcl
+#   ^^^^^ keyword.control.flow.error.tcl
+#         ^^^^^ string.unquoted.tcl
+#               ^^^^^ variable.other.tcl
+#                     ^^^^^ constant.language.errorcode.tcl
+
+    exit;exit
+#   ^^^^ meta.statement.flow.exit.tcl keyword.control.flow.exit.tcl
+#       ^ punctuation.terminator.command.tcl
+#        ^^^^ meta.statement.flow.exit.tcl keyword.control.flow.exit.tcl
+
+    exit 0 invalid ; # comment
+#   ^^^^^^^^^^^^^^^ meta.statement.flow.exit.tcl
+#   ^^^^ keyword.control.flow.exit.tcl
+#        ^ constant.numeric.integer.tcl
+#          ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+#                 ^ - invalid
+#                  ^ punctuation.terminator.command.tcl
+#                    ^ comment.line.double-dash.tcl
+    exit [incr error]
+#   ^^^^^^^^^^^^^^^^^^ meta.statement.flow.exit.tcl
+#   ^^^^ keyword.control.flow.exit.tcl
+#        ^^^^^^^^^^^^ meta.substitution.tcl
+
 
     return
+#   ^^^^^^^ meta.statement.flow.return.tcl
 #  ^ - keyword
 #   ^^^^^^ keyword.control.flow.return.tcl
 #         ^ - keyword
@@ -751,12 +790,21 @@ set regexp {(.{0,200})}
 #   ^^^^^^^^^ - keyword.control.flow
 
     return 1
+#   ^^^^^^^^^ meta.statement.flow.return.tcl
 #  ^ - keyword
 #   ^^^^^^ keyword.control.flow.return.tcl
 #         ^ - keyword
 #          ^ constant.numeric.integer.tcl
 
+    return break
+#   ^^^^^^^^^^^^^ meta.statement.flow.return.tcl
+#  ^ - keyword
+#   ^^^^^^ keyword.control.flow.return.tcl
+#         ^ - keyword
+#          ^^^^^ constant.language.errorcode.tcl
+
     return -code $code $factor
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.flow.return.tcl
 #  ^ - keyword
 #   ^^^^^^ keyword.control.flow.return.tcl
 #         ^ - keyword
@@ -765,13 +813,35 @@ set regexp {(.{0,200})}
 #                      ^^^^^^^ variable.other.tcl
 
     return -code error \
+#   ^^^^^^^^^^^^^^^^^^^^^ meta.statement.flow.return.tcl
 #  ^ - keyword
 #   ^^^^^^ keyword.control.flow.return.tcl
 #         ^ - keyword
 #          ^^^^^ variable.parameter.tcl
 #                ^^^^^ constant.language.errorcode.tcl
         "overflow computing factorial of $n"
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.flow.return.tcl
 #       ^ string.quoted.double.tcl punctuation.definition.string.begin.tcl
+
+    throw {ARITH DIVZERO {divide by zero}} {divide by zero} illegal
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.flow.throw.tcl
+#   ^^^^^ keyword.control.flow.throw.tcl
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.braces.tcl
+#                                          ^^^^^^^^^^^^^^^^ meta.braces.tcl string.quoted.brace.tcl
+#                                                           ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+    yield $value illegal
+#   ^^^^^^^^^^^^^^^^^^^^^ meta.statement.flow.yield.tcl
+#   ^^^^^ keyword.control.flow.yield.tcl
+#         ^^^^^^ variable.other.tcl
+#                ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+    yieldto cmd $value illegal
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.flow.yieldto.tcl
+#   ^^^^^^^ keyword.control.flow.yieldto.tcl
+#           ^^^ string.unquoted.tcl
+#               ^^^^^^ variable.other.tcl
+#                      ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 
 ##############################################################################
 # after commands

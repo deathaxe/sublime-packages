@@ -26,7 +26,7 @@ variables:
     ){{b}}
 
   keywords: |-
-    (?x:list|load|next|nextto|uplevel|yield|yieldto|unload|unset|
+    (?x:list|load|next|nextto|uplevel|unload|unset|
     ){{b}}
 
   builtin_funcs: |-
@@ -73,7 +73,7 @@ contexts:
     - include: cmd-set
 
     # flow control structures
-    - include: flow-control
+    - include: stmt-flow
     - include: if
     - include: for
     - include: foreach
@@ -440,33 +440,85 @@ contexts:
 
 ##[ FLOW CONTROL ]############################################################
 
-  errorcode-pop:
-    - include: cmd-generic-args
-    - include: errorcodes
-
-  flow-control:
-    # flow
+  stmt-flow:
+    # break
     - match: break{{b}}
       scope: keyword.control.flow.break.tcl
-      push: eoc-pop-or-illegal
-    - match: continue{{b}}
-      scope: keyword.control.flow.continue.tcl
-      push: eoc-pop-or-illegal
-    - match: error{{b}}
-      scope: keyword.control.flow.error.tcl
-      push: [cmd-generic-end, errorcode-pop]
-    - match: exit{{b}}
-      scope: keyword.control.flow.exit.tcl
-      push: eoc-pop-or-illegal
-    - match: return{{b}}
-      scope: keyword.control.flow.return.tcl
-      push: [cmd-generic-end, errorcode-pop]
-    - match: throw{{b}}
-      scope: keyword.control.flow.throw.tcl
-      push: cmd-generic-end
+      push: stmt-break-meta
+    # catch expr var
     - match: catch{{b}}
       scope: keyword.control.flow.catch.tcl
-      push: [cmd-generic-var, word-script-pop]
+      push: [stmt-catch-meta, cmd-generic-var, word-script-pop]
+    # continue
+    - match: continue{{b}}
+      scope: keyword.control.flow.continue.tcl
+      push: stmt-continue-meta
+    # error message ?info? ?code?
+    - match: error{{b}}
+      scope: keyword.control.flow.error.tcl
+      push: [stmt-error-meta, word-string-pop]
+    # exit errorcode
+    - match: exit{{b}}
+      scope: keyword.control.flow.exit.tcl
+      push: [stmt-exit-meta, word-any-pop]
+    # return ?option value ...? ?result?
+    - match: return{{b}}
+      scope: keyword.control.flow.return.tcl
+      push: [stmt-return-meta, stmt-return-args]
+    # throw type message
+    - match: throw{{b}}
+      scope: keyword.control.flow.throw.tcl
+      push: [stmt-throw-meta, word-string-pop, word-list-pop]
+    # yield ?value?
+    - match: yield{{b}}
+      scope: keyword.control.flow.yield.tcl
+      push: [stmt-yield-meta, word-any-pop]
+    # yieldto command ?arg...?
+    # yieldto name ?value...?
+    - match: yieldto{{b}}
+      scope: keyword.control.flow.yieldto.tcl
+      push: [stmt-yieldto-meta, word-any-pop, word-string-pop]
+
+  stmt-break-meta:
+    - meta_scope: meta.statement.flow.break.tcl
+    - include: eoc-pop-or-illegal
+
+  stmt-catch-meta:
+    - meta_scope: meta.statement.flow.catch.tcl
+    - include: eoc-pop-or-illegal
+
+  stmt-continue-meta:
+    - meta_scope: meta.statement.flow.continue.tcl
+    - include: eoc-pop-or-illegal
+
+  stmt-error-meta:
+    - meta_scope: meta.statement.flow.error.tcl
+    - include: errorcodes
+    - include: cmd-generic-end
+
+  stmt-exit-meta:
+    - meta_scope: meta.statement.flow.exit.tcl
+    - include: eoc-pop-or-illegal
+
+  stmt-return-args:
+    - include: errorcodes
+    - include: cmd-generic-args
+
+  stmt-return-meta:
+    - meta_scope: meta.statement.flow.return.tcl
+    - include: cmd-generic-end
+
+  stmt-throw-meta:
+    - meta_scope: meta.statement.flow.throw.tcl
+    - include: eoc-pop-or-illegal
+
+  stmt-yield-meta:
+    - meta_scope: meta.statement.flow.yield.tcl
+    - include: eoc-pop-or-illegal
+
+  stmt-yieldto-meta:
+    - meta_scope: meta.statement.flow.yieldto.tcl
+    - include: eoc-pop-or-illegal
 
 ##[ IF THEN ELSEIF THEN ELSE ]################################################
 
