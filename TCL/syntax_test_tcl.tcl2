@@ -1779,6 +1779,15 @@ set regexp {(.{0,200})}
 #                                           ^^^^^^^^^ meta.braces.tcl
 #                                                   ^ punctuation.section.braces.end.tcl
 
+    lrange [split $res ","] 0 end-1
+#   ^^^^^^ meta.function-call.tcl support.function.builtin.tcl
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function-call.parameters.tcl
+#          ^^^^^^^^^^^^^^^^ meta.substitution.tcl
+#                           ^ constant.numeric.integer.tcl
+#                             ^^^ variable.language.list.end.tcl
+#                                ^ keyword.operator.arithmetic.tcl
+#                                 ^ constant.numeric.integer.tcl
+
 ##############################################################################
 # namespace tests
 ##############################################################################

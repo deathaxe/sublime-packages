@@ -36,9 +36,6 @@ variables:
       http|info|interp|join|library|memory|msgcat|open|package|pid|pkg::create|
       pkg_mkIndex|puts|pwd|read|registry|rename|resource|scan|seek|socket|source|
       split|subst|tailcall|tcltest|tclvars|tell|time|trace|unknown|update|vwait|zlib|
-      # list manipulation commands
-      lappend|lassign|lindex|linsert|llength|lmap|lrange|lrepeat|
-      lreplace|lreverse|lsearch|lset|lsort|
       # https://www.tcl.tk/man/tcl8.6/TclCmd/library.htm#M5
       auto_execok|auto_import|auto_load|auto_mkindex|auto_qualify|auto_reset|
       parray|tcl_endOfWord|tcl_findLibrary|tcl_startOfNextWord|
@@ -326,11 +323,23 @@ contexts:
     - match: list{{b}}
       scope: keyword.other.builtin.tcl
       push: cmd-list-body
+    - match: |-
+        (?x:
+          lappend|lassign|lindex|linsert|llength|lmap|lrange|lrepeat|
+          lreplace|lreverse|lsearch|lset|lsort|
+        ){{b}}
+      scope: meta.function-call.tcl support.function.builtin.tcl
+      push: [cmd-function-end, cmd-list-function-args]
 
   cmd-list-body:
     - meta_scope: meta.list.tcl
     - include: eoc-pop
     - include: list-body
+
+  cmd-list-function-args:
+    - match: \bend\b
+      scope: variable.language.list.end.tcl
+    - include: cmd-generic-args
 
 ##[ REGEXP COMMANDS ]#########################################################
 
