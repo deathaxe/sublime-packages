@@ -1385,19 +1385,159 @@ set regexp {(.{0,200})}
 
 ##############################################################################
 # foreach statement
+#
+# SYNOPSIS
+#   foreach varlist1 list1 ?varlist2 list2 ...? body
 ##############################################################################
 
+    foreach
+#   ^^^^^^^ keyword.control.flow.foreach.tcl
+    foreach;foreach;#comment
+#   ^^^^^^^ keyword.control.flow.foreach.tcl
+#          ^ punctuation.terminator.command.tcl
+#           ^^^^^^^ keyword.control.flow.foreach.tcl
+#                  ^ punctuation.terminator.command.tcl
+#                   ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    foreach i $list {puts $i};#comment
+#   ^^^^^^^^^^^^^^^^ meta.statement.foreach.tcl
+#                   ^^^^^^^^^ meta.statement.foreach.body.tcl meta.block.tcl
+#   ^^^^^^^ keyword.control.flow.foreach.tcl
+#           ^ variable.parameter.tcl
+#             ^^^^^ variable.other.tcl
+#                   ^ punctuation.section.block.begin.tcl
+#                    ^^^^ support.function.builtin.tcl
+#                         ^^ variable.other.tcl
+#                            ^ punctuation.terminator.command.tcl
+#                             ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    foreach\
+#   ^^^^^^^^^ meta.statement.foreach.tcl
+#   ^^^^^^^ keyword.control.flow.foreach.tcl
+#          ^ punctuation.separator.continuation.newline.tcl
+    i\
+#^^^^^^ meta.statement.foreach.tcl
+#   ^ variable.parameter.tcl
+#    ^ punctuation.separator.continuation.newline.tcl
+    $list\
+#^^^^^^^^^^ meta.statement.foreach.tcl
+#   ^^^^^ variable.other.tcl
+#        ^ punctuation.separator.continuation.newline.tcl
+    {puts $i};#comment
+#^^^ meta.statement.foreach.tcl
+#   ^^^^^^^^^ meta.statement.foreach.body.tcl meta.block.tcl
+#   ^ punctuation.section.block.begin.tcl
+#    ^^^^ support.function.builtin.tcl
+#         ^^ variable.other.tcl
+#            ^ punctuation.terminator.command.tcl
+#             ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    foreach i $list1 {j-k} $list2 {m {n-o} p} $list3 $body
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.foreach.tcl
+#                                                    ^^^^^ meta.statement.foreach.body.tcl variable.other.tcl
+#   ^^^^^^^ keyword.control.flow.foreach.tcl
+#          ^ - keyword - variable
+#           ^ variable.parameter.tcl
+#            ^ - variable
+#             ^^^^^^ variable.other.tcl
+#                   ^ - variable
+#                    ^ punctuation.definition.variable.begin.tcl
+#                    ^^^^^ variable.parameter.tcl
+#                        ^ punctuation.definition.variable.end.tcl
+#                          ^^^^^^ variable.other.tcl
+#                                 ^ punctuation.section.braces.tcl
+#                                 ^^^ meta.braces.tcl
+#                                  ^ meta.braces.tcl variable.parameter.tcl
+#                                   ^ meta.braces.tcl - variable.parameter
+#                                    ^ punctuation.definition.variable.begin.tcl
+#                                    ^^^^^ meta.braces.tcl variable.parameter.tcl
+#                                        ^ punctuation.definition.variable.end.tcl
+#                                         ^ meta.braces.tcl - variable.parameter
+#                                          ^ meta.braces.tcl variable.parameter.tcl
+#                                           ^ meta.braces.tcl punctuation.section.braces.end.tcl
+#                                            ^ - variable
+#                                             ^^^^^^ variable.other.tcl
+#                                                    ^^^^^ variable.other.tcl
+
+    foreach {i j} {a b c d e f} {lappend x $i $j} illegal
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.foreach.tcl
+#                               ^^^^^^^^^^^^^^^^^ meta.statement.foreach.body.tcl meta.block.tcl
+#   ^^^^^^^ keyword.control.flow.foreach.tcl
+#           ^ punctuation.section.braces.tcl
+#           ^^^^^ meta.braces.tcl
+#            ^ variable.parameter.tcl
+#             ^ - variable
+#              ^ variable.parameter.tcl
+#               ^ punctuation.section.braces.end.tcl
+#                ^ - meta.braces - meta.block - variable
+#                 ^ punctuation.section.braces.begin.tcl
+#                 ^^^^^^^^^^^^^ meta.braces.tcl
+#                             ^ punctuation.section.braces.end.tcl
+#                              ^ - meta.braces - meta.block - variable
+#                               ^ punctuation.section.block.begin.tcl
+#                                ^^^^^^^ support.function.builtin.tcl
+#                                               ^ punctuation.section.block.end.tcl
+#                                                 ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+    foreach i {a b c} j {{d} 1 "f" [incr x]} {lappend x {$i $j}} illegal
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.foreach.tcl
+#                                            ^^^^^^^^^^^^^^^^^^^ meta.statement.foreach.body.tcl meta.block.tcl
+#   ^^^^^^^ keyword.control.flow.foreach.tcl
+#           ^ variable.parameter.tcl
+#            ^ - meta.braces - meta.block - variable
+#             ^ punctuation.section.braces.begin.tcl
+#             ^^^^^^^ meta.braces.tcl
+#                   ^ punctuation.section.braces.end.tcl
+#                    ^ - meta.braces - meta.block - variable
+#                     ^ variable.parameter.tcl
+#                      ^ - meta.braces - meta.block - variable
+#                       ^ meta.braces.tcl punctuation.section.braces.begin.tcl
+#                        ^ meta.braces.tcl meta.braces.tcl punctuation.section.braces.begin.tcl
+#                          ^ meta.braces.tcl meta.braces.tcl punctuation.section.braces.end.tcl
+#                           ^^^^^^^^^^^^^^^^ meta.braces.tcl
+#                            ^ constant.numeric.integer.tcl
+#                              ^^^ string.quoted.double.tcl
+#                                  ^^^^^^^^ meta.substitution.tcl
+#                                   ^^^^ keyword.other.builtin.tcl
+#                                          ^ punctuation.section.braces.end.tcl
+#                                           ^ - meta.braces - meta.block
+#                                            ^ punctuation.section.block.begin.tcl
+#                                             ^^^^^^^ support.function.builtin.tcl
+#                                                              ^ punctuation.section.block.end.tcl
+#                                                                ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
+    foreach {one_arg_opt_pattern} [list {-first\S*} {-second\S*} {-group\S*}] {
+#           ^ punctuation.definition.variable.begin.tcl
+#           ^^^^^^^^^^^^^^^^^^^^^ variable.parameter.tcl
+#                               ^ punctuation.definition.variable.end.tcl
+#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
+#                                                                             ^ meta.statement.foreach.body.tcl meta.block.tcl punctuation.section.block.begin.tcl
+        regsub -- "${one_arg_opt_pattern}\\s+\\S+" $args {} args
+#<- meta.statement.foreach.body.tcl meta.block.tcl
+#       ^^^^^^ support.function.builtin.tcl
+#              ^^ punctuation.terminator.switches.tcl
+#                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.double
+    }
+#<- meta.statement.foreach.body.tcl meta.block.tcl
+#   ^ meta.statement.foreach.body.tcl meta.block.tcl punctuation.section.block.end.tcl
 
     foreach i {
-       GigabitEthernet1/18
+#   ^^^^^^^^^^^^ meta.statement.foreach.tcl
+#   ^^^^^^^ keyword.control.flow.foreach.tcl
+#           ^ variable.parameter.tcl
+#             ^ punctuation.section.braces.begin.tcl
+#             ^^ meta.braces.tcl
+       GigabitEthernet1/18 \
+#                      ^ - keyword.operator
+#                          ^ punctuation.separator.continuation.newline.tcl
        Serial2/2/0.1/2/1/1:0
-       Serial2/2/0.1/2/1/2:0
-       Serial2/2/0.1/2/1/3:0
-       Serial2/2/0.1/2/2/1:0
-       Serial2/2/0.1/2/2/2:0
-       Serial2/2/0.1/2/2/3:0
+#                         ^ - keyword.operator
        GigabitEthernet9/24
     } {
+#^^^^ meta.statement.foreach.tcl meta.braces.tcl
+#   ^ punctuation.section.braces.end.tcl
+#     ^ punctuation.section.block.begin.tcl
+#     ^^ meta.statement.foreach.body.tcl meta.block.tcl
         set int [exec "show run inter $i | in Serial"]
         if {[regexp "Serial" $int ]} {
             puts "interface $i"

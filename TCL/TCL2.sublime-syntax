@@ -531,19 +531,54 @@ contexts:
     - match: foreach{{b}}
       scope: keyword.control.flow.foreach.tcl
       push:
-        - foreach-body-meta
-        - word-script-pop
-        - foreach-meta
-        - word-expr-pop
-        - cmd-generic-var
+        - foreach-body-meta  # body meta scope
+        - word-script-pop    # body
+        - foreach-iter       # iter1 list1 ?iter2 list2 ...?
 
-  foreach-meta:
+  foreach-iter:
     - clear_scopes: 1
     - meta_scope: meta.statement.foreach.tcl
-    - include: any-pop
+
+    # braced iterator variable
+    - match: |-
+        (?x:
+          (\{)            # opening brace
+          [^\s\{\}]*?     # everything but space or brace
+          (\})            # closing brace
+          (?!\s*(;|$))    # not followed by command termination
+        )
+      scope: variable.parameter.tcl
+      captures:
+        1: punctuation.definition.variable.begin.tcl
+        2: punctuation.definition.variable.end.tcl
+      push: word-list-pop
+    # simple iterator variable
+    - match: '{{ident}}{{b}}'
+      scope: variable.parameter.tcl
+      push: word-list-pop
+
+    # braced iterator variable list
+    - match: \{(?=.*?[\\\}]\s*[\\\{\[$])
+      scope: punctuation.section.braces.tcl
+      push:
+        - meta_scope: meta.braces.tcl
+        - include: continuation
+        - match: \}
+          scope: punctuation.section.braces.end.tcl
+          set: word-list-pop
+        # braced iterator variable
+        - match: (\{)[^\{\}]*?(\})
+          scope: variable.parameter.tcl
+          captures:
+            1: punctuation.definition.variable.begin.tcl
+            2: punctuation.definition.variable.end.tcl
+        # simple iterator variable
+        - match: '{{ident}}{{b}}'
+          scope: variable.parameter.tcl
+    - include: else-pop
 
   foreach-body-meta:
-    - meta_scope: meta.statement.foreach.body.tcl
+    - meta_content_scope: meta.statement.foreach.body.tcl
     - include: eoc-pop-or-illegal
 
 ##[ SWITCH ]##################################################################
