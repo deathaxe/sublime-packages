@@ -1118,6 +1118,19 @@ set regexp {(.{0,200})}
 #                 ^ punctuation.definition.string.end.tcl
 #                  ^ - string
 
+    array set bits {
+#                  ^ meta.array.tcl meta.braces.tcl punctuation.section.braces.begin.tcl
+        0 0000 1
+#       ^ constant.numeric.integer.tcl
+#         ^^^^ constant.numeric.integer.tcl
+#              ^ constant.numeric.integer.tcl
+        8 0001 9
+#       ^ constant.numeric.integer.tcl
+#         ^^^^ constant.numeric.integer.tcl
+#              ^ constant.numeric.integer.tcl
+    }
+#   ^ meta.array.tcl meta.braces.tcl punctuation.section.braces.end.tcl
+
     array unset foo "pa?[A-z]ttern"
 #                      ^^^^^^ constant.other.placeholder.tcl
 

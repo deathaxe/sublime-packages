@@ -146,15 +146,13 @@ contexts:
     # array set arrayName list
     - match: set{{b}}
       scope: variable.function.tcl
-      set: [cmd-generic-end, cmd-generic-var]
+      set: [cmd-array-body, cmd-generic-var]
     # array names arrayName ?mode? ?pattern?
     - match: names{{b}}
       scope: variable.function.tcl
       set: [cmd-array-names-switches, cmd-generic-var]
     - match: (?=\S)
-      set:
-        - include: eoc-pop
-        - include: list-body
+      set: cmd-array-body
 
   cmd-array-names-switches:
     - include: eoc-pop
@@ -172,6 +170,10 @@ contexts:
       set: word-string-pop
     - match: (?=\S)
       set: word-string-pop
+
+  cmd-array-body:
+    - include: eoc-pop
+    - include: list-body
 
   cmd-array-meta:
     - meta_scope: meta.array.tcl
