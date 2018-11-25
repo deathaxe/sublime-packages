@@ -840,7 +840,7 @@ contexts:
 
   namespace-accessor:
     - match: :{2,}
-      scope: punctuation.accessor.colon.tcl
+      scope: punctuation.accessor.double-colon.namespace.tcl
 
 ##[ PROC ]####################################################################
 

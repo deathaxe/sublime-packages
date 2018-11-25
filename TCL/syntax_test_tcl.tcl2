@@ -363,14 +363,14 @@ set regexp {(.{0,200})}
 #      ^ - variable.other
 #       ^ punctuation.definition.variable.tcl
 #       ^^^^^ variable.other.tcl
-#          ^^ punctuation.accessor.colon.tcl
+#          ^^ punctuation.accessor.double-colon.namespace.tcl
 #            ^ - variable.other
 
     cmd $ns::var
 #      ^ - variable.other
 #       ^ punctuation.definition.variable.tcl
 #       ^^^^^^^^ variable.other.tcl
-#          ^^ punctuation.accessor.colon.tcl
+#          ^^ punctuation.accessor.double-colon.namespace.tcl
 #               ^ - variable.other
 
     cmd ${ns}::cmd
@@ -378,7 +378,7 @@ set regexp {(.{0,200})}
 #       ^^^^^ variable.other.tcl
 #       ^^ punctuation.definition.variable.begin.tcl
 #           ^ punctuation.definition.variable.end.tcl
-#            ^^ punctuation.accessor.colon.tcl - variable.other
+#            ^^ punctuation.accessor.double-colon.namespace.tcl - variable.other
 
     cmd $var( arg , [set $var "x"] )
 #      ^ - variable.other
@@ -401,7 +401,7 @@ set regexp {(.{0,200})}
 #      ^ - variable.other
 #       ^ punctuation.definition.variable.tcl
 #       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.other.tcl
-#          ^^ punctuation.accessor.colon.tcl
+#          ^^ punctuation.accessor.double-colon.namespace.tcl
 #              ^ - meta.parens
 #               ^ punctuation.section.parens.begin.tcl
 #               ^^^^^^^^^^^^^^^^^^^^^^^^ meta.parens.tcl
@@ -1740,7 +1740,7 @@ set regexp {(.{0,200})}
 #        ^^^^^ keyword.control.flow.catch.tcl
 #              ^ punctuation.section.block.begin.tcl
 #               ^^^^^^^^ variable.function.tcl
-#                 ^^ punctuation.accessor.colon.tcl
+#                 ^^ punctuation.accessor.double-colon.namespace.tcl
 #                        ^^^^^^ variable.parameter.tcl
 #                                         ^ punctuation.separator.continuation.newline.tcl
         -flags "statistics,interfaceautoprobe" \
@@ -2090,7 +2090,7 @@ set regexp {(.{0,200})}
 #  ^ - meta.function
 #   ^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.tcl
 #        ^^^^^^^^ entity.name.function.tcl
-#          ^^ punctuation.accessor.colon.tcl
+#          ^^ punctuation.accessor.double-colon.namespace.tcl
 #                 ^^^^ meta.function.parameters.tcl
 #                      ^^^^^ variable.other.tcl
 #                           ^ - variable
