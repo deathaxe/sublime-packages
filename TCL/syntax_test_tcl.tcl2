@@ -702,6 +702,20 @@ set regexp {(.{0,200})}
 #             ^^^^^^^^^^^^^^ - comment
 
 ##############################################################################
+# constants
+##############################################################################
+
+    cmd 1. 1.0 1.e4 1.e-4 1.0e5 4.4e-3 .1e10
+#       ^^ constant.numeric.float.tcl
+#          ^^^ constant.numeric.float.tcl
+#              ^^^^ constant.numeric.float.tcl
+#                   ^^^^^ constant.numeric.float.tcl
+#                         ^^^^^ constant.numeric.float.tcl
+#                               ^^^^^^ constant.numeric.float.tcl
+#                                      ^^^^^ constant.numeric.float.tcl
+
+
+##############################################################################
 # common flow control keyword tests
 ##############################################################################
 
