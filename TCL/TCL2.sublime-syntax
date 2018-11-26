@@ -1210,6 +1210,7 @@ contexts:
 
   word-regexp-body:
     # TODO: make TCL regexp rules
+    - include: escape
     - match: \(
       scope: punctuation.section.group.begin.tcl
       push:
@@ -1217,6 +1218,7 @@ contexts:
         - match: \)
           scope: punctuation.section.group.end.tcl
           pop: true
+        - include: escape
     - match: \[
       scope: punctuation.section.bracket.begin.tcl
       push:
@@ -1224,7 +1226,7 @@ contexts:
         - match: \]
           scope: punctuation.section.bracket.end.tcl
           pop: true
-    - match: escape
+        - include: escape
     - match: \{
       scope: punctuation.section.braces.begin.tcl
       push:
