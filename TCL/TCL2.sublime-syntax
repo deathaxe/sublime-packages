@@ -26,14 +26,14 @@ variables:
     ){{b}}
 
   keywords: |-
-    (?x:list|load|next|nextto|uplevel|unload|unset|
+    (?x:list|load|next|nextto|package|uplevel|unload|unset|
     ){{b}}
 
   builtin_funcs: |-
     (?x:
       append|apply|bgerror|binary|cd|clock|close|concat|dde|encoding|eof|exec|
       fblocked|fconfigure|fcopy|fileevent|filename|flush|format|gets|glob|history|
-      http|info|interp|join|library|memory|msgcat|open|package|pid|pkg::create|
+      http|info|interp|join|library|memory|msgcat|open|pid|pkg::create|
       pkg_mkIndex|puts|pwd|read|registry|rename|resource|scan|seek|socket|source|
       split|subst|tailcall|tcltest|tclvars|tell|time|trace|unknown|update|vwait|zlib|
       # https://www.tcl.tk/man/tcl8.6/TclCmd/library.htm#M5
