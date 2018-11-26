@@ -840,7 +840,7 @@ set regexp {(.{0,200})}
     throw {ARITH DIVZERO {divide by zero}} {divide by zero} illegal
 #   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.flow.throw.tcl
 #   ^^^^^ keyword.control.flow.throw.tcl
-#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.braces.tcl
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.braces.tcl
 #                                          ^^^^^^^^^^^^^^^^ meta.braces.tcl string.quoted.brace.tcl
 #                                                           ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 
@@ -2410,9 +2410,8 @@ set regexp {(.{0,200})}
 #                   ^^^^ variable.parameter.tcl
 #                        ^^ punctuation.terminator.switches.tcl
 #                           ^^^^^^^^^^^^^^^ string.unquoted.tcl string.regexp.tcl
-#                                 ^ punctuation.section.bracket.begin.tcl
-#                                 ^^^^^^^^^ meta.bracket.tcl
-#                                         ^ punctuation.section.bracket.end.tcl
+#                               ^^ constant.character.escape.other.tcl
+#                                 ^^^^^^^^^ meta.substitution.tcl
 #                                           ^^^^ variable.other.tcl
 
     regsub -all {[A-z]\d+na\/\b} $args {\\} varname illegal
@@ -2961,6 +2960,7 @@ set regexp {(.{0,200})}
 #                  ^^^^^^ string.quoted.double.tcl
 #                        ^ - string
 #                         ^^^^^^^^^ string.unquoted.tcl string.regexp.tcl
+#                         ^^^^^ meta.substitution.tcl
 #                                  ^ - string - meta.block
 #                                   ^^^^^^^^^^ meta.block.tcl
 #                                             ^ - string - meta.block
@@ -2970,6 +2970,23 @@ set regexp {(.{0,200})}
 #                                                            ^ punctuation.terminator.command.tcl
 #                                                              ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
+# TODO: how to distinguish between braced branches with unbraced pattern and unbraced branches with braced pattern???
+    switch -regexp "aaab" {[a-b]{,2}} {expr {1}} {b\b} {expr {2}}; # comment
+--  ^^^^^^ keyword.control.flow.switch.tcl
+--         ^^^^^^^ variable.parameter.tcl
+--                 ^^^^^^ string.quoted.double.tcl
+--                       ^ - string
+--                        ^^^^^^^^^^^ string.quoted.brace.tcl string.regexp.tcl
+--                         ^^^^^ - meta.substitution.tcl
+--                                   ^ - string - meta.block
+--                                    ^^^^^^^^^^ meta.block.tcl
+--                                              ^ - string - meta.block
+--                                               ^^^^^ string.quoted.brace.tcl string.regexp.tcl
+--                                                    ^ - string - meta.block
+--                                                     ^^^^^^^^^^ meta.block.tcl
+--                                                               ^ punctuation.terminator.command.tcl
+--                                                                 ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
     switch -regexp "aaab" {[a-b]{,2} {expr {1}} b\b {expr {2}}};# comment
 #   ^^^^^^ keyword.control.flow.switch.tcl
 #          ^^^^^^^ variable.parameter.tcl
@@ -2977,6 +2994,7 @@ set regexp {(.{0,200})}
 #                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.list.tcl
 #                         ^ punctuation.section.list.begin.tcl - string
 #                          ^^^^^^^^^ string.unquoted.tcl string.regexp.tcl
+#                          ^^^^^ meta.substitution.tcl
 #                                   ^ - string - meta.block
 #                                    ^^^^^^^^^^ meta.block.tcl
 #                                              ^ - string - meta.block
@@ -2986,6 +3004,24 @@ set regexp {(.{0,200})}
 #                                                             ^ punctuation.section.list.end.tcl
 #                                                              ^ punctuation.terminator.command.tcl
 #                                                               ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
+
+    switch -regexp "aaab" {{[a-b]{,2}} {expr {1}} {b\b} {expr {2}}};# comment
+#   ^^^^^^ keyword.control.flow.switch.tcl
+#          ^^^^^^^ variable.parameter.tcl
+#                  ^^^^^^ string.quoted.double.tcl
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.list.tcl
+#                         ^ punctuation.section.list.begin.tcl - string
+#                          ^^^^^^^^^^^ string.quoted.brace.tcl string.regexp.tcl
+#                           ^^^^^ - meta.substitution.tcl
+#                                     ^ - string - meta.block
+#                                      ^^^^^^^^^^ meta.block.tcl
+#                                                ^ - string - meta.block
+#                                                 ^^^^^ string.quoted.brace.tcl string.regexp.tcl
+#                                                      ^ - string - meta.block
+#                                                       ^^^^^^^^^^ meta.block.tcl
+#                                                                 ^ punctuation.section.list.end.tcl
+#                                                                  ^ punctuation.terminator.command.tcl
+#                                                                   ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
 ##############################################################################
 # try..trap..finally tests

@@ -1198,15 +1198,16 @@ contexts:
     - match: (?=\S)
       set:
         - meta_scope: string.unquoted.tcl string.regexp.tcl
-        - include: word-regexp-body
+        - match: \{
+          scope: punctuation.section.braces.begin.tcl
+          push:
+            - meta_scope: meta.braces.tcl
+            - match: \}
+              scope: punctuation.section.braces.end.tcl
+              pop: true
+            - include: word-regexp-body
+        - include: string-body
         - include: eow-pop
-      with_prototype:
-        # make sure to pop off with whitespace and command termination
-        # even when within a character group/bracket/brace to comply
-        # with TCL's [2] Words rule.
-        - include: eol-pop
-        - match: (?=\s;)
-          pop: true
 
   word-regexp-body:
     # TODO: make TCL regexp rules
