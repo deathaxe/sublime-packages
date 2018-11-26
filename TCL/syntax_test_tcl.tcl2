@@ -1648,6 +1648,28 @@ set regexp {(.{0,200})}
 # if-else tests
 ##############################################################################
 
+    if true break elseif false continue else return
+#   ^^ keyword.control.flow.if.tcl
+#      ^^^^ constant.language.tcl
+#           ^^^^^ keyword.control.flow.break.tcl
+#                 ^^^^^^ keyword.control.flow.elseif.tcl
+#                        ^^^^^ constant.language.tcl
+#                              ^^^^^^^^ keyword.control.flow.continue.tcl
+#                                       ^^^^ keyword.control.flow.else.tcl
+#                                            ^^^^ keyword.control.flow.return.tcl
+
+    if true then break elseif false then continue else return
+#   ^^ keyword.control.flow.if.tcl
+#      ^^^^ constant.language.tcl
+#           ^^^^ keyword.control.flow.then.tcl
+#                ^^^^^ keyword.control.flow.break.tcl
+#                      ^^^^^^ keyword.control.flow.elseif.tcl
+#                             ^^^^^ constant.language.tcl
+#                                   ^^^^ keyword.control.flow.then.tcl
+#                                        ^^^^^^^^ keyword.control.flow.continue.tcl
+#                                                 ^^^^ keyword.control.flow.else.tcl
+#                                                      ^^^^ keyword.control.flow.return.tcl
+
     if true {} elseif false {} {} illegal
 #   ^^ keyword.control.flow.if.tcl
 #      ^^^^ constant.language.tcl

@@ -1098,6 +1098,16 @@ contexts:
           scope: punctuation.section.block.end.tcl
           set: eow-pop-or-illegal
         - include: main
+    # single word flow control statements
+    - match: break{{b}}
+      scope: meta.statement.control.flow.break.tcl keyword.control.flow.break.tcl
+      pop: true
+    - match: continue{{b}}
+      scope: meta.statement.control.flow.continue.tcl keyword.control.flow.continue.tcl
+      pop: true
+    - match: return{{b}}
+      scope: meta.statement.control.flow.return.tcl keyword.control.flow.return.tcl
+      pop: true
     # single word script,
     # a substitution or variable of a dynamically created script
     - match: (?=\S)
