@@ -912,44 +912,44 @@ set regexp {(.{0,200})}
 ##############################################################################
 
     array ; array
-#   ^^^^^^ meta.array.tcl
+#   ^^^^^^ meta.statement.array.tcl
 #         ^ - meta.array
-#           ^^^^^^ meta.array.tcl
+#           ^^^^^^ meta.statement.array.tcl
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^ punctuation.terminator.command.tcl
 #           ^^^^^ keyword.other.builtin.tcl
 
     array 1 2 3
-#   ^^^^^^^^^^^^ meta.array.tcl
+#   ^^^^^^^^^^^^ meta.statement.array.tcl
 #   ^^^^^ keyword.other.builtin.tcl
 #         ^ constant.numeric.integer.tcl
 #           ^ constant.numeric.integer.tcl
 #             ^ constant.numeric.integer.tcl
 
     array foo bar baz[incr x]
-#   ^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.array.tcl
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.array.tcl
 #   ^^^^^ keyword.other.builtin.tcl
 #                    ^^^^^^^^ meta.substitution.tcl
     array\
-#   ^^^^^^^ meta.array.tcl
+#   ^^^^^^^ meta.statement.array.tcl
 #   ^^^^^ keyword.other.builtin.tcl
 #        ^ punctuation.separator.continuation.newline.tcl
     foo\
-#^^^^^^^^ meta.array.tcl
+#^^^^^^^^ meta.statement.array.tcl
 #      ^ punctuation.separator.continuation.newline.tcl
     bar\
-#^^^^^^^^ meta.array.tcl
+#^^^^^^^^ meta.statement.array.tcl
 #      ^ punctuation.separator.continuation.newline.tcl
     baz[incr\
-#^^^^^^^^^^^^^ meta.array.tcl
+#^^^^^^^^^^^^^ meta.statement.array.tcl
 #      ^ punctuation.section.substitution.begin.tcl
 #      ^^^^^^^ meta.substitution.tcl
 #       ^^^^ keyword.other.builtin.tcl
 #           ^ punctuation.separator.continuation.newline.tcl
     x\
-#^^^^^^ meta.array.tcl meta.substitution.tcl
+#^^^^^^ meta.statement.array.tcl meta.substitution.tcl
     ]
-#^^^^^ meta.array.tcl
+#^^^^^ meta.statement.array.tcl
 #^^^^ meta.substitution.tcl
 #   ^ punctuation.section.substitution.end.tcl
 
@@ -1119,7 +1119,7 @@ set regexp {(.{0,200})}
 #                  ^ - string
 
     array set bits {
-#                  ^ meta.array.tcl meta.braces.tcl punctuation.section.braces.begin.tcl
+#                  ^ meta.statement.array.tcl meta.braces.tcl punctuation.section.braces.begin.tcl
         0 0000 1
 #       ^ constant.numeric.integer.tcl
 #         ^^^^ constant.numeric.integer.tcl
@@ -1129,7 +1129,7 @@ set regexp {(.{0,200})}
 #         ^^^^ constant.numeric.integer.tcl
 #              ^ constant.numeric.integer.tcl
     }
-#   ^ meta.array.tcl meta.braces.tcl punctuation.section.braces.end.tcl
+#   ^ meta.statement.array.tcl meta.braces.tcl punctuation.section.braces.end.tcl
 
     array unset foo "pa?[A-z]ttern"
 #                      ^^^^^^ constant.other.placeholder.tcl
@@ -1160,60 +1160,57 @@ set regexp {(.{0,200})}
 #   ^^^^ variable.other.tcl
 
     coroutine [concat "na" "me"] puts $arg
-#   ^^^^^^^^^ meta.coroutine.tcl - meta.corountine.name.tcl
-#            ^^^^^^^^^^^^^^^^^^^^ meta.coroutine.name.tcl
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.coroutine.tcl
 #             ^^^^^^^^^^^^^^^^^^  meta.substitution.tcl
-#                                ^^^^^^^^^^ meta.coroutine.body.tcl
 #   ^^^^^^^^^ keyword.other.builtin.tcl
 #                                ^^^^ support.function.builtin.tcl
 #                                     ^^^^ variable.other.tcl
 
     coroutine [concat "na" "me"] {
-#   ^^^^^^^^^ meta.coroutine.tcl - meta.corountine.name.tcl
-#            ^^^^^^^^^^^^^^^^^^^^ meta.coroutine.name.tcl
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.coroutine.tcl
 #             ^^^^^^^^^^^^^^^^^^  meta.substitution.tcl
-#                                ^^ meta.coroutine.body.tcl meta.braces.tcl string.quoted.brace.tcl
+#                                ^^ meta.braces.tcl string.quoted.brace.tcl
 #                                ^ punctuation.section.braces.begin.tcl
 #   ^^^^^^^^^ keyword.other.builtin.tcl
         func $arg
-#<- meta.coroutine.body.tcl meta.braces.tcl string.quoted.brace.tcl
+#
 #       ^^^^ - variable.function - support.function.builtin
 #            ^^^^ - variable
     }
-#<- meta.coroutine.body.tcl meta.braces.tcl string.quoted.brace.tcl
-#   ^ meta.coroutine.body.tcl meta.braces.tcl string.quoted.brace.tcl punctuation.section.braces.end.tcl
+#<- meta.statement.coroutine.tcl meta.braces.tcl
+#   ^ meta.statement.coroutine.tcl meta.braces.tcl string.quoted.brace.tcl punctuation.section.braces.end.tcl
 
 ##############################################################################
 # eval tests
 ##############################################################################
 
     eval $script puts "foo"
-#   ^^^^ meta.eval.tcl
-#       ^^^^^^^^^^^^^^^^^^^^ meta.eval.tcl
+#   ^^^^ meta.statement.eval.tcl
+#       ^^^^^^^^^^^^^^^^^^^^ meta.statement.eval.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^^^^^^^ variable.function.tcl
 #                ^^^^ - keyword
 #                     ^^^^^ string.quoted.double.tcl
 
     eval {puts} "foo"
-#   ^^^^ meta.eval.tcl
-#       ^^^^^^^^^^^^^^ meta.eval.tcl
+#   ^^^^ meta.statement.eval.tcl
+#       ^^^^^^^^^^^^^^ meta.statement.eval.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^^^^^^ meta.braces.tcl string.quoted.brace.tcl
 #               ^^^^^ string.quoted.double.tcl
 
     eval {
-#   ^^^^^^^ meta.eval.tcl
+#   ^^^^^^^ meta.statement.eval.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^ punctuation.section.braces.begin.tcl
 #        ^^ meta.braces.tcl string.quoted.brace.tcl
         puts
 #       ^^^^ meta.braces.tcl string.quoted.brace.tcl
     } "foo"
-#<- meta.eval.tcl meta.braces.tcl string.quoted.brace.tcl
-#^^^^ meta.eval.tcl meta.braces.tcl string.quoted.brace.tcl
+#<- meta.statement.eval.tcl meta.braces.tcl string.quoted.brace.tcl
+#^^^^ meta.statement.eval.tcl meta.braces.tcl string.quoted.brace.tcl
 #   ^ punctuation.section.braces.end.tcl
-#    ^ meta.eval.tcl - meta.braces
+#    ^ meta.statement.eval.tcl - meta.braces
 #     ^^^^^ string.quoted.double.tcl
 
 ##############################################################################
@@ -1221,8 +1218,8 @@ set regexp {(.{0,200})}
 ##############################################################################
 
     expr
-#  ^ - meta.expression
-#   ^^^^^ meta.expression.tcl
+#  ^ - meta.statement.expr
+#   ^^^^^ meta.statement.expr.tcl
 #   ^^^^ keyword.other.builtin.tcl
 
     expr eq ne in ni == != <= >= < >
@@ -1249,8 +1246,8 @@ set regexp {(.{0,200})}
 #              ^ keyword.operator.bitwise.tcl
 
     expr 1 + 2 * $var ** 4 % 2 / 1
-#  ^ - meta.expression
-#   ^^^^^^^^^^^^^^^^^^ meta.expression.tcl
+#  ^ - meta.statement.expr
+#   ^^^^^^^^^^^^^^^^^^ meta.statement.expr.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^ constant.numeric.integer.tcl
 #          ^ keyword.operator.arithmetic.tcl
@@ -1272,62 +1269,62 @@ set regexp {(.{0,200})}
 #                        ^^^^^^^ string.quoted.double.tcl
 
     expr {}
-#  ^ - meta.expression
-#   ^^^^^^^^ meta.expression.tcl
+#  ^ - meta.statement.expr
+#   ^^^^^^^^ meta.statement.expr.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^ meta.braces.tcl punctuation.section.braces.begin.tcl
 #         ^ meta.braces.tcl punctuation.section.braces.end.tcl
 
     expr {
-#  ^ - meta.expression
-#   ^^^^^^^ meta.expression.tcl
+#  ^ - meta.statement.expr
+#   ^^^^^^^ meta.statement.expr.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^ meta.braces.tcl punctuation.section.braces.begin.tcl
     } {
-#^^^^^^^ meta.expression.tcl
+#^^^^^^^ meta.statement.expr.tcl
 #^^^^ meta.braces.tcl
 #   ^ punctuation.section.braces.end.tcl
 #    ^ - meta.braces
 #     ^^ meta.braces.tcl
 #     ^ punctuation.section.braces.begin.tcl
     }
-#^^^^^ meta.expression.tcl
+#^^^^^ meta.statement.expr.tcl
 #^^^^ meta.braces.tcl
 #   ^ punctuation.section.braces.end.tcl
 #    ^ - meta.braces
 
     expr {
-#  ^ - meta.expression
-#   ^^^^^^^ meta.expression.tcl
+#  ^ - meta.statement.expr
+#   ^^^^^^^ meta.statement.expr.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^ meta.braces.tcl punctuation.section.braces.begin.tcl
     list
 #   ^^^^ - keyword - variable
     -
-#^^^^^ meta.expression.tcl meta.braces.tcl
+#^^^^^ meta.statement.expr.tcl meta.braces.tcl
 #   ^ keyword.operator.arithmetic.tcl
     $var
-#^^^^^^^^ meta.expression.tcl meta.braces.tcl
+#^^^^^^^^ meta.statement.expr.tcl meta.braces.tcl
 #   ^^^^ variable.other.tcl
     +
-#^^^^^ meta.expression.tcl meta.braces.tcl
+#^^^^^ meta.statement.expr.tcl meta.braces.tcl
 #   ^ keyword.operator.arithmetic.tcl
     [string "test"]
-#^^^ meta.expression.tcl meta.braces.tcl - meta.substitution
+#^^^ meta.statement.expr.tcl meta.braces.tcl - meta.substitution
 #   ^ punctuation.section.substitution.begin.tcl
-#   ^^^^^^^^^^^^^^^ meta.expression.tcl meta.braces.tcl meta.substitution.tcl
+#   ^^^^^^^^^^^^^^^ meta.statement.expr.tcl meta.braces.tcl meta.substitution.tcl
 #    ^^^^^^ keyword.other.builtin.tcl
 #           ^^^^^^ string.quoted.double.tcl
 #                 ^ punctuation.section.substitution.end.tcl
-#                  ^ meta.expression.tcl meta.braces.tcl - meta.substitution
+#                  ^ meta.statement.expr.tcl meta.braces.tcl - meta.substitution
     *
-#^^^^^ meta.expression.tcl meta.braces.tcl
+#^^^^^ meta.statement.expr.tcl meta.braces.tcl
 #   ^ keyword.operator.arithmetic.tcl
     10
-#^^^^^^ meta.expression.tcl meta.braces.tcl
+#^^^^^^ meta.statement.expr.tcl meta.braces.tcl
 #   ^^ constant.numeric.integer.tcl
     }
-#^^^^^ meta.expression.tcl
+#^^^^^ meta.statement.expr.tcl
 #^^^^ meta.braces.tcl
 #   ^ punctuation.section.braces.end.tcl
 
@@ -1906,13 +1903,16 @@ set regexp {(.{0,200})}
 ##############################################################################
 
     incr
+#   ^^^^^ meta.statement.incr.tcl
 #   ^^^^ keyword.other.builtin.tcl
 
     incr var
+#   ^^^^^^^^^ meta.statement.incr.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^^^ variable.other.tcl
 
     incr var 2 illegal
+#   ^^^^^^^^^^^^^^^^^^^ meta.statement.incr.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^^^ variable.other.tcl
 #           ^ - variable - constant
@@ -1924,20 +1924,20 @@ set regexp {(.{0,200})}
 ##############################################################################
 
     list
-#   ^^^^^ meta.list.tcl
+#   ^^^^^ meta.statement.list.tcl
 #   ^^^^ keyword.other.builtin.tcl
 
     list;list 1;#comment
-#   ^^^^ meta.list.tcl keyword.other.builtin.tcl
+#   ^^^^ meta.statement.list.tcl keyword.other.builtin.tcl
 #       ^ punctuation.terminator.command.tcl
-#        ^^^^ meta.list.tcl keyword.other.builtin.tcl
-#             ^ meta.list.tcl constant.numeric.integer.tcl
+#        ^^^^ meta.statement.list.tcl keyword.other.builtin.tcl
+#             ^ meta.statement.list.tcl constant.numeric.integer.tcl
 #              ^ punctuation.terminator.command.tcl
 #               ^ comment.line.double-dash.tcl punctuation.definition.comment.begin.tcl
 
     list 1 3 str[sub] {str[nosub]} -> "quot"
 #  ^ - meta.list
-#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.list.tcl
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.list.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^ constant.numeric.integer.tcl
 #          ^ constant.numeric.integer.tcl
@@ -1948,42 +1948,42 @@ set regexp {(.{0,200})}
 
     list\
 #  ^ - meta.list
-#   ^^^^ meta.list.tcl keyword.other.builtin.tcl
-#       ^ meta.list.tcl punctuation.separator.continuation.newline.tcl
+#   ^^^^ meta.statement.list.tcl keyword.other.builtin.tcl
+#       ^ meta.statement.list.tcl punctuation.separator.continuation.newline.tcl
     1\
-#   ^ meta.list.tcl constant.numeric.integer.tcl
-#    ^ meta.list.tcl punctuation.separator.continuation.newline.tcl
+#   ^ meta.statement.list.tcl constant.numeric.integer.tcl
+#    ^ meta.statement.list.tcl punctuation.separator.continuation.newline.tcl
     3\
-#   ^ meta.list.tcl constant.numeric.integer.tcl
-#    ^ meta.list.tcl punctuation.separator.continuation.newline.tcl
+#   ^ meta.statement.list.tcl constant.numeric.integer.tcl
+#    ^ meta.statement.list.tcl punctuation.separator.continuation.newline.tcl
     str[sub]\
-#  ^^^^^^^^^^^ meta.list.tcl
+#  ^^^^^^^^^^^ meta.statement.list.tcl
 #      ^^^^^ meta.substitution.tcl
 #           ^ punctuation.separator.continuation.newline.tcl
     {str[nosub]}\
-#   ^^^^^^^^^^^^ meta.list.tcl meta.braces.tcl
+#   ^^^^^^^^^^^^ meta.statement.list.tcl meta.braces.tcl
 #       ^^^^^^^ meta.substitution.tcl
-#               ^ meta.list.tcl punctuation.separator.continuation.newline.tcl
+#               ^ meta.statement.list.tcl punctuation.separator.continuation.newline.tcl
     ->\
-#   ^^^^ meta.list.tcl
+#   ^^^^ meta.statement.list.tcl
 #     ^ punctuation.separator.continuation.newline.tcl
     "quot"
-#   ^^^^^^^ meta.list.tcl
+#   ^^^^^^^ meta.statement.list.tcl
 #   ^^^^^^ string.quoted.double.tcl
 
     list {{1 2 3} {1 {2 str [incr x]} 3} {-1 -2 -3}}
 #  ^ - meta.list
-#   ^^^^^ meta.list.tcl - meta.braces
-#        ^ meta.list.tcl meta.braces.tcl
-#         ^^^^^^^ meta.list.tcl meta.braces.tcl meta.braces.tcl
-#                ^ meta.list.tcl meta.braces.tcl
-#                 ^^^ meta.list.tcl meta.braces.tcl meta.braces.tcl
-#                    ^^^^^^^^^^^^^^^^ meta.list.tcl meta.braces.tcl meta.braces.tcl meta.braces.tcl
-#                                    ^^^ meta.list.tcl meta.braces.tcl meta.braces.tcl
-#                                       ^ meta.list.tcl meta.braces.tcl
-#                                        ^^^^^^^^^^ meta.list.tcl meta.braces.tcl meta.braces.tcl
-#                                                  ^ meta.list.tcl meta.braces.tcl
-#                                                   ^ meta.list.tcl
+#   ^^^^^ meta.statement.list.tcl - meta.braces
+#        ^ meta.statement.list.tcl meta.braces.tcl
+#         ^^^^^^^ meta.statement.list.tcl meta.braces.tcl meta.braces.tcl
+#                ^ meta.statement.list.tcl meta.braces.tcl
+#                 ^^^ meta.statement.list.tcl meta.braces.tcl meta.braces.tcl
+#                    ^^^^^^^^^^^^^^^^ meta.statement.list.tcl meta.braces.tcl meta.braces.tcl meta.braces.tcl
+#                                    ^^^ meta.statement.list.tcl meta.braces.tcl meta.braces.tcl
+#                                       ^ meta.statement.list.tcl meta.braces.tcl
+#                                        ^^^^^^^^^^ meta.statement.list.tcl meta.braces.tcl meta.braces.tcl
+#                                                  ^ meta.statement.list.tcl meta.braces.tcl
+#                                                   ^ meta.statement.list.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #        ^^ punctuation.section.braces.begin.tcl
 #          ^ constant.numeric.integer.tcl
@@ -2007,7 +2007,7 @@ set regexp {(.{0,200})}
 #                                                 ^^ punctuation.section.braces.end.tcl
 
     list unquoted $words "without" \special {meaning}
-#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.list.tcl
+#   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.list.tcl
 #   ^^^^ keyword.other.builtin.tcl
 #                 ^^^^^^ variable.other.tcl
 #                        ^^^^^^^^^ string.quoted.double.tcl

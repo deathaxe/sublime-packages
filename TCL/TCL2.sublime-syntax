@@ -92,7 +92,7 @@ contexts:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/after.htm
     - match: after{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-after-meta, cmd-after-script, cmd-after-args]
+      push: [cmd-after-script, cmd-after-args]
 
   cmd-after-args:
     - match: idle{{b}}
@@ -104,16 +104,9 @@ contexts:
     - include: word-any-pop
 
   cmd-after-script:
-    - match: ''
-      set:
-        - clear_scopes: 1
-        - meta_scope: meta.after.body.tcl
-        - include: eoc-pop
-        - include: main
-
-  cmd-after-meta:
-    - meta_scope: meta.after.tcl
-    - include: immediately-pop
+    - meta_scope: meta.statement.after.tcl
+    - include: eoc-pop
+    - include: main
 
 ##[ ARRAY COMMANDS ]##########################################################
 
@@ -176,7 +169,7 @@ contexts:
     - include: list-body
 
   cmd-array-meta:
-    - meta_scope: meta.array.tcl
+    - meta_scope: meta.statement.array.tcl
     - include: eoc-pop-or-illegal
 
 ##[ COROUTINE COMMAND ]#######################################################
@@ -184,11 +177,8 @@ contexts:
   cmd-coroutine:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/coroutine.htm
     - match: coroutine{{b}}
-      scope: meta.coroutine.tcl keyword.other.builtin.tcl
-      push:
-        - cmd-coroutine-script
-        - cmd-coroutine-name-meta
-        - cmd-coroutine-name
+      scope: keyword.other.builtin.tcl
+      push: [cmd-coroutine-script, cmd-coroutine-name]
 
   cmd-coroutine-name:
     # simple coroutine name
@@ -198,16 +188,10 @@ contexts:
     # scripted coroutine name
     - include: word-any-pop
 
-  cmd-coroutine-name-meta:
-    - meta_content_scope: meta.coroutine.name.tcl
-    - include: immediately-pop
-
   cmd-coroutine-script:
-    - match: ''
-      set:
-        - meta_scope: meta.coroutine.body.tcl
-        - include: eoc-pop
-        - include: main
+    - meta_scope: meta.statement.coroutine.tcl
+    - include: eoc-pop
+    - include: main
 
 ##[ EVAL COMMAND ]############################################################
 
@@ -216,7 +200,7 @@ contexts:
     - match: eval{{b}}
       scope: keyword.other.builtin.tcl
       push:
-        - meta_scope: meta.eval.tcl
+        - meta_scope: meta.statement.eval.tcl
         - include: eoc-pop
         - include: main
 
@@ -229,7 +213,7 @@ contexts:
       push: cmd-expr-body
 
   cmd-expr-body:
-    - meta_scope: meta.expression.tcl
+    - meta_scope: meta.statement.expr.tcl
     - include: operator-expand-args
     # braced expression which continues at the next line even without
     # line continuation. It does not contain commands.
@@ -310,13 +294,10 @@ contexts:
     # https://www.tcl.tk/man/tcl8.6/TclCmd/incr.htm
     - match: incr{{b}}
       scope: keyword.other.builtin.tcl
-      push:
-        - cmd-incr-end
-        - word-any-pop
-        - cmd-generic-var
+      push: [cmd-incr-meta, word-any-pop, cmd-generic-var]
 
-  cmd-incr-end:
-    - meta_scope: meta.function-call.tcl
+  cmd-incr-meta:
+    - meta_scope: meta.statement.incr.tcl
     - include: eoc-pop-or-illegal
 
 ##[ LIST COMMANDS ]###########################################################
@@ -334,7 +315,7 @@ contexts:
       push: [cmd-function-end, cmd-list-function-args]
 
   cmd-list-body:
-    - meta_scope: meta.list.tcl
+    - meta_scope: meta.statement.list.tcl
     - include: eoc-pop
     - include: list-body
 
@@ -356,7 +337,7 @@ contexts:
     - match: regsub{{b}}
       scope: support.function.builtin.tcl
       push:
-        - cmd-regsub-end         # must be end of command
+        - cmd-regsub-meta         # must be end of command
         - cmd-generic-var        # varname
         - word-regexp-pop        # substitution
         - word-string-pop        # string
@@ -378,7 +359,7 @@ contexts:
       scope: variable.other.tcl
     - include: eoc-pop
 
-  cmd-regsub-end:
+  cmd-regsub-meta:
     - meta_scope: meta.function-call.tcl
     - include: eoc-pop-or-illegal
 
@@ -387,7 +368,11 @@ contexts:
   cmd-set:
     - match: set{{b}}
       scope: keyword.other.builtin.tcl
-      push: [cmd-generic-end, cmd-generic-args, cmd-generic-var]
+      push: [cmd-set-end, cmd-generic-args, cmd-generic-var]
+
+  cmd-set-end:
+    - meta_scope: meta.statement.set.tcl
+    - include: cmd-generic-end
 
 ##[ STRING COMMANDS ]#########################################################
 
@@ -437,7 +422,7 @@ contexts:
     - include: cmd-generic-args
 
   cmd-string-end:
-    - meta_scope: meta.string.tcl
+    - meta_scope: meta.statement.string.tcl
     - include: cmd-generic-end
 
 ##[ FLOW CONTROL ]############################################################
