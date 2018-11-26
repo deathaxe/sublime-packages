@@ -69,8 +69,9 @@ contexts:
     - include: cmd-incr
     - include: cmd-list
     - include: cmd-regexp
-    - include: cmd-string
     - include: cmd-set
+    - include: cmd-string
+    - include: cmd-unset
 
     # flow control structures
     - include: stmt-flow
@@ -423,6 +424,17 @@ contexts:
 
   cmd-string-end:
     - meta_scope: meta.statement.string.tcl
+    - include: cmd-generic-end
+
+##[ UNSET COMMAND ]###########################################################
+
+  cmd-unset:
+    - match: unset{{b}}
+      scope: keyword.other.builtin.tcl
+      push: [cmd-unset-end, cmd-generic-args]
+
+  cmd-unset-end:
+    - meta_scope: meta.statement.unset.tcl
     - include: cmd-generic-end
 
 ##[ FLOW CONTROL ]############################################################
