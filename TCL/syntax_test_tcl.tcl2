@@ -10,17 +10,19 @@
 
     cmd arg1 arg2; cmd arg1 arg2
 #  ^ - meta.function-call
-#   ^^^ meta.function-call.tcl
-#       ^^^^^^^^^ meta.function-call.parameters.tcl
+#   ^^^ meta.function-call.tcl - meta.function-call.parameters.tcl
+#      ^^^^^^^^^^ meta.function-call.parameters.tcl - meta.function-call.tcl
 #                ^ punctuation.terminator.command.tcl
 #                 ^ - meta.function-call
 #                  ^^^ meta.function-call.tcl
-#                      ^^^^^^^^^ meta.function-call.parameters.tcl
+#                     ^^^^^^^^^^ meta.function-call.parameters.tcl
 #  ^ - variable.function.tcl
 #   ^^^ variable.function.tcl
 #      ^ - variable.function.tcl
 
     cmd\
+#   ^^^^ meta.function-call.tcl - meta.function-call.parameters.tcl
+#       ^ meta.function-call.parameters.tcl - meta.function-call.tcl
 #   ^^^ variable.function.tcl
 #      ^ punctuation.separator.continuation.newline.tcl
     arg1\
@@ -72,15 +74,50 @@
 #   ^^^^^^^^^ - variable.parameter
 
     [cmd arg][cmd arg] {puts "str"}
+#   ^^^^^^^^^^^^^^^^^^ meta.function-call.tcl
+#                     ^^^^^^^^^^^^^^ meta.function-call.parameters.tcl
 
     "cmd" arg arg
+#   ^^^^^ meta.function-call.tcl
+#        ^^^^^^^^^ meta.function-call.parameters.tcl
 
     {cmd} arg arg
+#   ^^^^^ meta.function-call.tcl
+#        ^^^^^^^^^ meta.function-call.parameters.tcl
 
-    $cmd  arg arg
+    $cmd arg arg
+#   ^^^^ meta.function-call.tcl
+#       ^^^^^^^^^ meta.function-call.parameters.tcl
 
     ${cmd(test)} arg arg
+#   ^^^^^^^^^^^^ meta.function-call.tcl
+#               ^^^^^^^^^ meta.function-call.parameters.tcl
 
+    ${ns}::func arg arg
+#   ^^^^^^^^^^^ meta.function-call.tcl
+#              ^^^^^^^^^ meta.function-call.parameters.tcl
+
+    ns::func arg arg
+#   ^^^^^^^^ meta.function-call.tcl
+#           ^^^^^^^^^ meta.function-call.parameters.tcl
+
+# simple builtin commands/functions
+    pow x 10
+#   ^^^ support.function.builtin.tcl
+#   ^^^ meta.function-call.tcl
+#      ^^^^^ meta.function-call.parameters.tcl
+#         ^^ constant.numeric.integer.tcl
+
+    pow\
+#   ^^^ meta.function-call.tcl support.function.builtin.tcl
+#      ^^ meta.function-call.parameters.tcl
+#      ^ punctuation.separator.continuation.newline.tcl
+    x\
+#  ^^^^ meta.function-call.parameters.tcl
+#    ^ punctuation.separator.continuation.newline.tcl
+    10
+#  ^^^ meta.function-call.parameters.tcl
+#   ^^ constant.numeric.integer.tcl
 
 ##############################################################################
 # [3] Words

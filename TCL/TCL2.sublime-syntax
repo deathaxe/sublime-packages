@@ -85,6 +85,7 @@ contexts:
     - include: namespace
 
     # generic commands
+    - include: cmd-builtin
     - include: cmd-generic
 
 ##[ AFTER COMMANDS ]##########################################################
@@ -976,19 +977,22 @@ contexts:
 
 ##[ RULE 1 - COMMANDS ]#######################################################
 
-  cmd-generic:
+  cmd-builtin:
     # known commands
     - match: '{{keywords}}'
       scope: keyword.other.builtin.tcl
       push: [cmd-generic-end, cmd-generic-args]
-    # builtin functions
+    # builtin functions with optional switches
     - match: '{{builtin_funcs}}'
       scope: meta.function-call.tcl support.function.builtin.tcl
       push: [cmd-function-end, cmd-generic-args]
+    # builtin functions without switches
     - match: '{{math_funcs}}'
-      scope: meta.function-call.tcl support.function.math.tcl
+      scope: meta.function-call.tcl support.function.builtin.tcl
       push: cmd-function-end
-    # unknown generic commands
+
+  cmd-generic:
+    # user defined or generic commands
     - match: (?=\S)
       push: [cmd-function-end, cmd-generic-args, cmd-generic-name]
 
@@ -997,18 +1001,21 @@ contexts:
     - match: \{
       scope: punctuation.section.braces.begin.tcl
       set:
-        - meta_scope: meta.braces.tcl string.quoted.brace.tcl
+        - clear_scopes: 1  # meta.function-call.parameters.tcl
+        - meta_scope: meta.function-call.tcl meta.braces.tcl string.quoted.brace.tcl
         - include: braces-string-body
         - include: braces-end-pop
     - match: \"
       scope: punctuation.definition.string.begin.tcl
       set:
-        - meta_scope: string.quoted.double.tcl
+        - clear_scopes: 1  # meta.function-call.parameters.tcl
+        - meta_scope: meta.function-call.tcl string.quoted.double.tcl
         - include: string-body
         - include: string-quoted-double-end
     - match: ''
       set:
-        - meta_scope: variable.function.tcl
+        - clear_scopes: 1  # meta.function-call.parameters.tcl
+        - meta_scope: meta.function-call.tcl variable.function.tcl
         - include: string-body
         - include: namespace-accessor
         - include: eow-pop
