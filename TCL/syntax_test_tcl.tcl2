@@ -2275,7 +2275,7 @@ set regexp {(.{0,200})}
 #   ^^^^^^^^^^ meta.function.tcl - meta.function.parameters - meta.braces
 #             ^ meta.function.parameters.tcl meta.braces.tcl
 #              ^^^^^^^^^^^^^^^^^^^^ meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl
-#                          ^^^^^^^ invalid.illegal.end-of-word-expected.tcl
+#                          ^^^^^^^ invalid.illegal.end-of-param-expected.tcl
 #                                  ^ meta.function.parameters.tcl meta.braces.tcl
 #                                   ^ meta.function.tcl - meta.function.parameters - meta.braces - meta.block
 #                                    ^^^^^^^^^^^^ meta.block.tcl
@@ -2317,7 +2317,7 @@ set regexp {(.{0,200})}
 #           ^^^^^ string.quoted.double.tcl
 #                ^ punctuation.separator.continuation.newline.tcl
             invalid\
-#           ^^^^^^^ invalid.illegal.end-of-word-expected.tcl
+#           ^^^^^^^ invalid.illegal.end-of-param-expected.tcl
 #                  ^ punctuation.separator.continuation.newline.tcl
         }\
 #      ^ meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl - punctuation
@@ -2342,20 +2342,22 @@ set regexp {(.{0,200})}
     }
 #   ^ meta.function.tcl meta.block.tcl punctuation.section.block.end.tcl
 
-    proc mult {par {multiplier 2}} {
+    proc mult {par {multiplier 2} {verify AcceptAll}} {
 #  ^ - meta.function
 #   ^^^^^^^^^^ meta.function.tcl - meta.function.parameters - meta.braces
 #             ^^^^^ meta.function.parameters.tcl meta.braces.tcl
 #                  ^^^^^^^^^^^^^^ meta.function.parameters.tcl meta.braces.tcl meta.braces.tcl
 #                                ^ meta.function.parameters.tcl meta.braces.tcl
-#                                 ^ meta.function.tcl - meta.function.parameters - meta.braces
-#                                  ^ meta.function.tcl meta.block.tcl punctuation.section.block.begin.tcl
+#                                  ^^^^^^ variable.parameter.tcl
+#                                         ^^^^^^^^^ - invalid.illegal
+#                                                    ^ meta.function.tcl - meta.function.parameters - meta.braces
+#                                                     ^ meta.function.tcl meta.block.tcl punctuation.section.block.begin.tcl
 #             ^ punctuation.section.braces.begin.tcl
 #              ^^^ variable.parameter.tcl
 #                  ^ punctuation.section.braces.begin.tcl
 #                   ^^^^^^^^^^ variable.parameter.tcl
 #                              ^ constant.numeric.integer.tcl
-#                               ^^ punctuation.section.braces.end.tcl
+#                                                  ^^ punctuation.section.braces.end.tcl
 #
         upvar 1 $par var
 #<- meta.function.tcl meta.block.tcl
@@ -2367,6 +2369,7 @@ set regexp {(.{0,200})}
 #   ^ punctuation.section.block.end.tcl
 #    ^^^^^^^^^ meta.function.tcl - meta.block.tcl
 #     ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
+
 
 ##############################################################################
 # regexp commands

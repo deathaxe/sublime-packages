@@ -928,8 +928,8 @@ contexts:
         - match: \{
           scope: punctuation.section.braces.begin.tcl
           push:
-            - proc-params-braced-meta
-            - proc-params-braced-default
+            - proc-params-braced-end
+            - word-any-pop
             - proc-params-braced-name
         # parameter names without default value
         - include: proc-params-simple
@@ -950,14 +950,12 @@ contexts:
     # scripted parameter name
     - include: word-string-pop
 
-  proc-params-braced-default:
-    # parameter default value
-    - include: words
-    - include: eow-pop-or-illegal
-
-  proc-params-braced-meta:
+  proc-params-braced-end:
     - meta_scope: meta.braces.tcl
     - include: braces-end-pop
+    - include: continuation
+    - match: '{{word}}'
+      scope: invalid.illegal.end-of-param-expected.tcl
 
   proc-params-simple:
     # simple parameter name
