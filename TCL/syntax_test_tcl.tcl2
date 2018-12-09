@@ -1940,18 +1940,19 @@ set regexp {(.{0,200})}
 #                                              ^ punctuation.definition.string.end.tcl
 #                                               ^ punctuation.section.substitution.end.tcl
 #                                                 ^ punctuation.separator.continuation.newline.tcl
-        -parentoid $aggr_attach_oid} err]} {
+        -parentoid $aggr_attach_oid} err arg2]} {
 #<- meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl meta.block.tcl
 #       ^^^^^^^^^^ variable.parameter.tcl
 #                  ^^^^^^^^^^^^^^^^ variable.other.tcl
 #                                  ^ punctuation.section.block.end.tcl
-#                                   ^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl
+#                                   ^^^^^^^^^^ meta.statement.conditional.tcl meta.braces.tcl meta.substitution.tcl
 #                                    ^^^ variable.other.tcl
-#                                       ^ punctuation.section.substitution.end.tcl
-#                                        ^ meta.statement.conditional.tcl meta.braces.tcl punctuation.section.braces.end.tcl - meta.substitution
-#                                         ^ meta.statement.conditional.tcl - meta.braces - meta.substitution - punctuation
-#                                          ^ meta.statement.conditional.tcl meta.block.tcl punctuation.section.block.begin.tcl
+#                                        ^^^^ variable.other.tcl
+#                                            ^ punctuation.section.substitution.end.tcl
+#                                             ^ meta.statement.conditional.tcl meta.braces.tcl punctuation.section.braces.end.tcl - meta.substitution
+#                                              ^ meta.statement.conditional.tcl - meta.braces - meta.substitution - punctuation
+#                                               ^ meta.statement.conditional.tcl meta.block.tcl punctuation.section.block.begin.tcl
         return "Creating aggregator interface $aggrname under element/management element-module OID $aggr_attach_oid: $err"
 #<- meta.statement.conditional.tcl meta.block.tcl
     }

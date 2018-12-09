@@ -448,7 +448,7 @@ contexts:
     # catch expr var
     - match: catch{{b}}
       scope: keyword.control.flow.catch.tcl
-      push: [stmt-catch-meta, cmd-generic-var, word-script-pop]
+      push: [stmt-catch-meta, word-script-pop]
     # continue
     - match: continue{{b}}
       scope: keyword.control.flow.continue.tcl
@@ -485,6 +485,9 @@ contexts:
 
   stmt-catch-meta:
     - meta_scope: meta.statement.flow.catch.tcl
+    - include: words
+    - match: '{{word}}'
+      scope: variable.other.tcl
     - include: eoc-pop-or-illegal
 
   stmt-continue-meta:
