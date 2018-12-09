@@ -28,7 +28,7 @@ variables:
     ){{b}}
 
   keywords: |-
-    (?x:list|load|next|nextto|package|uplevel|unload|unset|
+    (?x:dict|list|load|next|nextto|package|uplevel|unload|unset|
     ){{b}}
 
   builtin_funcs: |-
