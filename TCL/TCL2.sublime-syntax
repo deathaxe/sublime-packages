@@ -1062,7 +1062,7 @@ contexts:
       pop: true
 
   cmd-generic-end:
-    - include: words
+    - include: expressions
     - include: eoc-pop
 
   cmd-function-end:
