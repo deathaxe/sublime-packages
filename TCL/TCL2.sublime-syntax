@@ -3,9 +3,11 @@
 # https://www.sublimetext.com/docs/3/syntax.html
 # https://wiki.tcl-lang.org/page/Dodekalogue
 # https://www.tcl.tk/man/tcl8.6/TclCmd/Tcl.htm
-name: Tcl2
+name: Tcl Improved
 file_extensions:
+  - tcl
   - tcl2
+  - tm
 scope: source.tcl
 
 variables:
@@ -73,7 +75,7 @@ contexts:
     - include: cmd-string
     - include: cmd-unset
 
-    # flow control structures
+    # flow control statements
     - include: stmt-flow
     - include: if
     - include: for
@@ -339,7 +341,7 @@ contexts:
     - match: regsub{{b}}
       scope: support.function.builtin.tcl
       push:
-        - cmd-regsub-meta         # must be end of command
+        - cmd-regsub-meta        # must be end of command
         - cmd-generic-var        # varname
         - word-regexp-pop        # substitution
         - word-string-pop        # string

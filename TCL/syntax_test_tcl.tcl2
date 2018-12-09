@@ -252,10 +252,6 @@
 #          ^^^^^^ meta.braces.tcl string.quoted.brace.tcl
 #               ^ punctuation.section.braces.end.tcl
 
-    {{{}{}}{}{}}
-#   ^^^^^^^^^^^^ punctuation.section.braces - illegal
-
-
 # ----------------------------------------------------------------------------
 # https://github.com/SublimeTextIssues/DefaultPackages/issues/131
 
