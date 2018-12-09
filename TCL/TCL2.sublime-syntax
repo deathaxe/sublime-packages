@@ -27,9 +27,7 @@ variables:
       auto_execs|auto_index|auto_noexec|auto_noload|auto_path|env\(TCL_LIBRARY\)|env\(TCLLIBPATH\)
     ){{b}}
 
-  keywords: |-
-    (?x:dict|list|load|next|nextto|package|uplevel|unload|unset|
-    ){{b}}
+  keywords: (?:dict|list|load|next|nextto|package|uplevel|unload|unset){{b}}
 
   builtin_funcs: |-
     (?x:
