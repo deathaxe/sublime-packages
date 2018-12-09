@@ -1111,6 +1111,13 @@ contexts:
           scope: punctuation.section.block.end.tcl
           set: eow-pop-or-illegal
         - include: main
+    # script in a double quoted string
+    - match: \"
+      scope: punctuation.definition.string.begin.tcl
+      set:
+        - meta_scope: string.quoted.double.tcl
+        - include: string-body
+        - include: string-quoted-double-end
     # single word flow control statements
     - match: break{{b}}
       scope: meta.statement.control.flow.break.tcl keyword.control.flow.break.tcl

@@ -2367,6 +2367,20 @@ set regexp {(.{0,200})}
 #    ^^^^^^^^^ meta.function.tcl - meta.block.tcl
 #     ^^^^^^^ invalid.illegal.end-of-cmd-expected.tcl
 
+    proc $procName {clockval timezone} "
+#                                      ^ meta.function.tcl string.quoted.double.tcl punctuation.definition.string.begin.tcl
+        $preFormatCode
+#       ^^^^^^^^^^^^^^ meta.function.tcl string.quoted.double.tcl variable.other.tcl
+        return \[::format [list $formatString] $substituents\]
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.tcl string.quoted.double.tcl
+#       ^^^^^^ - keyword
+#              ^^ constant.character.escape.other.tcl
+#                         ^^^^^^^^^^^^^^^^^^^^ meta.substitution.tcl
+#                                              ^^^^^^^^^^^^^ variable.other.tcl
+    " illegal
+#   ^ meta.function.tcl string.quoted.double.tcl punctuation.definition.string.end.tcl
+#    ^ meta.function.tcl - string - punctuation
+#     ^^^^^^^ meta.function.tcl invalid.illegal.end-of-cmd-expected.tcl
 
 ##############################################################################
 # regexp commands
