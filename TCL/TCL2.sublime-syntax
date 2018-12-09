@@ -358,9 +358,7 @@ contexts:
 
   cmd-regexp-matches:
     - meta_scope: meta.function-call.tcl
-    - include: words
-    - match: '{{word}}'
-      scope: variable.other.tcl
+    - include: cmd-generic-vars
     - include: eoc-pop
 
   cmd-regsub-meta:
@@ -487,9 +485,7 @@ contexts:
 
   stmt-catch-meta:
     - meta_scope: meta.statement.flow.catch.tcl
-    - include: words
-    - match: '{{word}}'
-      scope: variable.other.tcl
+    - include: cmd-generic-vars
     - include: eoc-pop-or-illegal
 
   stmt-continue-meta:
@@ -1038,6 +1034,13 @@ contexts:
     - match: '{{ident}}'
       set: [variable-simple-end, variable-simple-name]
     - include: word-string-pop
+
+  cmd-generic-vars:
+    # scripted variable definitions
+    - include: words
+    # simple variable definition
+    - match: '{{word}}'
+      scope: variable.other.tcl
 
   cmd-generic-args:
     - include: cmd-switches-end
