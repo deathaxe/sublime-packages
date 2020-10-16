@@ -1,0 +1,22 @@
+%YAML 1.2
+---
+scope: source.java.embedded.jsp
+version: 2
+hidden: true
+
+extends: Java.sublime-syntax
+
+contexts:
+
+  stray-braces:
+    - match: \}
+      scope: punctuation.section.block.end.java
+
+  stray-group:
+    - match: \)
+      scope: punctuation.section.group.end.java
+
+  string-escapes:
+    # escaped <% and %> to not detect them as end of interpolation
+    - match: <\\%|%\\>
+      scope: constant.character.escape.jsp

@@ -1,0 +1,13 @@
+%YAML 1.2
+---
+scope: source.css.embedded.jsp
+version: 2
+hidden: true
+
+extends: Packages/CSS/CSS.sublime-syntax
+
+contexts:
+
+  prototype:
+    - meta_prepend: true
+    - include: HTML (JSP).sublime-syntax#jsp-interpolations

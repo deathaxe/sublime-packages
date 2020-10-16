@@ -1,10 +1,81 @@
-// SYNTAX TEST "Packages/Java/Java Server Pages (JSP).sublime-syntax"
-// <- text.html.jsp - source.java.embedded.html
+// SYNTAX TEST "Packages/Java/HTML (JSP).sublime-syntax"
+// <- text.html.jsp - source.java.embedded.jsp
 <!DOCTYPE html>
 <html>
 <head>
     <title></title>
 //  ^^^^^^^^^^^^^^^ meta.tag
+
+    <style type="text/css">
+//  ^^^^^^^^^^^^^^^^^^^^^^^ meta.tag.style.begin.html
+
+        @media <% print(myMedia) %> {
+//      ^^^^^^ meta.at-rule.media.css keyword.control.directive.css
+//             ^^^^^^^^^^^^^^^^^^^^ meta.at-rule.media.css meta.interpolation.scriptlet.jsp
+//                                  ^ meta.at-rule.media.css meta.block.css punctuation.section.block.begin.css
+        }
+
+        tr.<% print(myClass); %> {
+//      ^^^ meta.selector.css - meta.interpolation
+//         ^^^^^^^^^^^^^^^^^^^^^ meta.selector.css meta.interpolation.scriptlet.jsp
+//                               ^ - meta.selector - meta.interpolation
+//         ^^ punctuation.section.interpolation.begin.jsp
+//                            ^^ punctuation.section.interpolation.end.jsp
+            color: <% print("<\%foo%\>"); %>;
+//          ^^^^^ support.type.property-name.css
+//               ^ punctuation.separator.key-value.css
+//                 ^^^^^^^^^^^^^^^^^^^^^^^^^ meta.property-value.css meta.interpolation.scriptlet.jsp
+//                                          ^ - meta.interpolation
+//                 ^^ punctuation.section.interpolation.begin.jsp
+//                    ^^^^^ variable.function.java
+//                           ^^^ constant.character.escape.jsp
+//                                 ^^^ constant.character.escape.jsp
+//                                        ^^ punctuation.section.interpolation.end.jsp
+            color: <% print('<\%bar%\>'); %>;
+//          ^^^^^ support.type.property-name.css
+//               ^ punctuation.separator.key-value.css
+//                 ^^^^^^^^^^^^^^^^^^^^^^^^^ meta.property-value.css meta.interpolation.scriptlet.jsp
+//                                          ^ - meta.interpolation
+//                 ^^ punctuation.section.interpolation.begin.jsp
+//                    ^^^^^ variable.function.java
+//                           ^^^ constant.character.escape.jsp
+//                                 ^^^ constant.character.escape.jsp
+//                                        ^^ punctuation.section.interpolation.end.jsp
+        }
+    </style>
+//  ^^^^^^^^ meta.tag.style.end.html
+
+    <script type="text/javascript">
+//  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.tag.script.begin.html
+        <% if (true) { %>
+//      ^^^^^^^^^^^^^^^^^ meta.interpolation.scriptlet.jsp
+//      ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
+//        ^^^^^^^^^^^^^ source.java.embedded.jsp
+//                     ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
+
+            if (true) { <% print ("hello%\>") %> }
+//          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.js.embedded.html meta.conditional.js
+//                      ^^^^^^^^^^^^^^^^^^^^^^^^ meta.interpolation.scriptlet.jsp
+//                      ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
+//                        ^^^^^^^^^^^^^^^^^^^^ source.java.embedded.jsp
+//                                      ^^^ constant.character.escape.jsp
+//                                            ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
+
+        <% } else { %>
+//      ^^^^^^^^^^^^^^ meta.interpolation.scriptlet.jsp
+//      ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
+//        ^^^^^^^^^^ source.java.embedded.jsp
+//                  ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
+
+            console.write("yep");
+        <% } %>
+//      ^^^^^^^ meta.interpolation.scriptlet.jsp
+//      ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
+//        ^^^ source.java.embedded.jsp
+//           ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
+
+    </script>
+//  ^^^^^^^^^ meta.tag.script.end.html
 </head>
 <body>
 
@@ -74,14 +145,14 @@
 
     <%@ include file="foo.bar" %>
 // ^ - meta
-//  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.embedded.directive.jsp
+//  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.interpolation.directive.jsp
 //                               ^ - meta
-//  ^^^ punctuation.section.embedded.begin.jsp
+//  ^^^ punctuation.section.interpolation.begin.jsp
 //      ^^^^^^^ keyword.control.directive.jsp
 //              ^^^^ entity.other.attribute-name.jsp
 //                  ^ punctuation.separator.key-value.jsp
 //                   ^^^^^^^^^ string.quoted.double.jsp
-//                             ^^ punctuation.section.embedded.end.jsp
+//                             ^^ punctuation.section.interpolation.end.jsp
 
     <!-- DECLARATION TESTS -->
 
@@ -107,7 +178,7 @@
 //      ^ entity.name.tag.html punctuation.separator.namespace.html
 //       ^^^^^^^^^^^ entity.name.tag.localname.html
 //                  ^ punctuation.definition.tag.end.html
-//                   ^^^^^^^^^^ source.java.embedded.html - source.java source.java
+//                   ^^^^^^^^^^ source.java.embedded.jsp - source.java source.java
 //                   ^^^ storage.type.primitive.java
 //                             ^^^^^^^^^^^^^^^^^^ meta.tag.jsp.declaration.end.html
 //                             ^^ punctuation.definition.tag.begin.html
@@ -118,13 +189,13 @@
 
     <%! int i = 0; %>
 // ^ - meta
-//  ^^^ meta.embedded.declaration.jsp - source.java.embedded.html
-//     ^^^^^^^^^^^^ meta.embedded.declaration.jsp source.java.embedded.html - source.java source.java
-//                 ^^ meta.embedded.declaration.jsp - source.java.embedded.html
+//  ^^^ meta.interpolation.declaration.jsp - source.java.embedded.jsp
+//     ^^^^^^^^^^^^ meta.interpolation.declaration.jsp source.java.embedded.jsp - source.java source.java
+//                 ^^ meta.interpolation.declaration.jsp - source.java.embedded.jsp
 //                   ^ - meta
-//  ^^^ punctuation.section.embedded.begin.jsp
+//  ^^^ punctuation.section.interpolation.begin.jsp
 //      ^^^ storage.type.primitive.java
-//                 ^^ punctuation.section.embedded.end.jsp
+//                 ^^ punctuation.section.interpolation.end.jsp
 
     <!-- EXPRESSIONS TESTS -->
 
@@ -132,13 +203,13 @@
 //  ^^^^^^^^^^^^^^^^^ - meta
 //                   ^^^^^^ meta.tag.inline.any.html - meta.attribute-with-value.html
 //                         ^^^^^^^^^^^^^^^^^^^^^^^^^ meta.tag.inline.any.html meta.attribute-with-value.html
-//                                ^^^ meta.embedded.expression.jsp punctuation.section.embedded.begin.jsp - source.java
-//                                   ^^^^^^^^^^^^ meta.embedded.expression.jsp source.java.embedded.html - source.java source.java
-//                                               ^^ meta.embedded.expression.jsp punctuation.section.embedded.end.jsp - source.java
+//                                ^^^ meta.interpolation.expression.jsp punctuation.section.interpolation.begin.jsp - source.java
+//                                   ^^^^^^^^^^^^ meta.interpolation.expression.jsp source.java.embedded.jsp - source.java source.java
+//                                               ^^ meta.interpolation.expression.jsp punctuation.section.interpolation.end.jsp - source.java
 //                                                  ^ meta.tag.inline.any.html - meta.attribute-with-value.html
-//                                                   ^^^ meta.embedded.expression.jsp punctuation.section.embedded.begin.jsp - source.java
-//                                                      ^^^^^^^^^^^^ meta.embedded.expression.jsp source.java.embedded.html
-//                                                                  ^^ meta.embedded.expression.jsp punctuation.section.embedded.end.jsp - source.java
+//                                                   ^^^ meta.interpolation.expression.jsp punctuation.section.interpolation.begin.jsp - source.java
+//                                                      ^^^^^^^^^^^^ meta.interpolation.expression.jsp source.java.embedded.jsp
+//                                                                  ^^ meta.interpolation.expression.jsp punctuation.section.interpolation.end.jsp - source.java
 //                                                                    ^^^^^^^ meta.tag.inline.any.html
 //                                                                           ^^^^^^^^^ - meta
 
@@ -151,7 +222,7 @@
 //                                  ^ entity.name.tag.html punctuation.separator.namespace.html
 //                                   ^^^^^^^^^^ entity.name.tag.localname.html
 //                                             ^ punctuation.definition.tag.end.html
-//                                              ^^^^^^^^^^^^^^^^^^ source.java.embedded.html - source.java source.java
+//                                              ^^^^^^^^^^^^^^^^^^ source.java.embedded.jsp - source.java source.java
 //                                                                ^^^^^^^^^^^^^^^^^ meta.tag.jsp.expression.end.html
 //                                                                ^^ punctuation.definition.tag.begin.html
 //                                                                  ^^^ entity.name.tag.namespace.html
@@ -215,18 +286,18 @@
     <!-- SCRIPTLET TESTS -->
 
     <%
-//  ^^ punctuation.section.embedded.begin.jsp - source.java.embedded.html
-//    ^ source.java.embedded.html - source.java source.java
+//  ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
+//    ^ source.java.embedded.jsp - source.java source.java
     if (!foo && !bar) {
 //  ^^ keyword.control.conditional.if.java
 //      ^ keyword.operator.logical.java
 //           ^^ keyword.operator.logical.java
     %><div style="width: <%=with%>"></div><%
-//  ^^ punctuation.section.embedded.end.jsp - source.java.embedded.html
+//  ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
 //    ^^^^^ meta.tag.block.any.html - meta.attribute-with-value
 //         ^^^^^^^ meta.tag.block.any.html meta.attribute-with-value.style.html - source.css
 //                ^^^^^^^ meta.tag.block.any.html meta.attribute-with-value.style.html source.css - meta.expression
-//                       ^^^^^^^^^ meta.tag.block.any.html meta.attribute-with-value.style.html source.css meta.embedded.expression.jsp
+//                       ^^^^^^^^^ meta.tag.block.any.html meta.attribute-with-value.style.html source.css meta.interpolation.expression.jsp
 //                                ^ meta.tag.block.any.html meta.attribute-with-value.style.html - source.css
 //                                 ^^^^^^^ meta.tag.block.any.html - meta.attribute-with-value.style.html - source.css
 //    ^ punctuation.definition.tag.begin.html
@@ -236,39 +307,39 @@
 //               ^ string.quoted.double punctuation.definition.string.begin.html
 //                ^^^^^ meta.property-name.css support.type.property-name.css
 //                     ^ punctuation.separator.key-value.css
-//                       ^^^ punctuation.section.embedded.begin.jsp - source.java.embedded
-//                          ^^^^ source.java.embedded.html
-//                              ^^ punctuation.section.embedded.end.jsp - source.java.embedded
+//                       ^^^ punctuation.section.interpolation.begin.jsp - source.java.embedded
+//                          ^^^^ source.java.embedded.jsp
+//                              ^^ punctuation.section.interpolation.end.jsp - source.java.embedded
 //                                ^ string.quoted.double punctuation.definition.string.end.html
 //                                 ^ punctuation.definition.tag.end.html
-//                                        ^^ punctuation.section.embedded.begin.jsp - source.java.embedded.html
+//                                        ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
         if (foot.shouldBe()) {
 //      ^^ keyword.control.conditional.if.java
             boolean test = false;
 //          ^^^^^^^ storage.type
 //                         ^^^^^ constant
             %>
-//          ^^ punctuation.section.embedded.end.jsp - source.java.embedded.html
-//            ^ text.html.jsp - source.java.embedded.html
+//          ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
+//            ^ text.html.jsp - source.java.embedded.jsp
 
             <%-- This is a comment --%>
 //          ^^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.block.jsp
             <% int aNumber = 0; // this scriptlet should close %>
 //                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.line.double-slash.java
-//                                                             ^^ punctuation.section.embedded.end.jsp
+//                                                             ^^ punctuation.section.interpolation.end.jsp
 
 
             <div style="width: 90%"></div>
 //          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.tag
             <%
-//          ^^ punctuation.section.embedded.begin.jsp - source.java.embedded.html
+//          ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
         }
 //      ^ - invalid.illegal.stray-brace-end
     }
 //  ^ - invalid.illegal.stray-brace-end
     %>
-//  ^^ punctuation.section.embedded.end.jsp - source.java.embedded.html
-//    ^ text.html.jsp - source.java.embedded.html
+//  ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
+//    ^ text.html.jsp - source.java.embedded.jsp
 
 
     Plain text
