@@ -93,8 +93,7 @@ contexts:
         2: entity.name.tag.namespace.html
         3: entity.name.tag.html punctuation.separator.namespace.html
         4: entity.name.tag.localname.html
-      embed: tag-jsp-declaration-attributes
-      escape: (?=(?i)</jsp:declaration{{tag_name_break_char}})
+      push: tag-jsp-declaration-attributes
     - match: (?i)(</)(jsp)(:)(declaration){{tag_name_break}}
       captures:
         1: punctuation.definition.tag.begin.html
@@ -104,12 +103,27 @@ contexts:
       push: tag-jsp-declaration-end
 
   tag-jsp-declaration-attributes:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.declaration.begin.html
-    - include: tag-end-set-java
+    - match: \>
+      scope:
+        meta.tag.jsp.declaration.begin.html
+        punctuation.definition.tag.end.html
+      pop: 1
+      embed: scope:source.java.embedded.jsp
+      escape: (?i)(</)(jsp)(:)(declaration)(>)
+      escape_captures:
+        0: meta.tag.jsp.declaration.end.html
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.namespace.html
+        3: entity.name.tag.html punctuation.separator.namespace.html
+        4: entity.name.tag.localname.html
+        5: punctuation.definition.tag.end.html
     - include: tag-end-self-closing
     - include: tag-attributes
 
   tag-jsp-declaration-end:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.declaration.end.html
     - include: tag-end
     - include: illegal-attributes
@@ -137,11 +151,13 @@ contexts:
       push: tag-jsp-directive-end
 
   tag-jsp-directive-attributes:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.directive.begin.html
     - include: tag-end-maybe-self-closing
     - include: tag-attributes
 
   tag-jsp-directive-end:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.directive.end.html
     - include: tag-end
     - include: illegal-attributes
@@ -155,8 +171,7 @@ contexts:
         2: entity.name.tag.namespace.html
         3: entity.name.tag.html punctuation.separator.namespace.html
         4: entity.name.tag.localname.html
-      embed: tag-jsp-expression-attributes
-      escape: (?=(?i)</jsp:expression{{tag_name_break_char}})
+      push: tag-jsp-expression-attributes
     - match: (?i)(</)(jsp)(:)(expression){{tag_name_break}}
       captures:
         1: punctuation.definition.tag.begin.html
@@ -166,12 +181,27 @@ contexts:
       push: tag-jsp-expression-end
 
   tag-jsp-expression-attributes:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.expression.begin.html
-    - include: tag-end-set-java
+    - match: \>
+      scope:
+        meta.tag.jsp.expression.begin.html
+        punctuation.definition.tag.end.html
+      pop: 1
+      embed: scope:source.java.embedded.jsp
+      escape: (?i)(</)(jsp)(:)(expression)(>)
+      escape_captures:
+        0: meta.tag.jsp.expression.end.html
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.namespace.html
+        3: entity.name.tag.html punctuation.separator.namespace.html
+        4: entity.name.tag.localname.html
+        5: punctuation.definition.tag.end.html
     - include: tag-end-self-closing
     - include: tag-attributes
 
   tag-jsp-expression-end:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.expression.end.html
     - include: tag-end
     - include: illegal-attributes
@@ -195,11 +225,13 @@ contexts:
       push: tag-jsp-other-end
 
   tag-jsp-other-attributes:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.other.begin.html
     - include: tag-end-maybe-self-closing
     - include: tag-attributes
 
   tag-jsp-other-end:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.other.end.html
     - include: tag-end
     - include: illegal-attributes
@@ -213,8 +245,7 @@ contexts:
         2: entity.name.tag.namespace.html
         3: entity.name.tag.html punctuation.separator.namespace.html
         4: entity.name.tag.localname.html
-      embed: tag-jsp-scriptlet-attributes
-      escape: (?=(?i)</jsp:scriptlet{{tag_name_break_char}})
+      push: tag-jsp-scriptlet-attributes
     - match: (?i)(</)(jsp)(:)(scriptlet){{tag_name_break}}
       captures:
         1: punctuation.definition.tag.begin.html
@@ -224,12 +255,27 @@ contexts:
       push: tag-jsp-scriptlet-end
 
   tag-jsp-scriptlet-attributes:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.scriptlet.begin.html
-    - include: tag-end-set-java
+    - match: \>
+      scope:
+        meta.tag.jsp.scriptlet.begin.html
+        punctuation.definition.tag.end.html
+      pop: 1
+      embed: scope:source.java.embedded.jsp
+      escape: (?i)(</)(jsp)(:)(scriptlet)(>)
+      escape_captures:
+        0: meta.tag.jsp.scriptlet.end.html
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.namespace.html
+        3: entity.name.tag.html punctuation.separator.namespace.html
+        4: entity.name.tag.localname.html
+        5: punctuation.definition.tag.end.html
     - include: tag-end-self-closing
     - include: tag-attributes
 
   tag-jsp-scriptlet-end:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.scriptlet.end.html
     - include: tag-end
     - include: illegal-attributes
@@ -253,6 +299,7 @@ contexts:
       push: tag-jsp-text-end
 
   tag-jsp-text-attributes:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.text.begin.html
     - match: \>
       scope: punctuation.definition.tag.end.html
@@ -266,16 +313,25 @@ contexts:
       pop: 1
 
   tag-jsp-text-end:
+    - meta_include_prototype: false
     - meta_scope: meta.tag.jsp.text.end.html
     - include: tag-end
     - include: illegal-attributes
 
 ###[ JSP TAG PROTOTYPES ]#####################################################
 
-  tag-end-set-java:
-    - match: \>
-      scope: punctuation.definition.tag.end.html
-      set: scope:source.java.embedded.jsp
+  tag-cdata-java:
+    - match: (<!\[)(CDATA)(\[)
+      captures:
+        0: meta.tag.sgml.cdata.html
+        1: punctuation.definition.tag.begin.html
+        2: keyword.declaration.cdata.html
+        3: punctuation.definition.tag.begin.html
+      embed: scope:source.java.embedded.jsp
+      embed_scope: meta.tag.sgml.cdata.html source.java.embedded.jsp
+      escape: ']]>'
+      escape_captures:
+        0: meta.tag.sgml.cdata.html punctuation.definition.tag.end.html
 
   illegal-attributes:
     - match: '[^{{tag_name_break_char}}]+'
@@ -287,6 +343,7 @@ contexts:
     - match: (?=<%)
       push:
         - clear_scopes: 1
+        - meta_include_prototype: false
         - include: jsp-interpolations
         - include: immediately-pop
 

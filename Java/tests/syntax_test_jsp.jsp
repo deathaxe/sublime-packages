@@ -347,8 +347,68 @@
 //        ^^^^^^^ entity.name.tag.localname.html
 //               ^ punctuation.definition.tag.end.html
 
-    <!-- SCRIPTLET TESTS -->
 
+    <!-- JSP SCRIPTLET TAG TESTS -->
+
+    </jsp:scriptlet>
+//  ^^^^^^^^^^^^^^^^ meta.tag.jsp.scriptlet.end.html
+//  ^^ punctuation.definition.tag.begin.html
+//    ^^^ entity.name.tag.namespace.html
+//       ^ punctuation.separator.namespace.html
+//        ^^^^^^^^^ entity.name.tag.localname.html
+//                 ^ punctuation.definition.tag.end.html
+
+    <jsp:scriptlet/>int i;</jsp:scriptlet>
+//  ^^^^^^^^^^^^^^^^ meta.tag.jsp.scriptlet.begin.html
+//  ^ punctuation.definition.tag.begin.html
+//   ^^^ entity.name.tag.namespace.html
+//      ^ punctuation.separator.namespace.html
+//       ^^^^^^^^^ entity.name.tag.localname.html
+//                ^^ punctuation.definition.tag.end.html
+//                  ^^^^^^ - source
+//                        ^^^^^^^^^^^^^^^^ meta.tag.jsp.scriptlet.end.html
+//                        ^^ punctuation.definition.tag.begin.html
+//                          ^^^ entity.name.tag.namespace.html
+//                             ^ punctuation.separator.namespace.html
+//                              ^^^^^^^^^ entity.name.tag.localname.html
+//                                       ^ punctuation.definition.tag.end.html
+
+    <jsp:scriptlet>int i = (1 << 5);</jsp:scriptlet>
+//  ^^^^^^^^^^^^^^^ meta.tag.jsp.scriptlet.begin.html
+//  ^ punctuation.definition.tag.begin.html
+//   ^^^ entity.name.tag.namespace.html
+//      ^ punctuation.separator.namespace.html
+//       ^^^^^^^^^ entity.name.tag.localname.html
+//                ^ punctuation.definition.tag.end.html
+//                 ^^^^^^^^^^^^^^^^^ source.java.embedded.jsp
+//                                  ^^^^^^^^^^^^^^^^ meta.tag.jsp.scriptlet.end.html
+//                                  ^^ punctuation.definition.tag.begin.html
+//                                    ^^^ entity.name.tag.namespace.html
+//                                       ^ punctuation.separator.namespace.html
+//                                        ^^^^^^^^^ entity.name.tag.localname.html
+//                                                 ^ punctuation.definition.tag.end.html
+
+    <!-- Note we need to declare CDATA because we don't escape the less than symbol -->
+    <jsp:scriptlet><![CDATA[int i = (1 << 5);]]></jsp:scriptlet>
+//  ^^^^^^^^^^^^^^^ meta.tag.jsp.scriptlet.begin.html
+//  ^ punctuation.definition.tag.begin.html
+//   ^^^ entity.name.tag.namespace.html
+//      ^ punctuation.separator.namespace.html
+//       ^^^^^^^^^ entity.name.tag.localname.html
+//                ^ punctuation.definition.tag.end.html
+//                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.java.embedded.jsp
+//                 ^^^ punctuation.definition.tag.begin.html
+//                    ^^^^^ keyword.declaration.cdata.html
+//                         ^ punctuation.definition.tag.begin.html
+//                                           ^^^ punctuation.definition.tag.end.html
+//                                              ^^^^^^^^^^^^^^^^ meta.tag.jsp.scriptlet.end.html
+//                                              ^^ punctuation.definition.tag.begin.html
+//                                                ^^^ entity.name.tag.namespace.html
+//                                                   ^ punctuation.separator.namespace.html
+//                                                    ^^^^^^^^^ entity.name.tag.localname.html
+//                                                             ^ punctuation.definition.tag.end.html
+
+    <!-- JSP TEXT TAG TESTS -->
 
     Plain text
 //  ^^^^^^^^^^ text.html.jsp - meta

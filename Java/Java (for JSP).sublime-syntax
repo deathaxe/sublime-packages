@@ -8,6 +8,18 @@ extends: Java.sublime-syntax
 
 contexts:
 
+  prototype:
+    - meta_append: true
+    - include: HTML (Plain).sublime-syntax#entities
+    - match: (<!\[)(CDATA)(\[)
+      captures:
+        0: meta.tag.sgml.cdata.html
+        1: punctuation.definition.tag.begin.html
+        2: keyword.declaration.cdata.html
+        3: punctuation.definition.tag.begin.html
+    - match: ']]>'
+      scope: meta.tag.sgml.cdata.html punctuation.definition.tag.end.html
+
   stray-braces:
     - match: \}
       scope: punctuation.section.block.end.java
