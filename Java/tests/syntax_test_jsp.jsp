@@ -82,6 +82,70 @@
     <%-- This is a comment --%>
 //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.block.jsp
 
+    <!--
+    ---------------------------------------------------------------------------
+    -- SCRIPTLET TESTS
+    ---------------------------------------------------------------------------
+    -->
+
+    <%
+//  ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
+//    ^ source.java.embedded.jsp - source.java source.java
+    if (!foo && !bar) {
+//  ^^ keyword.control.conditional.if.java
+//      ^ keyword.operator.logical.java
+//           ^^ keyword.operator.logical.java
+    %><div style="width: <%=with%>"></div><%
+//  ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
+//    ^^^^^ meta.tag.block.any.html - meta.attribute-with-value
+//         ^^^^^^^ meta.tag.block.any.html meta.attribute-with-value.style.html - source.css
+//                ^^^^^^^ meta.tag.block.any.html meta.attribute-with-value.style.html source.css - meta.expression
+//                       ^^^^^^^^^ meta.tag.block.any.html meta.attribute-with-value.style.html source.css meta.interpolation.expression.jsp
+//                                ^ meta.tag.block.any.html meta.attribute-with-value.style.html - source.css
+//                                 ^^^^^^^ meta.tag.block.any.html - meta.attribute-with-value.style.html - source.css
+//    ^ punctuation.definition.tag.begin.html
+//     ^^^ entity.name.tag.block.any.html
+//         ^^^^^ entity.other.attribute-name.style.html
+//              ^ punctuation.separator.key-value.html
+//               ^ string.quoted.double punctuation.definition.string.begin.html
+//                ^^^^^ meta.property-name.css support.type.property-name.css
+//                     ^ punctuation.separator.key-value.css
+//                       ^^^ punctuation.section.interpolation.begin.jsp - source.java.embedded
+//                          ^^^^ source.java.embedded.jsp
+//                              ^^ punctuation.section.interpolation.end.jsp - source.java.embedded
+//                                ^ string.quoted.double punctuation.definition.string.end.html
+//                                 ^ punctuation.definition.tag.end.html
+//                                        ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
+        if (foot.shouldBe()) {
+//      ^^ keyword.control.conditional.if.java
+            boolean test = false;
+//          ^^^^^^^ storage.type
+//                         ^^^^^ constant
+            %>
+//          ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
+//            ^ text.html.jsp - source.java.embedded.jsp
+
+            <%-- This is a comment --%>
+//          ^^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.block.jsp
+            <% int aNumber = 0; // this scriptlet should close %>
+//                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.line.double-slash.java
+//                                                             ^^ punctuation.section.interpolation.end.jsp
+
+
+            <div style="width: 90%"></div>
+//          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.tag
+            <%
+//          ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
+        }
+//      ^ - invalid.illegal.stray-brace-end
+    }
+//  ^ - invalid.illegal.stray-brace-end
+    %>
+//  ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
+//    ^ text.html.jsp - source.java.embedded.jsp
+
+
+
     <!-- ROOT TESTS -->
 
     <jsp:root
@@ -284,62 +348,6 @@
 //               ^ punctuation.definition.tag.end.html
 
     <!-- SCRIPTLET TESTS -->
-
-    <%
-//  ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
-//    ^ source.java.embedded.jsp - source.java source.java
-    if (!foo && !bar) {
-//  ^^ keyword.control.conditional.if.java
-//      ^ keyword.operator.logical.java
-//           ^^ keyword.operator.logical.java
-    %><div style="width: <%=with%>"></div><%
-//  ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
-//    ^^^^^ meta.tag.block.any.html - meta.attribute-with-value
-//         ^^^^^^^ meta.tag.block.any.html meta.attribute-with-value.style.html - source.css
-//                ^^^^^^^ meta.tag.block.any.html meta.attribute-with-value.style.html source.css - meta.expression
-//                       ^^^^^^^^^ meta.tag.block.any.html meta.attribute-with-value.style.html source.css meta.interpolation.expression.jsp
-//                                ^ meta.tag.block.any.html meta.attribute-with-value.style.html - source.css
-//                                 ^^^^^^^ meta.tag.block.any.html - meta.attribute-with-value.style.html - source.css
-//    ^ punctuation.definition.tag.begin.html
-//     ^^^ entity.name.tag.block.any.html
-//         ^^^^^ entity.other.attribute-name.style.html
-//              ^ punctuation.separator.key-value.html
-//               ^ string.quoted.double punctuation.definition.string.begin.html
-//                ^^^^^ meta.property-name.css support.type.property-name.css
-//                     ^ punctuation.separator.key-value.css
-//                       ^^^ punctuation.section.interpolation.begin.jsp - source.java.embedded
-//                          ^^^^ source.java.embedded.jsp
-//                              ^^ punctuation.section.interpolation.end.jsp - source.java.embedded
-//                                ^ string.quoted.double punctuation.definition.string.end.html
-//                                 ^ punctuation.definition.tag.end.html
-//                                        ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
-        if (foot.shouldBe()) {
-//      ^^ keyword.control.conditional.if.java
-            boolean test = false;
-//          ^^^^^^^ storage.type
-//                         ^^^^^ constant
-            %>
-//          ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
-//            ^ text.html.jsp - source.java.embedded.jsp
-
-            <%-- This is a comment --%>
-//          ^^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.block.jsp
-            <% int aNumber = 0; // this scriptlet should close %>
-//                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.line.double-slash.java
-//                                                             ^^ punctuation.section.interpolation.end.jsp
-
-
-            <div style="width: 90%"></div>
-//          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.tag
-            <%
-//          ^^ punctuation.section.interpolation.begin.jsp - source.java.embedded.jsp
-        }
-//      ^ - invalid.illegal.stray-brace-end
-    }
-//  ^ - invalid.illegal.stray-brace-end
-    %>
-//  ^^ punctuation.section.interpolation.end.jsp - source.java.embedded.jsp
-//    ^ text.html.jsp - source.java.embedded.jsp
 
 
     Plain text
