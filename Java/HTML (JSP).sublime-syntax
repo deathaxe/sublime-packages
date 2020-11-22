@@ -44,36 +44,60 @@ contexts:
 
   tag-event-attribute-value:
     - match: \"
-      scope: meta.string.html string.quoted.double.html punctuation.definition.string.begin.html
+      scope:
+        meta.string.html string.quoted.double.html
+        punctuation.definition.string.begin.html
       embed: scope:source.js.embedded.jsp
-      embed_scope: meta.string.html meta.interpolation.html source.js.embedded.html
+      embed_scope:
+        meta.string.html meta.interpolation.html
+        source.js.embedded.html
       escape: \"
       escape_captures:
-        0: meta.string.html string.quoted.double.html punctuation.definition.string.end.html
+        0:
+          meta.string.html string.quoted.double.html
+          punctuation.definition.string.end.html
     - match: \'
-      scope: meta.string.html string.quoted.single.html punctuation.definition.string.begin.html
+      scope:
+        meta.string.html string.quoted.single.html
+        punctuation.definition.string.begin.html
       embed: scope:source.js.embedded.jsp
-      embed_scope: meta.string.html meta.interpolation.html source.js.embedded.html
+      embed_scope:
+        meta.string.html meta.interpolation.html
+        source.js.embedded.html
       escape: \'
       escape_captures:
-        0: meta.string.html string.quoted.single.html punctuation.definition.string.end.html
+        0:
+          meta.string.html string.quoted.single.html
+          punctuation.definition.string.end.html
     - include: else-pop
 
   tag-style-attribute-value:
     - match: \"
-      scope: meta.string.html string.quoted.double.html punctuation.definition.string.begin.html
+      scope:
+        meta.string.html string.quoted.double.html
+        punctuation.definition.string.begin.html
       embed: scope:source.css.embedded.jsp#rule-list-body
-      embed_scope: meta.string.html meta.interpolation.html source.css.embedded.html
+      embed_scope:
+        meta.string.html meta.interpolation.html
+        source.css.embedded.html
       escape: \"
       escape_captures:
-        0: meta.string.html string.quoted.double.html punctuation.definition.string.end.html
+        0:
+          meta.string.html string.quoted.double.html
+          punctuation.definition.string.end.html
     - match: \'
-      scope: meta.string.html string.quoted.single.html punctuation.definition.string.begin.html
+      scope:
+        meta.string.html string.quoted.single.html
+        punctuation.definition.string.begin.html
       embed: scope:source.css.embedded.jsp#rule-list-body
-      embed_scope: meta.string.html meta.interpolation.html source.css.embedded.html
+      embed_scope:
+        meta.string.html meta.interpolation.html
+        source.css.embedded.html
       escape: \'
       escape_captures:
-        0: meta.string.html string.quoted.single.html punctuation.definition.string.end.html
+        0:
+          meta.string.html string.quoted.single.html
+          punctuation.definition.string.end.html
     - include: else-pop
 
   tag-attribute-value-content:
@@ -368,12 +392,17 @@ contexts:
 
   jsp-interpolations-declarations:
     - match: <%!
-      scope: meta.interpolation.declaration.jsp punctuation.section.interpolation.begin.jsp
+      scope:
+        meta.interpolation.declaration.jsp
+        punctuation.section.interpolation.begin.jsp
       embed: scope:source.java.embedded.jsp
-      embed_scope: meta.interpolation.declaration.jsp source.java.embedded.jsp
+      embed_scope:
+        meta.interpolation.declaration.jsp
+        source.java.embedded.jsp
       escape: \%>
       escape_captures:
-        0: meta.interpolation.declaration.jsp punctuation.section.interpolation.end.jsp
+        0: meta.interpolation.declaration.jsp
+           punctuation.section.interpolation.end.jsp
 
   jsp-interpolations-directives:
     - match: <%@
@@ -402,21 +431,31 @@ contexts:
 
   jsp-interpolations-expressions:
     - match: <%=
-      scope: meta.interpolation.expression.jsp punctuation.section.interpolation.begin.jsp
+      scope:
+        meta.interpolation.expression.jsp
+        punctuation.section.interpolation.begin.jsp
       embed: scope:source.java.embedded.jsp#expressions
-      embed_scope: meta.interpolation.expression.jsp source.java.embedded.jsp
+      embed_scope:
+        meta.interpolation.expression.jsp
+        source.java.embedded.jsp
       escape: \%>
       escape_captures:
-        0: meta.interpolation.expression.jsp punctuation.section.interpolation.end.jsp
+        0: meta.interpolation.expression.jsp
+           punctuation.section.interpolation.end.jsp
 
   jsp-interpolations-scriptlets:
     - match: <%
-      scope: meta.interpolation.scriptlet.jsp punctuation.section.interpolation.begin.jsp
+      scope:
+        meta.interpolation.scriptlet.jsp
+        punctuation.section.interpolation.begin.jsp
       embed: scope:source.java.embedded.jsp
-      embed_scope: meta.interpolation.scriptlet.jsp source.java.embedded.jsp
+      embed_scope:
+        meta.interpolation.scriptlet.jsp
+        source.java.embedded.jsp
       escape: \%>
       escape_captures:
-        0: meta.interpolation.scriptlet.jsp punctuation.section.interpolation.end.jsp
+        0: meta.interpolation.scriptlet.jsp
+           punctuation.section.interpolation.end.jsp
 
 ###[ JSP CONSTANTS ]##########################################################
 
