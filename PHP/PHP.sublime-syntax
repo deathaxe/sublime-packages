@@ -83,10 +83,11 @@ contexts:
 ###[ EMBEDDED LANGUAGES ]#####################################################
 
   style-css-content:
-    - match: (?=\S|^)
+    - match: ''
+      pop: 1
       embed: scope:source.css.php
       embed_scope: source.css.embedded.html
-      escape: '{{style_close_lookahead}}'
+      escape: '{{style_content_end}}'
 
   tag-style-attribute-value:
     - match: \"
@@ -106,10 +107,11 @@ contexts:
     - include: else-pop
 
   script-javascript-content:
-    - match: (?=\S|^)
+    - match: ''
+      pop: 1
       embed: scope:source.js.php
       embed_scope: source.js.embedded.html
-      escape: '{{script_close_lookahead}}'
+      escape: '{{script_content_end}}'
 
   tag-event-attribute-value:
     - match: \"
