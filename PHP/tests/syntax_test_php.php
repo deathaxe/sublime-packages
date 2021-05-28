@@ -1733,7 +1733,7 @@ This is a test! $var
 //^^^^^^^^^^^^^^^^^^ string.unquoted.nowdoc
 //              ^^^^ - variable.other
 EOT;
-// <- keyword.operator.heredoc
+// <- keyword.operator.nowdoc
 
 echo <<<HTML
 //   ^^^^^^^ punctuation.section.embedded.begin punctuation.definition.string
@@ -1742,13 +1742,12 @@ This is a test!
 <div class="foo-bar"></div>
 //^^^^^^^^^^^^^^^^^^^^^^^^^ meta.embedded.html text.html
 // <- punctuation.definition.tag.begin
-//^^ entity.name.tag.block
+//^^ entity.name.tag
 //   ^^^^^ entity.other.attribute-name
 //         ^^^^^^^^^ string.quoted.double
 HTML;
 // <- punctuation.section.embedded.end keyword.operator.heredoc
 //  ^ punctuation.terminator.expression
-//   ^ meta.heredoc-end
 
 echo <<< JAVASCRIPT
 //   ^^^^^^^^^^^^^^ punctuation.section.embedded.begin punctuation.definition.string
