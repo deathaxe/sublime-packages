@@ -7346,6 +7346,11 @@ This ~~text~~~~ is ~~~~curious~~.
 |                  ^^^^ - punctuation.definition.strikethrough
 |                             ^^ punctuation.definition.strikethrough.end
 
+This ~~is ~~striked~~ inline text
+|^^^^ - markup.strikethrough
+|    ^^^^^^^^^^^^^^^^ markup.strikethrough.markdown-gfm
+|                    ^^^^^^^^^^^^^ - markup.strikethrough
+
 This ~~has a
 |    ^^^^^^^^ meta.paragraph markup.strikethrough
 
