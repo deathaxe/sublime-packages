@@ -1,0 +1,126 @@
+/* SYNTAX TEST "Packages/CSS/CSS.sublime-syntax" */
+
+<<<<<<< HEAD
+/* <- markup.conflict.begin.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.begin.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.begin.git - entity - punctuation */
+/*      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git */
+/*          ^ markup.conflict.begin.git - entity - punctuation */
+
+=======
+/* <- markup.conflict.separator.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.separator.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.separator.git - punctuation */
+
+>>>>>>> master
+/* <- markup.conflict.end.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.end.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.end.git - entity - punctuation */
+/*      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git */
+/*            ^ markup.conflict.end.git - entity - punctuation */
+
+/* in block comments
+<<<<<<< HEAD
+/* <- markup.conflict.begin.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.begin.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.begin.git - entity - punctuation */
+/*      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git */
+/*          ^ markup.conflict.begin.git - entity - punctuation */
+
+/* in block comments
+=======
+/* <- markup.conflict.separator.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.separator.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.separator.git - punctuation */
+
+/* in block comments
+>>>>>>> master
+/* <- markup.conflict.end.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.end.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.end.git - entity - punctuation */
+/*      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git */
+/*            ^ markup.conflict.end.git - entity - punctuation */
+
+
+@media {
+<<<<<<< HEAD
+/* <- markup.conflict.begin.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.begin.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.begin.git - entity - punctuation */
+/*      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git */
+/*          ^ markup.conflict.begin.git - entity - punctuation */
+
+=======
+/* <- markup.conflict.separator.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.separator.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.separator.git - punctuation */
+
+>>>>>>> master
+/* <- markup.conflict.end.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.end.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.end.git - entity - punctuation */
+/*      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git */
+/*            ^ markup.conflict.end.git - entity - punctuation */    
+}
+
+> .class {
+<<<<<<< HEAD
+/* <- markup.conflict.begin.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.begin.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.begin.git - entity - punctuation */
+/*      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git */
+/*          ^ markup.conflict.begin.git - entity - punctuation */
+    color: ours;
+=======
+/* <- markup.conflict.separator.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.separator.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.separator.git - punctuation */
+    color: theirs;
+>>>>>>> master
+/* <- markup.conflict.end.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.end.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.end.git - entity - punctuation */
+/*      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git */
+/*            ^ markup.conflict.end.git - entity - punctuation */    
+
+    > .nested {
+<<<<<<< HEAD
+/* <- markup.conflict.begin.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.begin.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.begin.git - entity - punctuation */
+/*      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git */
+/*          ^ markup.conflict.begin.git - entity - punctuation */
+        color: ours;
+=======
+/* <- markup.conflict.separator.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.separator.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.separator.git - punctuation */
+        color: theirs;
+>>>>>>> master
+/* <- markup.conflict.end.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.end.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.end.git - entity - punctuation */
+/*      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git */
+/*            ^ markup.conflict.end.git - entity - punctuation */    
+    }
+}
+
+
+> [
+<<<<<<< HEAD
+/* <- markup.conflict.begin.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.begin.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.begin.git - entity - punctuation */
+/*      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git */
+/*          ^ markup.conflict.begin.git - entity - punctuation */
+=======
+/* <- markup.conflict.separator.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.separator.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.separator.git - punctuation */
+>>>>>>> master
+/* <- markup.conflict.end.git punctuation.section.conflict.git */
+/*^^^^^ markup.conflict.end.git punctuation.section.conflict.git */
+/*     ^ markup.conflict.end.git - entity - punctuation */
+/*      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git */
+/*            ^ markup.conflict.end.git - entity - punctuation */    
+];

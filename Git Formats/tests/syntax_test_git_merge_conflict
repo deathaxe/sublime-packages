@@ -1,0 +1,76 @@
+# SYNTAX TEST "Git Merge.sublime-syntax"
+
+<<<<<<< HEAD
+#  <- markup.conflict.begin.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
+#      ^ markup.conflict.begin.git - entity - punctuation
+#       ^^^^ markup.conflict.begin.git entity.name.section.conflict.git
+#           ^ markup.conflict.begin.git - entity - punctuation
+
+<<<<<<< path-like/branch
+#  <- markup.conflict.begin.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
+#      ^ markup.conflict.begin.git - entity - punctuation
+#       ^^^^^^^^^^^^^^^^ markup.conflict.begin.git entity.name.section.conflict.git
+#                       ^ markup.conflict.begin.git - entity - punctuation
+
+<<<<<<< b709551881dedb723fa6d621e51585ecb9856fb5
+#  <- markup.conflict.begin.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
+#      ^ markup.conflict.begin.git - entity - punctuation
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ markup.conflict.begin.git entity.name.section.conflict.git
+#                                               ^ markup.conflict.begin.git - entity - punctuation
+
+<<<<<<< v1.0.5-beta.5
+#  <- markup.conflict.begin.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
+#      ^ markup.conflict.begin.git - entity - punctuation
+#       ^^^^^^^^^^^^^ markup.conflict.begin.git entity.name.section.conflict.git
+#                    ^ markup.conflict.begin.git - entity - punctuation
+
+<<<<<<< Updated upstream
+#  <- markup.conflict.begin.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
+#      ^ markup.conflict.begin.git - entity - punctuation
+#       ^^^^^^^^^^^^^^^^ markup.conflict.begin.git entity.name.section.conflict.git
+#                       ^ markup.conflict.begin.git - entity - punctuation
+
+=======
+#  <- markup.conflict.separator.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
+#      ^ markup.conflict.separator.git - punctuation
+
+>>>>>>> HEAD
+#  <- markup.conflict.end.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.end.git punctuation.section.conflict.git
+#      ^ markup.conflict.end.git - entity - punctuation
+#       ^^^^ markup.conflict.end.git entity.name.section.conflict.git
+#           ^ markup.conflict.end.git - entity - punctuation
+
+>>>>>>> path-like/branch
+#  <- markup.conflict.end.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.end.git punctuation.section.conflict.git
+#      ^ markup.conflict.end.git - entity - punctuation
+#       ^^^^^^^^^^^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
+#                       ^ markup.conflict.end.git - entity - punctuation
+
+>>>>>>> b709551881dedb723fa6d621e51585ecb9856fb5
+#  <- markup.conflict.end.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.end.git punctuation.section.conflict.git
+#      ^ markup.conflict.end.git - entity - punctuation
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
+#                                               ^ markup.conflict.end.git - entity - punctuation
+
+>>>>>>> v1.0.5-beta.5
+#  <- markup.conflict.end.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.end.git punctuation.section.conflict.git
+#      ^ markup.conflict.end.git - entity - punctuation
+#       ^^^^^^^^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
+#                    ^ markup.conflict.end.git - entity - punctuation
+
+>>>>>>> Stashed changes
+#  <- markup.conflict.end.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.end.git punctuation.section.conflict.git
+#      ^ markup.conflict.end.git - entity - punctuation
+#       ^^^^^^^^^^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
+#                      ^ markup.conflict.end.git - entity - punctuation

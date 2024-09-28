@@ -8829,3 +8829,73 @@ Handle incomplete $\sqrt{b$ expressions well.
    |                       ^^ meta.group.brace
    |                         ^ punctuation.definition.math.end - meta.group
    |                          ^ meta.paragraph.list.markdown - markup.math
+
+<!-- SETEXT heading: Merge conflict marker -->
+
+Conflict in SETEXT heading
+<<<<<<< HEAD
+|  <- markup.conflict.begin.git punctuation.section.conflict.git
+| ^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
+|      ^ markup.conflict.begin.git - punctuation
+|       ^^^^ markup.conflict.begin.git entity.name.section.conflict.git
+|           ^ markup.conflict.begin.git - punctuation
+====
+=======
+|  <- markup.conflict.separator.git punctuation.section.conflict.git
+| ^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
+|      ^ markup.conflict.separator.git - punctuation
+==
+>>>>>>> master
+|  <- markup.conflict.end.git punctuation.section.conflict.git
+| ^^^^^ markup.conflict.end.git punctuation.section.conflict.git
+|      ^ markup.conflict.end.git - entity - punctuation
+|       ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
+|             ^ markup.conflict.end.git - entity - punctuation
+
+
+<!-- ATX heading: Merge conflict marker -->
+
+<<<<<<< HEAD
+|  <- markup.conflict.begin.git punctuation.section.conflict.git
+| ^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
+|      ^ markup.conflict.begin.git - punctuation
+|       ^^^^ markup.conflict.begin.git entity.name.section.conflict.git
+|           ^ markup.conflict.begin.git - punctuation
+# Conflicting in ATX Heading
+=======
+|  <- markup.conflict.separator.git punctuation.section.conflict.git
+| ^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
+|      ^ markup.conflict.separator.git - punctuation
+# Conflicting in ATX Heading
+>>>>>>> master
+|  <- markup.conflict.end.git punctuation.section.conflict.git
+| ^^^^^ markup.conflict.end.git punctuation.section.conflict.git
+|      ^ markup.conflict.end.git - entity - punctuation
+|       ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
+|             ^ markup.conflict.end.git - entity - punctuation
+
+
+<!-- paragraph: Merge conflict marker -->
+
+<<<<<<< HEAD
+|  <- markup.conflict.begin.git punctuation.section.conflict.git
+| ^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
+|      ^ markup.conflict.begin.git - entity - punctuation
+|       ^^^^ markup.conflict.begin.git entity.name.section.conflict.git
+|           ^ markup.conflict.begin.git - entity - punctuation
+
+our paragraph
+
+=======
+|  <- markup.conflict.separator.git punctuation.section.conflict.git
+| ^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
+|      ^ markup.conflict.separator.git - punctuation
+
+their paragraph
+
+>>>>>>> master
+|  <- markup.conflict.end.git punctuation.section.conflict.git
+| ^^^^^ markup.conflict.end.git punctuation.section.conflict.git
+|      ^ markup.conflict.end.git - entity - punctuation
+|       ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
+|             ^ markup.conflict.end.git - entity - punctuation

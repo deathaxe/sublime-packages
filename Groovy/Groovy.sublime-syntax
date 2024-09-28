@@ -53,6 +53,9 @@ contexts:
         1: keyword.other.import.groovy
         2: storage.type.import.groovy
     - include: groovy
+
+
+
   class-object:
     - match: |-
         (?x)
@@ -113,6 +116,8 @@ contexts:
       scope: comment.line.double-slash.groovy
       captures:
         1: punctuation.definition.comment.groovy
+    - include: scope:text.git.merge#conflicts  # merge conflict marker
+
   constants:
     - match: '\b([A-Z][A-Z0-9_]+)\b'
       scope: constant.other.groovy

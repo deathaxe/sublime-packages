@@ -139,7 +139,6 @@ S\u0815mma\ry\n
 #^ comment.block.documentation.python - constant.character.escape
 '''
 
-
 ##################
 # Imports
 ##################

@@ -83,6 +83,25 @@
 // <- comment.line.other.js punctuation.definition.comment.js
 //^^^^^^^^^^^^^^^^^^^^ comment.line.other.js - meta.preprocessor
 
+<<<<<<< HEAD
+// <- markup.conflict.begin.git punctuation.section.conflict.git
+//^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
+//     ^ markup.conflict.begin.git - entity - punctuation
+//      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git
+//          ^ markup.conflict.begin.git - entity - punctuation
+
+=======
+// <- markup.conflict.separator.git punctuation.section.conflict.git
+//^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
+//     ^ markup.conflict.separator.git - punctuation
+
+>>>>>>> master
+// <- markup.conflict.end.git punctuation.section.conflict.git
+//^^^^^ markup.conflict.end.git punctuation.section.conflict.git
+//     ^ markup.conflict.end.git - entity - punctuation
+//      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
+//            ^ markup.conflict.end.git - entity - punctuation
+
 // This object literal is technically broken since foo() does not have a
 // method body, but we include it here to ensure that highlighting is not
 // broken as the user is typing

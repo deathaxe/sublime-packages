@@ -137,6 +137,7 @@ contexts:
     - include: expressions-common
 
   expressions-common:
+    - include: scope:text.git.merge#conflicts  # merge conflict marker
     - include: sub
     - include: quoted-like
     - include: label
