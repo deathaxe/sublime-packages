@@ -20,17 +20,18 @@ contexts:
     # Consume git merge conflict markers to
     # - reduce risk for them to break syntax highlighting
     # - and add first class support for Sublime Text as git merge tool
-    - match: ^\s*(<{7}) ([-/.\w ]+)$\n?
+    - match: ^\s*(<{7})(?:[ ]([-/.\w ]+))?$\n?
       scope: markup.conflict.begin.git
       captures:
         1: punctuation.section.conflict.git
         2: entity.name.section.conflict.git
-    - match: ^\s*(>{7}) ([-/.\w ]+)$\n?
+    - match: ^\s*(>{7})(?:[ ]([-/.\w ]+))?$\n?
       scope: markup.conflict.end.git
       captures:
         1: punctuation.section.conflict.git
         2: entity.name.section.conflict.git
-    - match: ^\s*(={7}|\|{7})$\n?
+    - match: ^\s*(={7}|\|{7})(?:[ ]([-/.\w ]+))?$\n?
       scope: markup.conflict.separator.git
       captures:
         1: punctuation.section.conflict.git
+        2: entity.name.section.conflict.git

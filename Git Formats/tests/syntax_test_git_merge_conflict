@@ -40,10 +40,24 @@
 # ^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
 #      ^ markup.conflict.separator.git - punctuation
 
+||||||| name
+#  <- markup.conflict.separator.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
+#      ^ markup.conflict.separator.git - punctuation - entity
+#       ^^^^ markup.conflict.separator.git entity.name.section.conflict.git
+#           ^ markup.conflict.separator.git - punctuation - entity
+
 =======
 #  <- markup.conflict.separator.git punctuation.section.conflict.git
 # ^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
 #      ^ markup.conflict.separator.git - punctuation
+
+======= name
+#  <- markup.conflict.separator.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
+#      ^ markup.conflict.separator.git - punctuation - entity
+#       ^^^^ markup.conflict.separator.git entity.name.section.conflict.git
+#           ^ markup.conflict.separator.git - punctuation - entity
 
 >>>>>>> HEAD
 #  <- markup.conflict.end.git punctuation.section.conflict.git
