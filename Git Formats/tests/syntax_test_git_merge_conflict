@@ -35,6 +35,11 @@
 #       ^^^^^^^^^^^^^^^^ markup.conflict.begin.git entity.name.section.conflict.git
 #                       ^ markup.conflict.begin.git - entity - punctuation
 
+|||||||
+#  <- markup.conflict.separator.git punctuation.section.conflict.git
+# ^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
+#      ^ markup.conflict.separator.git - punctuation
+
 =======
 #  <- markup.conflict.separator.git punctuation.section.conflict.git
 # ^^^^^ markup.conflict.separator.git punctuation.section.conflict.git

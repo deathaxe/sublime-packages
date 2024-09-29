@@ -30,7 +30,7 @@ contexts:
       captures:
         1: punctuation.section.conflict.git
         2: entity.name.section.conflict.git
-    - match: ^\s*(={7})$\n?
+    - match: ^\s*(={7}|\|{7})$\n?
       scope: markup.conflict.separator.git
       captures:
         1: punctuation.section.conflict.git
