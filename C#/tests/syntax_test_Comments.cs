@@ -54,22 +54,22 @@ namespace HelloWorld
 
 class MergeConflict {
 <<<<<<< HEAD
-// <- markup.conflict.begin.git punctuation.section.conflict.git
-//^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
-//     ^ markup.conflict.begin.git - entity - punctuation
-//      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git
-//          ^ markup.conflict.begin.git - entity - punctuation
+// <- markup.conflict.begin.diff3 punctuation.section.conflict.diff3
+//^^^^^ markup.conflict.begin.diff3 punctuation.section.conflict.diff3
+//     ^ markup.conflict.begin.diff3 - entity - punctuation
+//      ^^^^ markup.conflict.begin.diff3 entity.name.section.conflict.diff3
+//          ^ markup.conflict.begin.diff3 - entity - punctuation
     void main(int foo) {
 =======
-// <- markup.conflict.separator.git punctuation.section.conflict.git
-//^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
-//     ^ markup.conflict.separator.git - punctuation
+// <- markup.conflict.separator.diff3 punctuation.section.conflict.diff3
+//^^^^^ markup.conflict.separator.diff3 punctuation.section.conflict.diff3
+//     ^ markup.conflict.separator.diff3 - punctuation
     void main(bool bar) {
 >>>>>>> master
-// <- markup.conflict.end.git punctuation.section.conflict.git
-//^^^^^ markup.conflict.end.git punctuation.section.conflict.git
-//     ^ markup.conflict.end.git - entity - punctuation
-//      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
-//            ^ markup.conflict.end.git - entity - punctuation
+// <- markup.conflict.end.diff3 punctuation.section.conflict.diff3
+//^^^^^ markup.conflict.end.diff3 punctuation.section.conflict.diff3
+//     ^ markup.conflict.end.diff3 - entity - punctuation
+//      ^^^^^^ markup.conflict.end.diff3 entity.name.section.conflict.diff3
+//            ^ markup.conflict.end.diff3 - entity - punctuation
     }
 }

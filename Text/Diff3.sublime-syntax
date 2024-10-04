@@ -8,8 +8,8 @@
 #
 # The `conflicts` context is included by all bundled syntax definitions
 # to help maintaining syntax highlighting when resolving merge conflicts.
-name: Git Merge
-scope: text.git.merge
+name: Diff3
+scope: text.diff3
 version: 2
 
 contexts:
@@ -21,17 +21,17 @@ contexts:
     # - reduce risk for them to break syntax highlighting
     # - and add first class support for Sublime Text as git merge tool
     - match: ^\s*(<{7})(?:[ ]([-/.\w ]+))?$\n?
-      scope: markup.conflict.begin.git
+      scope: markup.conflict.begin.diff3
       captures:
-        1: punctuation.section.conflict.git
-        2: entity.name.section.conflict.git
+        1: punctuation.section.conflict.diff3
+        2: entity.name.section.conflict.diff3
     - match: ^\s*(>{7})(?:[ ]([-/.\w ]+))?$\n?
-      scope: markup.conflict.end.git
+      scope: markup.conflict.end.diff3
       captures:
-        1: punctuation.section.conflict.git
-        2: entity.name.section.conflict.git
+        1: punctuation.section.conflict.diff3
+        2: entity.name.section.conflict.diff3
     - match: ^\s*(={7}|\|{7})(?:[ ]([-/.\w ]+))?$\n?
-      scope: markup.conflict.separator.git
+      scope: markup.conflict.separator.diff3
       captures:
-        1: punctuation.section.conflict.git
-        2: entity.name.section.conflict.git
+        1: punctuation.section.conflict.diff3
+        2: entity.name.section.conflict.diff3

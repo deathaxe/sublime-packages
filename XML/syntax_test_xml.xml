@@ -1943,86 +1943,86 @@ bar="baz" />
 ###############################################################################
 
 <<<<<<< HEAD
-## <- markup.conflict.begin.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
-##     ^ markup.conflict.begin.git - entity - punctuation
-##      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git
-##          ^ markup.conflict.begin.git - entity - punctuation
+## <- markup.conflict.begin.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.begin.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.begin.diff3 - entity - punctuation
+##      ^^^^ markup.conflict.begin.diff3 entity.name.section.conflict.diff3
+##          ^ markup.conflict.begin.diff3 - entity - punctuation
 
 =======
-## <- markup.conflict.separator.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
-##     ^ markup.conflict.separator.git - punctuation
+## <- markup.conflict.separator.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.separator.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.separator.diff3 - punctuation
 
 >>>>>>> master
-## <- markup.conflict.end.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.end.git punctuation.section.conflict.git
-##     ^ markup.conflict.end.git - entity - punctuation
-##      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
-##            ^ markup.conflict.end.git - entity - punctuation
+## <- markup.conflict.end.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.end.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.end.diff3 - entity - punctuation
+##      ^^^^^^ markup.conflict.end.diff3 entity.name.section.conflict.diff3
+##            ^ markup.conflict.end.diff3 - entity - punctuation
 
 <tag
      attr="value"
 <<<<<<< HEAD
-## <- markup.conflict.begin.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
-##     ^ markup.conflict.begin.git - entity - punctuation
-##      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git
-##          ^ markup.conflict.begin.git - entity - punctuation
+## <- markup.conflict.begin.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.begin.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.begin.diff3 - entity - punctuation
+##      ^^^^ markup.conflict.begin.diff3 entity.name.section.conflict.diff3
+##          ^ markup.conflict.begin.diff3 - entity - punctuation
      our="value"
 =======
-## <- markup.conflict.separator.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
-##     ^ markup.conflict.separator.git - punctuation
+## <- markup.conflict.separator.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.separator.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.separator.diff3 - punctuation
      their="value"
 >>>>>>> master
-## <- markup.conflict.end.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.end.git punctuation.section.conflict.git
-##     ^ markup.conflict.end.git - entity - punctuation
-##      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
-##            ^ markup.conflict.end.git - entity - punctuation
+## <- markup.conflict.end.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.end.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.end.diff3 - entity - punctuation
+##      ^^^^^^ markup.conflict.end.diff3 entity.name.section.conflict.diff3
+##            ^ markup.conflict.end.diff3 - entity - punctuation
 >
 ## <- meta.tag.xml punctuation.definition.tag.end.opening.xml
 
 <![CDATA[
 <<<<<<< HEAD
-## <- markup.conflict.begin.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
-##     ^ markup.conflict.begin.git - entity - punctuation
-##      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git
-##          ^ markup.conflict.begin.git - entity - punctuation
+## <- markup.conflict.begin.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.begin.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.begin.diff3 - entity - punctuation
+##      ^^^^ markup.conflict.begin.diff3 entity.name.section.conflict.diff3
+##          ^ markup.conflict.begin.diff3 - entity - punctuation
      our="value"
 =======
-## <- markup.conflict.separator.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
-##     ^ markup.conflict.separator.git - punctuation
+## <- markup.conflict.separator.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.separator.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.separator.diff3 - punctuation
      their="value"
 >>>>>>> master
-## <- markup.conflict.end.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.end.git punctuation.section.conflict.git
-##     ^ markup.conflict.end.git - entity - punctuation
-##      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
-##            ^ markup.conflict.end.git - entity - punctuation
+## <- markup.conflict.end.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.end.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.end.diff3 - entity - punctuation
+##      ^^^^^^ markup.conflict.end.diff3 entity.name.section.conflict.diff3
+##            ^ markup.conflict.end.diff3 - entity - punctuation
 ]]>
 ## <- meta.tag.sgml.cdata.xml punctuation.definition.tag.end.xml
 
 <!DOCTYPE root-element [
 <<<<<<< HEAD
-## <- markup.conflict.begin.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.begin.git punctuation.section.conflict.git
-##     ^ markup.conflict.begin.git - entity - punctuation
-##      ^^^^ markup.conflict.begin.git entity.name.section.conflict.git
-##          ^ markup.conflict.begin.git - entity - punctuation
+## <- markup.conflict.begin.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.begin.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.begin.diff3 - entity - punctuation
+##      ^^^^ markup.conflict.begin.diff3 entity.name.section.conflict.diff3
+##          ^ markup.conflict.begin.diff3 - entity - punctuation
      <!ELEMENT root-element (#PCDATA)>
 =======
-## <- markup.conflict.separator.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.separator.git punctuation.section.conflict.git
-##     ^ markup.conflict.separator.git - punctuation
+## <- markup.conflict.separator.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.separator.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.separator.diff3 - punctuation
      <!ELEMENT root-element (#PCDATA)>
 >>>>>>> master
-## <- markup.conflict.end.git punctuation.section.conflict.git
-##^^^^^ markup.conflict.end.git punctuation.section.conflict.git
-##     ^ markup.conflict.end.git - entity - punctuation
-##      ^^^^^^ markup.conflict.end.git entity.name.section.conflict.git
-##            ^ markup.conflict.end.git - entity - punctuation
+## <- markup.conflict.end.diff3 punctuation.section.conflict.diff3
+##^^^^^ markup.conflict.end.diff3 punctuation.section.conflict.diff3
+##     ^ markup.conflict.end.diff3 - entity - punctuation
+##      ^^^^^^ markup.conflict.end.diff3 entity.name.section.conflict.diff3
+##            ^ markup.conflict.end.diff3 - entity - punctuation
 ]>

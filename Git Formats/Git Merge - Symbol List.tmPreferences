@@ -2,7 +2,7 @@
 <plist version="1.0">
 <dict>
 	<key>scope</key>
-	<string>markup.conflict.begin.git entity.name.section.conflict</string>
+	<string>markup.conflict.begin.diff3 entity.name.section.conflict</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>

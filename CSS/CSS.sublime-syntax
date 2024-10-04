@@ -376,7 +376,7 @@ contexts:
     - match: /\*+
       scope: punctuation.definition.comment.begin.css
       push: block-comment-body
-    - include: scope:text.git.merge#conflicts  # merge conflict marker
+    - include: scope:text.diff3#conflicts  # merge conflict marker
 
   block-comment-body:
     - meta_scope: comment.block.css
@@ -386,7 +386,7 @@ contexts:
     - match: ^\s*(\*)(?!/)
       captures:
         1: punctuation.definition.comment.css
-    - include: scope:text.git.merge#conflicts  # merge conflict marker
+    - include: scope:text.diff3#conflicts  # merge conflict marker
 
 ###[ AT RULES ]################################################################
 
