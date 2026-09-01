@@ -32,6 +32,7 @@ contexts:
     - include: stray-punctuation
     - include: terminators
     - include: attributes
+    - include: extern-alias-declarations
     - include: modifiers
     - include: visibility
     # global declarations
@@ -429,8 +430,23 @@ contexts:
       pop: 1
     - include: csharp
 
-###[ USING DECLARATIONS ]######################################################
+###[ ALIAS DECLARATIONS ]######################################################
 
+  extern-alias-declarations:
+    - match: (extern)\s+(alias)\b
+      captures:
+        1: storage.modifier.cs
+        2: keyword.declaration.alias.cs
+      push: extern-alias-declaration-name
+
+  extern-alias-declaration-name:
+    - meta_scope: meta.alias.cs
+    - match: '{{unreserved_name}}'
+      scope: variable.namespace.cs
+      pop: 1
+    - include: else-pop
+
+###[ USING DECLARATIONS ]######################################################
   using-declarations:
     - match: (?:(global)\s+)?(using)\b
       captures:
@@ -901,6 +917,12 @@ contexts:
     - include: secondary-type-constraint
 
   secondary-type-constraint:
+    - match: (allows)\s+(ref)\s+(struct)\b
+      captures:
+        1: storage.modifier.cs
+        2: storage.modifier.cs
+        3: storage.type.primitive.cs
+      pop: 1
     - match: (new)\s*((\()\s*(\)))
       scope: meta.constructor.cs
       captures:
@@ -1683,6 +1705,8 @@ contexts:
     # language variables
     - match: _\b
       scope: variable.language.anonymous.cs
+    - match: field\b
+      scope: variable.language.cs
     - match: value\b
       scope: variable.language.cs
     - include: namespace-variables
@@ -1699,18 +1723,21 @@ contexts:
         8: punctuation.accessor.dot.cs
         9: meta.function-call.identifier.cs variable.function.cs
       push: regex-function-call-argument-list
-    - match: '{{name}}(?={{generic_declaration}}?\s*\()'
+    - match: '{{name}}(?={{generic_declaration}}?{{item_access}}*\s*\()'
       scope: meta.function-call.identifier.cs variable.function.cs
       push:
+        - maybe-item-access
         - function-call-argument-list
+        - maybe-item-access
         - type-argument-list
-    - match: '{{name}}(?={{generic_declaration}}\s*\.)'
+    - match: '{{name}}(?={{generic_declaration}})'
       scope: support.type.cs
       push:
         - type-suffix
         - type-argument-list
     - match: '{{name}}'
       scope: variable.other.cs
+      push: maybe-item-access
     - match: '@'
       scope: invalid.illegal.reserved-char.cs
 
@@ -2205,19 +2232,21 @@ contexts:
     - include: expression-list
 
   maybe-member-access:
-    - match: (\?)?(\.)
+    - match: \s*(\?)?(\.)
       captures:
         1: keyword.operator.null-coalescing.cs
         2: punctuation.accessor.dot.cs
       set: member-access
-    - include: else-pop
+    - include: noeol-pop
 
   member-access:
-    - match: '{{unreserved_name}}(?={{generic_declaration}}?\s*\()'
+    - match: '{{unreserved_name}}(?={{generic_declaration}}?{{item_access}}*\s*\()'
       scope: meta.function-call.identifier.cs variable.function.cs
       set:
         - maybe-member-access
+        - maybe-item-access
         - function-call-argument-list
+        - maybe-item-access
         - type-argument-list
     - match: '{{unreserved_name}}(?={{generic_declaration}})'
       scope: support.type.cs
@@ -2229,7 +2258,7 @@ contexts:
       scope: variable.other.member.cs
       set:
         - maybe-member-access
-        - type-argument-list
+        - maybe-item-access
     - include: else-pop
 
 ###[ LAMBDA EXPRESSIONS ]######################################################
@@ -3133,7 +3162,6 @@ contexts:
     - include: string-placeholder-escapes
     - include: string-guids
     - include: extended-raw-string-placeholders
-    - include: invalid-string-placeholders
 
   inside-raw-string:
     - meta_include_prototype: false
@@ -3145,7 +3173,6 @@ contexts:
     - include: string-placeholder-escapes
     - include: string-guids
     - include: extended-raw-string-placeholders
-    - include: invalid-string-placeholders
 
   extended-raw-string-placeholders:
     - match: (?=\{\d)
@@ -3391,7 +3418,7 @@ variables:
   integer_suffix: '[uU][lL]?|[lL][uU]?'
 
   # characters
-  escape_base: \\[0abfnrtv"'\\]
+  escape_base: \\[0abefnrtv"'\\]
   escape_hex: \\x\h{1,4}
   escape_uni16: \\u\h{4}
   escape_uni32: \\U\h{8}
@@ -3406,15 +3433,17 @@ variables:
     | {{language_literals}}
     )
 
-  modifiers: (?x:abstract|async|const|explicit|extern|implicit|new|override|partial|readonly|ref|required|sealed|static|unsafe|virtual|volatile)\b
-  method_param_type_modifier: (?:in|out|params|ref|this)\b
+  modifiers: (?x:abstract|async|const|explicit|extern|implicit|new|override|partial|readonly|ref|required|scoped|sealed|static|unsafe|virtual|volatile)\b
+  method_param_type_modifier: (?:in|out|params|ref|scoped|this)\b
   generic_param_type_modifier: (?:in|out|readonly|ref)\b
 
   visibility: (?:internal|private|protected|public)\b
 
   base_type: (?x:bool|byte|sbyte|char|decimal|double|float|int|uint|nint|nuint|long|ulong|short|ushort|dynamic|object|string|void)\b
   type_suffix: (?:\s*(?:\[,*\]|\*|\?)*)
-  generic_declaration: (?:\s*<[^={};]*>)
+  generic_declaration: (?:\s*<(?:{{escape_uni16}}|{{escape_uni32}}|[\s\w_.()<>,?@])*>)
+
+  item_access: (?:\s*\[[^]]*\])
 
   statement_keywords: (?:break|case|catch|class|continue|do|else|enum|event|finally|fixed|for|foreach|goto|if|interface|namespace|operator|return|switch|try|union|using|while)\b
   expression_keywords: (?:as|checked|default|delegate|in|is|lock|nameof|new|not|params|sizeof|stackalloc|throw|typeof|unchecked)\b
@@ -3426,8 +3455,8 @@ variables:
   name_normal: '{{start_char}}{{other_char}}*\b'
   cap_name: '[[:upper:]]{{other_char}}*\b'
   lower_name: '[[:lower:]]{{other_char}}*\b'
-  start_char: (?:{{escape_uni16}}|{{escape_uni32}}|[_[[:alpha:]]])
-  other_char: (?:{{escape_uni16}}|{{escape_uni32}}|[_[[:alnum:]]])
+  start_char: (?:{{escape_uni16}}|{{escape_uni32}}|[_[:alpha:]])
+  other_char: (?:{{escape_uni16}}|{{escape_uni32}}|[_[:alnum:]])
 
   wspace_eol: \s*(?:\n|$)
 

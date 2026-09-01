@@ -1520,6 +1520,62 @@ fmt = u'string \r \n \u2040 %s \{{ {x} \}}'
 #                                      ^ invalid.deprecated.character.escape.python
 #                                      ^^^ constant.character.escape.python
 
+r'\b{{{{{ss_var}_active}}}}'
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.python string.quoted.single.python - constant.character
+#^ punctuation.definition.string.begin.python
+#                          ^ punctuation.definition.string.end.python
+
+b"{\$}" B"{\$}"
+#^^^^^^ meta.string.python string.quoted.double.python - constant
+#        ^^^^^^ meta.string.python string.quoted.double.python - constant
+
+f"{\$}" F"{\$}"
+#^^^^^^ meta.string.python
+# ^^^^ meta.interpolation.python
+#  ^ invalid.illegal.backslash-in-fstring.python
+#        ^^^^^^ meta.string.python
+#         ^^^^ meta.interpolation.python
+#          ^ invalid.illegal.backslash-in-fstring.python
+
+r"{\$}" R"{\$}"
+#^^^^^^ meta.string.python string.quoted.double.python
+#  ^^ constant.character.escape.regexp
+#        ^^^^^^ meta.string.python string.quoted.double.python - constant
+
+u"{\$}" U"{\$}"
+#^^^^^^ meta.string.python string.quoted.double.python
+# ^^^^ constant.other.placeholder.python
+#  ^^ invalid.deprecated.character.escape.python
+#        ^^^^^^ meta.string.python string.quoted.double.python
+#         ^^^^ constant.other.placeholder.python
+#          ^^ invalid.deprecated.character.escape.python
+
+b'{\$}' B'{\$}'
+#^^^^^^ meta.string.python string.quoted.single.python - constant
+#        ^^^^^^ meta.string.python string.quoted.single.python - constant
+
+f'{\$}' F'{\$}'
+#^^^^^^ meta.string.python
+# ^^^^ meta.interpolation.python
+#  ^ invalid.illegal.backslash-in-fstring.python
+#        ^^^^^^ meta.string.python
+#         ^^^^ meta.interpolation.python
+#          ^ invalid.illegal.backslash-in-fstring.python
+
+r'{\$}' R'{\$}'
+#^^^^^^ meta.string.python string.quoted.single.python
+#  ^^ constant.character.escape.regexp
+#        ^^^^^^ meta.string.python string.quoted.single.python - constant
+
+u'{\$}' U'{\$}'
+#^^^^^^ meta.string.python string.quoted.single.python
+# ^^^^ constant.other.placeholder.python
+#  ^^ invalid.deprecated.character.escape.python
+#        ^^^^^^ meta.string.python string.quoted.single.python
+#         ^^^^ constant.other.placeholder.python
+#          ^^ invalid.deprecated.character.escape.python
+
+
 ################################
 # regular expression backrefs
 ################################
@@ -1959,6 +2015,23 @@ re.sub(rf" ?\{{\\i.?\}}({x})\{{\\i.?\}}", r"\1", line)
 #                              ^^ constant.character.escape.regexp
 #                                   ^ constant.character.escape.regexp - constant.character.escape.python
 #                                    ^^ constant.character.escape.regexp constant.character.escape.python
+
+fr'\b{{{{{ss_var}_active}}}}'
+#^ storage.type.string.python
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.python
+# ^^^^^^^ string.quoted.single.python
+# ^ punctuation.definition.string.begin.python
+#  ^^^^^^ source.regexp.python meta.mode.basic.regexp
+#  ^^ keyword.control.anchor.regexp
+#    ^^^^ constant.character.escape.python
+#        ^^^^^^^^ meta.interpolation.python - string
+#        ^ punctuation.section.interpolation.begin.python
+#         ^^^^^^ variable.other.python
+#               ^ punctuation.section.interpolation.end.python
+#                ^^^^^^^^^^^^ string.quoted.single.python
+#                ^^^^^^^^^^^ source.regexp.python meta.mode.basic.regexp
+#                       ^^^^ constant.character.escape.python
+#                           ^ punctuation.definition.string.end.python
 
 fr'\x{c:02x} becomes \xAB'
 #^ storage.type.string.python
